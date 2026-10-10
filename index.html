@@ -305,7 +305,7 @@ const doneSets=w=>w.exercises.reduce((s,e)=>s+e.sets.filter(x=>x.done).length,0)
 const allSets=w=>w.exercises.reduce((s,e)=>s+e.sets.length,0);
 
 /* ---------- views ---------- */
-let tab="today", planDay=new Date().getDay(), logConfirm=null, bodyConfirm=null;
+let tab=(location.hash.match(/tab=(today|log|plan|body|move|timer)/)||[])[1]||"today", planDay=new Date().getDay(), logConfirm=null, bodyConfirm=null;
 const ties='<span class="tie-b l"></span><span class="tie-b r"></span>';
 
 function vToday(){
