@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>我的人偶</title>
+<style>
+html{color-scheme:light}
+html,body{margin:0;height:100%;background:transparent;color:#f3f2ee;font-family:"PingFang TC","Noto Sans TC",system-ui,sans-serif;overflow:hidden}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#load{position:fixed;inset:0;display:grid;place-items:center;color:#c3c4bf;font-size:14px;pointer-events:none;text-align:center;padding:20px}
+.acts{position:fixed;left:10px;top:10px;display:flex;gap:4px;flex-wrap:wrap}
+.acts button{border:1px solid rgba(243,242,238,.25);background:rgba(79,81,78,.7);color:#c3c4bf;font:12px inherit;font-family:inherit;padding:4px 9px;cursor:pointer}
+.acts button.on{border-color:#f3f2ee;color:#f3f2ee}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/","@pixiv/three-vrm":"https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@2.1.0/lib/three-vrm.module.js"}}</script>
+</head><body>
+<canvas id="c" aria-label="我的 3D 人偶，可拖曳旋轉"></canvas>
+<div class="acts" id="acts" hidden>
+  <button data-a="idle" class="on">站著</button><button data-a="wave">揮手</button><button data-a="stretch">伸展</button><button data-a="smile">笑一個</button>
+</div>
+<div id="load">人偶載入中…</div>
+<script type="module">
+import * as THREE from "three";
+import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+import {VRMLoaderPlugin,VRMUtils} from "@pixiv/three-vrm";
+
+const cv=document.getElementById("c"),load=document.getElementById("load");
+const r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
+r.setPixelRatio(Math.min(devicePixelRatio,2));r.outputColorSpace=THREE.SRGBColorSpace;
+const sc=new THREE.Scene();sc.background=new THREE.Color(0x5f615e);
+const cam=new THREE.PerspectiveCamera(30,1,.1,50);cam.position.set(0,1.2,3.6);
+const ctl=new OrbitControls(cam,cv);ctl.target.set(0,.95,0);ctl.enableDamping=true;ctl.enablePan=false;ctl.minDistance=1;ctl.maxDistance=5.5;ctl.maxPolarAngle=Math.PI*.58;
+sc.add(new THREE.HemisphereLight(0xffffff,0x6b6d69,1.2));
+const sun=new THREE.DirectionalLight(0xffffff,1.6);sun.position.set(1.5,3,2.5);sc.add(sun);
+// 地上淡淡的影子圈
+const g=new THREE.Mesh(new THREE.CircleGeometry(.5,48),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.18}));g.rotation.x=-Math.PI/2;sc.add(g);
+
+function resize(){const w=innerWidth,h=innerHeight;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+addEventListener("resize",resize);resize();
+
+// 先看 OneDrive「應用程式/Origina/Gym/me.vrm」（之後在 VRoid 改好、換掉那個檔案就會更新），沒有就用 App 內建的這一版
+async function source(){
+  try{const t=JSON.parse(localStorage.getItem("lucky-token")||"null");
+    if(t&&t.access&&t.exp>Date.now()){
+      const res=await fetch("https://graph.microsoft.com/v1.0/me/drive/special/approot:/Gym/me.vrm:/content",{headers:{Authorization:"Bearer "+t.access}});
+      if(res.ok)return URL.createObjectURL(await res.blob());}}catch(e){}
+  return "me.vrm";
+}
+
+const loader=new GLTFLoader();loader.register(p=>new VRMLoaderPlugin(p));
+let vrm=null,act="idle",actT=0;
+loader.load(await source(),gl=>{
+  vrm=gl.userData.vrm;VRMUtils.removeUnnecessaryVertices(gl.scene);VRMUtils.removeUnnecessaryJoints?.(gl.scene);
+  if(vrm.meta&&vrm.meta.metaVersion==="0")VRMUtils.rotateVRM0(vrm);
+  vrm.scene.traverse(o=>{o.frustumCulled=false;});
+  sc.add(vrm.scene);
+  // 依身高對準鏡頭
+  const box=new THREE.Box3().setFromObject(vrm.scene),h=box.max.y-box.min.y;
+  ctl.target.set(0,h*.58,0);cam.position.set(0,h*.66,h*2.3);ctl.update();
+  load.style.display="none";document.getElementById("acts").hidden=false;
+},e=>{if(e.total)load.textContent=`人偶載入中… ${Math.round(e.loaded/e.total*100)}%`;},
+()=>{load.textContent="人偶載入失敗，請確認網路後重新打開";});
+
+document.getElementById("acts").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;act=b.dataset.a;actT=0;
+  document.querySelectorAll(".acts button").forEach(x=>x.classList.toggle("on",x===b));});
+
+const B=n=>vrm.humanoid.getNormalizedBoneNode(n);
+const clock=new THREE.Clock();let blinkAt=2;
+function pose(t){
+  const br=Math.sin(t*1.6);           // 呼吸
+  const sway=Math.sin(t*.55);         // 重心輕輕左右
+  let lA=-1.22,rA=1.22,lE=0,rE=0,rEz=0,lAx=0,rAx=0,head=0,spine=br*.015;
+  if(act==="wave"){const k=Math.min(actT/.5,1);rA=1.22-k*1.95;rEz=-k*(1.5+Math.sin(actT*8)*.4);}
+  if(act==="stretch"){const k=Math.min(actT/.8,1);lA=-1.22+k*2.9;rA=1.22-k*2.9;spine-=k*.08;head=-k*.15;}
+  B("leftUpperArm").rotation.set(lAx,0,lA+br*.02);B("rightUpperArm").rotation.set(rAx,0,rA-br*.02);
+  B("leftLowerArm").rotation.set(0,lE?-lE:-.12,0);B("rightLowerArm").rotation.set(0,rEz?0:.12,rEz);
+  B("spine").rotation.set(spine,0,sway*.02);B("hips").rotation.set(0,sway*.04,0);
+  B("head").rotation.set(head+Math.sin(t*.4)*.03,Math.sin(t*.3)*.12,0);
+  const em=vrm.expressionManager;if(em){
+    let b=0;if(t>blinkAt){const d=t-blinkAt;b=d<.08?d/.08:d<.16?1-(d-.08)/.08:0;if(d>.16)blinkAt=t+2+Math.random()*3;}
+    em.setValue("blink",b);em.setValue("happy",act==="smile"?Math.min(actT/.4,1)*.8:act==="wave"?.35:0);}
+}
+r.setAnimationLoop(()=>{const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;actT+=dt;
+  if(vrm){pose(t);vrm.update(dt);}ctl.update();r.render(sc,cam);});
+</script>
+</body></html>
