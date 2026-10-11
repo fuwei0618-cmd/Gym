@@ -441,8 +441,19 @@ const VISION_DEFAULT={type:"vision",
   wins:[]};
 function visionData(){const d=docs.get("vision");return Object.assign(JSON.parse(JSON.stringify(VISION_DEFAULT)),d?JSON.parse(JSON.stringify(d)):{});}
 function saveVision(v,soon){soon?writeSoon("vision",v):write("vision",v);}
-let visionImgs=[];
-async function loadVisionImgs(){const list=(await IDB.get("vision/imgs"))||[];visionImgs.forEach(x=>URL.revokeObjectURL(x.url));visionImgs=list.map(x=>({id:x.id,url:URL.createObjectURL(x.blob)}));if(st.view==="vision")render();}
+const WHY_EX="我想在舞台上更有自信、想喜歡鏡子裡的自己、想讓身體記住音樂。";
+const BECOME_EX=["穿高跟鞋走路也很穩、很好看","上課時敢站在前排","能完整跳完一首歌，錄給自己看"];
+function seedVision(){const v=visionData();if(v.seeded)return;if(!(v.why||"").trim())v.why=WHY_EX;v.become=v.become.map((b,i)=>(b||"").trim()?b:(BECOME_EX[i]||""));v.seeded=true;saveVision(v);}
+/* photos: cloud asset (claude.ai) or compressed copy inside the synced notes (GitHub + OneDrive) */
+const visionImgs=()=>{const v=visionData();const a=(v.imgs||[]).map(x=>({id:x.id,url:"/_blob/"+x.a,kind:"a",t:x.t||0}));
+  const d=[...docs.entries()].filter(([k,x])=>x&&x.type==="vimg").map(([k,x])=>({id:k,url:x.data,kind:"d",t:x.t||0}));return [...a,...d].sort((p,q)=>p.t-q.t);};
+async function shrink(blobOrFile,max,q){const bm=await createImageBitmap(blobOrFile);const k=Math.min(1,max/Math.max(bm.width,bm.height));const c=document.createElement("canvas");c.width=Math.round(bm.width*k);c.height=Math.round(bm.height*k);c.getContext("2d").drawImage(bm,0,0,c.width,c.height);return c;}
+async function addVisionImage(file){
+  if(assets){const c=await shrink(file,1400,.85);const blob=await new Promise(r=>c.toBlob(r,"image/jpeg",.85));const r=await assets.upload(blob);const v=visionData();v.imgs=v.imgs||[];v.imgs.push({id:uid(),a:r.id,t:Date.now()});saveVision(v);return;}
+  const c=await shrink(file,640,.72);write("vimg_"+uid(),{type:"vimg",data:c.toDataURL("image/jpeg",.72),t:Date.now()});
+}
+async function migrateLocalImgs(){const list=(await IDB.get("vision/imgs"))||[];if(!list.length)return;for(const x of list){try{await addVisionImage(x.blob);}catch(e){}}await IDB.put("vision/imgs",[]);render();}
+async function loadVisionImgs(){seedVision();await migrateLocalImgs();if(st.view==="vision")render();}
 function vVision(){
   const v=visionData();
   const classes=songs().reduce((n,s)=>n+((s.lessons||[]).length),0);
@@ -453,7 +464,7 @@ function vVision(){
     <p class="vnote">${esc(v.note).replace(/\n/g,"<br>")}</p>
     <div class="vstats"><div><b class="num">${classes}</b><span>堂課</span></div><div><b class="num">${green}</b><span>段會了</span></div><div><b class="num">${v.wins.length}</b><span>個小勝利</span></div></div>
   </section>
-  ${visionImgs.length?`<section class="vgallery">${visionImgs.map(x=>`<figure><img src="${x.url}" alt="願景照片"><button class="x" data-act="vimgdel" data-id="${x.id}" aria-label="移除照片">×</button></figure>`).join("")}</section>`:""}
+  ${visionImgs().length?`<section class="vgallery">${visionImgs().map(x=>`<figure><img src="${esc(x.url)}" alt="願景照片"><button class="x" data-act="vimgdel" data-id="${esc(x.id)}" data-kind="${x.kind}" aria-label="移除照片">×</button></figure>`).join("")}</section>`:""}
   <section class="panel stack">
     <h2>我為什麼想學高跟鞋</h2>
     <textarea class="line" rows="3" id="vWhy" placeholder="例如：我想在舞台上更有自信、想喜歡鏡子裡的自己、想讓身體記住音樂……">${esc(v.why)}</textarea>
@@ -483,7 +494,7 @@ function vVision(){
   </section>
   <section class="panel stack">
     <h2>願景照片</h2>
-    <p class="note" style="margin:0">放喜歡的舞者、想穿的鞋、想成為的樣子。照片只存在這台裝置。</p>
+    <p class="note" style="margin:0">放喜歡的舞者、想穿的鞋、想成為的樣子。照片會跟著筆記同步，換裝置也看得到。</p>
     <label class="btn" style="align-self:flex-start">＋ 加照片<input type="file" id="vImg" accept="image/*" multiple hidden></label>
   </section>`;
 }
@@ -813,7 +824,7 @@ document.addEventListener("click",async e=>{
   else if(a==="rfdel"){const v=visionData();v.reframes.splice(+b.dataset.i,1);saveVision(v);render();}
   else if(a==="winadd"||a==="winquick"){const t=a==="winquick"?b.dataset.t:($("#vWin").value||"").trim();if(!t){$("#vWin").focus();return;}const v=visionData();v.wins.push({d:today(),t});saveVision(v);render();toast("放進罐子了，你很棒 ✦");}
   else if(a==="windel"){const v=visionData();v.wins.splice(+b.dataset.i,1);saveVision(v);render();}
-  else if(a==="vimgdel"){const list=((await IDB.get("vision/imgs"))||[]).filter(x=>x.id!==b.dataset.id);await IDB.put("vision/imgs",list);loadVisionImgs();}
+  else if(a==="vimgdel"){if(b.dataset.kind==="d"){write(b.dataset.id,null);}else{const v=visionData();const x=(v.imgs||[]).find(i=>i.id===b.dataset.id);v.imgs=(v.imgs||[]).filter(i=>i.id!==b.dataset.id);saveVision(v);if(x&&assets){try{await assets.delete(x.a);}catch(err){}}}render();}
   else if(a==="guideoff"){st.guideOff=true;render();}
   else if(a==="autosplit"){autoSplit(+b.dataset.v);}
   else if(a==="merge"){const ss=secsOf(st.song),i=ss.findIndex(y=>y.id===b.dataset.id),x=ss[i],nx=ss[i+1];if(!nx)return;x.end=nx.end;x.cue=[x.cue,nx.cue].filter(Boolean).join("・");x.details=[...(x.details||[]),...(nx.details||[])];x.snaps=[...(x.snaps||[]),...(nx.snaps||[])];saveSec(x);write(nx.id,null);renumber();render();}
@@ -910,10 +921,7 @@ main.addEventListener("input",e=>{
 });
 main.addEventListener("toggle",e=>{if(e.target.id==="moreBox")st.more=e.target.open;},true);
 main.addEventListener("change",async e=>{const t=e.target;
-  if(t.id==="vImg"&&t.files&&t.files.length){const list=(await IDB.get("vision/imgs"))||[];
-    for(const f of t.files){try{const bm=await createImageBitmap(f);const k=Math.min(1,900/Math.max(bm.width,bm.height));const c=document.createElement("canvas");c.width=Math.round(bm.width*k);c.height=Math.round(bm.height*k);c.getContext("2d").drawImage(bm,0,0,c.width,c.height);
-      const blob=await new Promise(r=>c.toBlob(r,"image/jpeg",.85));list.push({id:uid(),blob});}catch(err){}}
-    const ok=await IDB.put("vision/imgs",list);if(!ok)toast("這台裝置存不下照片");loadVisionImgs();return;}
+  if(t.id==="vImg"&&t.files&&t.files.length){toast("照片上傳中…");let n=0;for(const f of t.files){try{await addVisionImage(f);n++;}catch(err){toast("有一張照片存不進去："+((err&&(err.code||err.message))||""));}}if(n)toast("已加入 "+n+" 張照片");render();return;}
   if(t.id==="follow"){st.follow=t.checked;}
   else if(t.id==="remember"){st.remember=t.checked;}
 
