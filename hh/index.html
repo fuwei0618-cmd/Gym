@@ -1,0 +1,841 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><link rel="apple-touch-icon" href="../icons/apple-touch-icon.png?v=1"><link rel="icon" href="../icons/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="HH"><meta name="theme-color" content="#d9d7d1"><script src="https://fuwei0618-cmd.github.io/Entry/sync/origina-sync.js" data-app="hh" data-keys="origina.hh.v1" data-pos="br"></script>
+</head><body>
+<title>Origina HH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Origina system: light cast-concrete ground (speckle + one form seam with tie holes), translucent white cards r18,
+   charcoal primary, pale moss accent. Status by shape (ring / half / full), never red. Single light theme by choice. */
+:root{
+  --ground:#d9d7d1;
+  --card:rgba(250,249,246,.84);
+  --card-solid:#faf9f6;
+  --well:#ebe9e4;
+  --ink:#232321;
+  --ink-2:#605e58;
+  --ink-3:#7a7871;
+  --line:rgba(60,58,52,.12);
+  --moss:#8a9d7f;
+  --moss-deep:#56684f;
+  --moss-tint:#e1e8da;
+  --screen:#2b2a28;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  --shadow:0 0 0 1px rgba(60,58,52,.10),0 8px 20px -14px rgba(40,36,30,.5);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--ground)}
+body{
+  background-color:var(--ground);
+  background-image:radial-gradient(ellipse 60% 40% at 18% 12%,rgba(255,255,255,.45),transparent 70%),radial-gradient(ellipse 50% 35% at 85% 80%,rgba(60,55,48,.09),transparent 70%),radial-gradient(rgba(60,58,52,.10) .8px,transparent 1.1px),radial-gradient(rgba(255,255,255,.35) .7px,transparent 1px);
+  background-size:auto,auto,7px 7px,11px 11px;background-position:0 0,0 0,0 0,3px 5px;background-attachment:fixed,fixed,scroll,scroll;
+  color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;
+  padding-inline:16px;padding-block:16px 60px;min-height:100%;
+}
+.wrap{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:14px;position:relative}
+.seam{position:absolute;left:-16px;right:-16px;top:52px;height:1px;background:rgba(60,58,52,.14);pointer-events:none}
+.seam::before,.seam::after{content:"";position:absolute;top:10px;width:7px;height:7px;border-radius:50%;background:#a9a69f;box-shadow:inset 0 1px 1px rgba(0,0,0,.35)}
+.seam::before{left:5px}.seam::after{right:5px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--moss-deep);outline-offset:2px}
+.panel{position:relative;background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:16px}
+.panel.bare{background:none;box-shadow:none;padding:4px 4px 0}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:0 4px}
+.brand{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--ink-2);background:none;border:0;padding:6px 0}
+.brand b{color:var(--moss-deep);font-weight:500}
+.back{font-size:15px;color:var(--moss-deep);font-weight:500}
+.sync{font-family:var(--f-mono);font-size:11px;color:var(--ink-3)}
+.sync.on{color:var(--moss-deep)}
+h1{font-weight:900;font-size:34px;line-height:1.15;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h2{font-weight:700;font-size:18px;margin:0;text-wrap:balance}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.sub{color:var(--ink-2);font-size:14px}
+.note{font-size:12px;color:var(--ink-3)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.stack{display:flex;flex-direction:column;gap:12px}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.btn{border:0;background:var(--well);padding:9px 14px;font-size:14px;border-radius:10px;min-height:38px}
+.btn.solid,.btn.rose{background:var(--ink);color:var(--card-solid);font-weight:700}
+.btn.ghost{background:transparent;box-shadow:inset 0 0 0 1px var(--line);color:var(--ink-2)}
+.btn.sm{padding:5px 10px;font-size:13px;min-height:32px;border-radius:9px}
+.btn.on{background:var(--moss-tint);color:var(--moss-deep);font-weight:700}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.danger{background:transparent;box-shadow:inset 0 0 0 1px #9b5a4a;color:#8a4c3e}
+.btn.big{width:100%;min-height:52px;border-radius:14px;font-size:16px}
+.link{background:none;border:0;color:var(--ink-2);font-size:13px;padding:2px 0;text-decoration:underline;text-underline-offset:3px}
+input.line,textarea.line,select.line{width:100%;min-width:0;background:transparent;border:0;border-bottom:1px solid var(--line);padding:6px 2px;color:var(--ink)}
+input.line:focus,textarea.line:focus,select.line:focus{outline:none;border-color:var(--moss-deep)}
+textarea.line{resize:vertical}
+label.lab{display:flex;flex-direction:column;gap:2px;min-width:0}
+label.lab>span{font-size:12px;color:var(--ink-3)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:rgba(60,58,52,.10);border-radius:12px;padding:3px}
+.seg button{border:0;background:transparent;padding:7px 2px;color:var(--ink-2);font-size:14px;border-radius:9px;min-width:0}
+.seg button.on{background:var(--card-solid);color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+/* songs */
+.song{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center;border:0;border-top:1px solid var(--line);padding:14px 0;text-align:left;background:none;width:100%}
+.song:first-child{border-top:0}
+.song b{font-size:18px}
+.bar{height:5px;background:var(--well);display:flex;overflow:hidden;grid-column:1/-1;border-radius:3px}
+.bar i{display:block;height:100%}
+
+/* player */
+.playerCard{position:sticky;top:calc(6px + env(safe-area-inset-top,0px));z-index:4;background:var(--card-solid)}
+.player{position:relative;background:var(--screen);border-radius:12px;overflow:hidden;display:flex;justify-content:center}
+.player video{display:block;width:100%;max-height:var(--ph,46vh);background:var(--screen);object-fit:contain}
+.player video.mirror{transform:scaleX(-1)}
+.player .empty{aspect-ratio:16/10;width:100%;display:grid;place-items:center;text-align:center;padding:20px;color:#c9c6bf;font-size:14px}
+.player .empty .btn{background:var(--card-solid);color:var(--ink);font-weight:700}
+.ov-count{position:absolute;left:12px;top:8px;font-weight:900;font-size:52px;line-height:1;color:#faf9f6;text-shadow:0 2px 8px rgba(0,0,0,.5);pointer-events:none;font-variant-numeric:tabular-nums}
+.ov-count small{display:block;font-family:var(--f-mono);font-size:11px;font-weight:400;color:#cfccc5;margin-top:2px}
+.ov-count.one{color:var(--moss-tint)}
+.ov-sec{position:absolute;right:12px;top:12px;max-width:58%;text-align:right;font-size:14px;font-weight:700;color:#faf9f6;text-shadow:0 1px 6px rgba(0,0,0,.7);pointer-events:none}
+.ov-sec small{display:block;font-weight:400;color:#d4d1ca;font-size:12px}
+.ov-size{position:absolute;right:8px;bottom:8px;display:flex;gap:2px;background:rgba(0,0,0,.45);border-radius:9px;padding:2px}
+.ov-size button{border:0;background:transparent;color:#d4d1ca;font-size:12px;padding:4px 8px;border-radius:7px;min-height:28px}
+.ov-size button.on{background:rgba(250,249,246,.9);color:var(--ink);font-weight:700}
+.ov-test{position:absolute;inset:0;background:#1e1e1d;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center;pointer-events:none;color:#faf9f6}
+.ov-test b{font-size:26px;line-height:1.35;text-wrap:balance}
+.ov-test span{color:#bdbab3;font-size:14px}
+.ov-cd{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.35);font-size:120px;font-weight:900;color:var(--moss-tint);pointer-events:none}
+.scrub{width:100%;accent-color:var(--moss-deep);margin:0}
+.timeline{position:relative;height:12px;margin-top:4px;background:var(--well);border-radius:3px}
+.timeline i{position:absolute;top:3px;height:6px;border-radius:2px}
+.timeline .ab{position:absolute;top:0;height:12px;box-shadow:inset 0 0 0 1.5px var(--moss-deep);border-radius:3px;background:rgba(138,157,127,.18)}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.slot{border:0;background:var(--well);padding:7px 4px;font-size:12px;line-height:1.3;color:var(--ink-2);min-width:0;border-radius:10px}
+.slot b{display:block;font-size:13px;color:var(--ink)}
+.slot.has b::after{content:" ●";color:var(--moss);font-size:9px;vertical-align:2px}
+.slot.on{background:var(--moss-tint);color:var(--moss-deep)}
+.slot.on b{color:var(--moss-deep)}
+.transport{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.transport button{border:0;background:var(--well);padding:10px 0;font-size:14px;border-radius:10px;min-height:44px}
+.transport .play{background:var(--ink);color:var(--card-solid);font-weight:700}
+.speeds{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.speeds button{border:0;background:var(--well);padding:7px 0;font-family:var(--f-mono);font-size:13px;color:var(--ink-2);border-radius:10px;min-height:36px}
+.speeds button.on{background:var(--moss);color:#fff}
+.toggles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.toggles button{font-size:13px;padding:7px 2px}
+details.more summary{list-style:none;cursor:pointer;font-size:13px;color:var(--ink-2)}
+details.more summary::-webkit-details-marker{display:none}
+
+/* quick row + focus */
+.quick{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;margin-top:8px}
+.quick button{border:0;background:var(--well);border-radius:10px;min-height:44px;font-size:13px;padding:0 2px;color:var(--ink);min-width:0;white-space:nowrap}
+.quick .play{background:var(--ink);color:var(--card-solid);font-weight:700;grid-column:span 2}
+.quick button.on{background:var(--moss);color:#fff}
+.quick button:disabled{opacity:.4}
+@media (max-width:480px){.quick{gap:3px}.quick button{font-size:12px}.quick .play{grid-column:auto}}
+body.focus{overflow:hidden}
+body.focus .playerCard{position:fixed;inset:0;z-index:50;border-radius:0;margin:0;padding:calc(8px + env(safe-area-inset-top,0px)) 10px calc(10px + env(safe-area-inset-bottom,0px));background:#151514;display:flex;flex-direction:column;box-shadow:none}
+body.focus .player{flex:1;min-height:0;align-items:center;border-radius:8px}
+body.focus .player video{max-height:100%;height:100%}
+body.focus .ov-size,body.focus .playerCard .lessons{display:none}
+body.focus .scrub{accent-color:var(--moss)}
+body.focus .timeline{background:#2c2c2a}
+body.focus #tnow,body.focus .playerCard .note{color:#bdbab3}
+body.focus .quick button{background:#2c2c2a;color:#ecebe7}
+body.focus .quick .play{background:#faf9f6;color:#151514}
+body.focus .quick button.on{background:var(--moss);color:#fff}
+body.focus .ov-sec{font-size:18px}body.focus .ov-sec small{font-size:15px}
+.guide{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px}
+.guide li b{display:block;font-size:15px}.guide li span{font-size:13px;color:var(--ink-2)}
+.guide li.done b{text-decoration:line-through;color:var(--ink-3)}.guide li.done span{display:none}
+.guide li.done::marker{color:var(--moss-deep)}
+.loops{display:flex;flex-direction:column;gap:6px}
+.loopi{display:grid;grid-template-columns:auto 1fr 28px;gap:8px;align-items:center;background:var(--well);border-radius:12px;padding:4px 6px 4px 4px}
+.loopi .lp{border:0;background:var(--card-solid);border-radius:9px;padding:6px 10px;display:flex;flex-direction:column;align-items:flex-start;min-height:44px;justify-content:center;min-width:96px}
+.loopi .lp b{font-size:13px}.loopi .lp span{font-size:11px;color:var(--ink-3)}
+.loopi.on{background:var(--moss-tint)}.loopi.on .lp{background:var(--moss);color:#fff}.loopi.on .lp span{color:#eef2ea}
+.loopi .x{border:0;background:transparent;color:var(--ink-3);font-size:18px;padding:0}
+.qrow .c em{display:block;font-style:normal;font-size:13px;color:var(--ink-2);line-height:1.5;margin:2px 0}
+.qrow.looping{background:var(--moss-tint);border-radius:12px;box-shadow:inset 3px 0 0 var(--moss-deep)}
+.qrow.sel{background:#ecefe8;border-radius:12px}
+.ck{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;box-shadow:inset 0 0 0 1.5px var(--ink-3);color:var(--moss-deep);font-weight:700}
+.selbar{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--ink);color:var(--card-solid);border-radius:12px;padding:8px 10px;position:sticky;bottom:10px;z-index:3;font-size:14px}
+.selbar .btn.solid{background:var(--card-solid);color:var(--ink)}
+.playerCard .lessons{margin:-2px -2px 8px}
+.playerCard .lessons button{box-shadow:none;background:var(--well)}
+.playerCard .lessons button.on{background:var(--ink)}
+/* lessons bar */
+.lessons{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 4px;scrollbar-width:none}
+.lessons::-webkit-scrollbar{display:none}
+.lessons button{flex:none;border:0;background:var(--card);box-shadow:var(--shadow);border-radius:12px;padding:6px 12px;display:flex;flex-direction:column;align-items:flex-start;line-height:1.25;min-height:44px;justify-content:center}
+.lessons button b{font-size:14px}.lessons button span{font-size:11px;color:var(--ink-3)}
+.lessons button.on{background:var(--ink);color:var(--card-solid)}
+.lessons button.on span{color:#cfccc5}
+.lessons button.add{background:transparent;box-shadow:inset 0 0 0 1px var(--line);color:var(--ink-2);font-size:14px}
+/* quick view */
+.qv{display:flex;flex-direction:column}
+.qrow{display:grid;grid-template-columns:46px 1fr auto;gap:10px;align-items:center;padding:12px 8px;border-top:1px solid var(--line);cursor:pointer;border-radius:0}
+.qrow:first-child{border-top:0}
+.qrow .t{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.qrow .c{min-width:0}
+.qrow .c b{display:block;font-size:16px;font-weight:500;line-height:1.35;overflow-wrap:anywhere}
+.qrow .c span{font-size:12px;color:var(--ink-3)}
+.qrow.now{background:var(--moss-tint);border-radius:12px;border-top-color:transparent}
+.qrow.now .c b{font-weight:700}.qrow.now .t{color:var(--moss-deep)}
+.qrow.now+.qrow{border-top-color:transparent}
+.st{width:20px;height:20px;border-radius:50%;border:0;padding:0;background:transparent;box-shadow:inset 0 0 0 1.6px #3a3936}
+.st.y{background:linear-gradient(90deg,var(--moss) 50%,transparent 50%);box-shadow:inset 0 0 0 1.6px var(--moss)}
+.st.g{background:var(--moss);box-shadow:none}
+.legend{display:flex;gap:14px;justify-content:center;font-size:12px;color:var(--ink-2)}
+.legend span{display:flex;gap:5px;align-items:center}
+.legend i{width:11px;height:11px;border-radius:50%;display:inline-block;box-shadow:inset 0 0 0 1.5px #3a3936}
+.legend i.y{background:linear-gradient(90deg,var(--moss) 50%,transparent 50%);box-shadow:inset 0 0 0 1.5px var(--moss)}
+.legend i.g{background:var(--moss);box-shadow:none}
+.ed{padding:12px 8px 16px;display:flex;flex-direction:column;gap:12px;background:rgba(235,233,228,.6);border-radius:12px;margin:4px 0 8px}
+.stpick{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.stpick button{border:0;background:var(--well);padding:7px 0;font-size:13px;border-radius:10px;color:var(--ink-2)}
+.stpick button.on{background:var(--moss-tint);color:var(--moss-deep);font-weight:700}
+.snaps{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.snaps figure{margin:0;position:relative}
+.snaps img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;border-radius:8px}
+.snaps figcaption{font-family:var(--f-mono);font-size:10px;color:var(--ink-3)}
+.snaps .x{position:absolute;top:4px;right:4px;border:0;background:rgba(0,0,0,.55);color:#fff;width:24px;height:24px;font-size:13px;padding:0;border-radius:12px}
+.checks{display:flex;flex-direction:column;gap:6px}
+.checks label{display:flex;gap:8px;align-items:flex-start;font-size:14px}
+.checks input{accent-color:var(--moss-deep);margin-top:4px}
+.queue{display:flex;flex-direction:column;gap:2px;max-height:220px;overflow:auto}
+.queue div{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--ink-2);padding:5px 8px;border-radius:8px}
+.queue div.now{color:var(--moss-deep);background:var(--moss-tint);font-weight:700}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:#8a4c3e}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--card-solid);padding:9px 16px;font-size:14px;z-index:9;max-width:calc(100% - 32px);border-radius:12px}
+@media (max-width:420px){h1{font-size:30px}.toggles{grid-template-columns:repeat(2,1fr)}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <div class="seam" aria-hidden="true"></div>
+  <header class="top">
+    <button class="back" data-act="home" id="backBtn" style="background:none;border:0;padding:6px 0" hidden>‹ 我的歌</button>
+    <button class="brand" data-act="home">ORIGINA · <b>HH</b></button>
+    <span class="sync" id="sync">僅存本機</span>
+  </header>
+  <main id="main" class="stack"></main>
+</div>
+<input type="file" id="filePick" accept="video/*" hidden>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const main=$("#main");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad=n=>String(n).padStart(2,"0");
+const fmt=t=>{t=Math.max(0,t||0);return Math.floor(t/60)+":"+pad(Math.floor(t%60));};
+const fmt1=t=>{t=Math.max(0,t||0);return Math.floor(t/60)+":"+pad(Math.floor(t%60))+"."+Math.floor((t%1)*10);};
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const n=v=>{const x=parseFloat(v);return isFinite(x)?x:0;};
+let toastT=0;function toast(m){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2600);}
+
+/* ---------- store: cloud db when available, else this browser ---------- */
+const LS="origina.hh.v1";
+let docs=new Map(),backend="local",col=null,firstSnap=true;
+try{const raw=localStorage.getItem(LS);if(raw)docs=new Map(Object.entries(JSON.parse(raw)));}catch(e){}
+const persistLocal=()=>{try{localStorage.setItem(LS,JSON.stringify(Object.fromEntries(docs)));}catch(e){}};
+const chains={},timers={};
+const pend={};
+function write(id,data){
+  if(data==null)docs.delete(id);else docs.set(id,data);
+  if(backend!=="cloud"){persistLocal();return;}
+  const snap=data==null?null:JSON.parse(JSON.stringify(data));pend[id]={v:snap};
+  chains[id]=(chains[id]||Promise.resolve()).then(()=>snap==null?col.doc(id).delete():col.doc(id).set(snap)).then(()=>{if(pend[id]&&pend[id].v===snap)setTimeout(()=>{if(pend[id]&&pend[id].v===snap)delete pend[id];},1500);})
+    .catch(err=>{delete pend[id];const c=(err&&err.code)||"未知";setSync("同步失敗："+c,false);toast("雲端存檔失敗（"+c+"）："+((err&&err.message)||"")+"，資料先存在這台裝置");backend="local";persistLocal();});
+}
+function writeSoon(id,data,ms=700){docs.set(id,data);clearTimeout(timers[id]);timers[id]=setTimeout(()=>{delete timers[id];write(id,docs.get(id));},ms);}
+function setSync(t,on){const el=$("#sync");el.textContent=t;el.classList.toggle("on",!!on);}
+let assets=null,sample=null,sampleImg=false;
+async function connect(){
+  if(!window.claude||!window.claude.use)return;
+  window.claude.use("assets").then(a=>{assets=a;}).catch(()=>{});
+  window.claude.use("sample").then(async s=>{sample=s;if(s){try{sampleImg=!!(await s.limits()).images;}catch(e){}}safeRender();}).catch(()=>{});
+  try{
+    const [db,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);
+    if(!db||!user)return;const id=await user.id();if(!id)return;
+    col=db.collection("data/users/"+id);
+    col.onSnapshot(async snap=>{
+      const m=new Map(snap.docs.map(d=>[d.id,JSON.parse(JSON.stringify(d.data()||{}))]));
+      if(firstSnap){firstSnap=false;backend="cloud";setSync("雲端同步中",true);
+        if(m.size===0&&docs.size>0){for(const [k,d] of docs){try{await col.doc(k).set(d);}catch(e){}}return;}}
+      for(const k in timers){if(docs.has(k))m.set(k,docs.get(k));}
+      for(const k in pend){if(pend[k].v==null)m.delete(k);else m.set(k,pend[k].v);}
+      docs=m;persistLocal();safeRender();
+    },()=>{setSync("離線，暫存本機",false);backend="local";});
+  }catch(e){}
+}
+
+/* ---------- device video memory (IndexedDB, optional) ---------- */
+const IDB={db:null,
+  open(){return new Promise(res=>{try{const r=indexedDB.open("origina-hh-videos",1);r.onupgradeneeded=()=>r.result.createObjectStore("v");r.onsuccess=()=>{this.db=r.result;res(this.db);};r.onerror=()=>res(null);}catch(e){res(null);}});},
+  async put(k,file){try{const db=this.db||await this.open();if(!db)return false;return await new Promise(res=>{const tx=db.transaction("v","readwrite");tx.objectStore("v").put(file,k);tx.oncomplete=()=>res(true);tx.onerror=()=>res(false);tx.onabort=()=>res(false);});}catch(e){return false;}},
+  async get(k){try{const db=this.db||await this.open();if(!db)return null;return await new Promise(res=>{const r=db.transaction("v").objectStore("v").get(k);r.onsuccess=()=>res(r.result||null);r.onerror=()=>res(null);});}catch(e){return null;}},
+  async del(k){try{const db=this.db||await this.open();if(!db)return;db.transaction("v","readwrite").objectStore("v").delete(k);}catch(e){}}
+};
+
+/* ---------- model ---------- */
+const SLOTS=[{id:"fn",name:"正面",kind:"正常",sync:true},{id:"bn",name:"背面",kind:"正常",sync:true},{id:"fe",name:"正面",kind:"講解",sync:false},{id:"be",name:"背面",kind:"講解",sync:false}];
+const songs=()=>[...docs.entries()].filter(([k,v])=>v&&v.type==="song").map(([k,v])=>({id:k,...v})).sort((a,b)=>(b.updated||"").localeCompare(a.updated||""));
+const lessonsOf=s=>((s&&s.lessons)||[]).map((l,i)=>({...l,_i:i})).sort((a,b)=>(a.date||"").localeCompare(b.date||"")||a._i-b._i);
+function secsOf(sid,lid){
+  const s=getSong(sid);const order=lessonsOf(s).map(l=>l.id);
+  const all=[...docs.entries()].filter(([k,v])=>v&&v.type==="sec"&&v.song===sid).map(([k,v])=>({id:k,...v}));
+  if(lid==="*")return all.filter(x=>!x.archived).sort((a,b)=>(order.indexOf(a.lesson)-order.indexOf(b.lesson))||a.start-b.start);
+  const L=lid===undefined?st.lesson:lid;return all.filter(x=>x.lesson===L).sort((a,b)=>a.start-b.start);
+}
+const clone=o=>JSON.parse(JSON.stringify(o));
+function saveSong(s,soon){const {id,...d}=s;d.updated=new Date().toISOString();soon?writeSoon(id,d):write(id,d);}
+function saveSec(s,soon){const {id,...d}=s;soon?writeSoon(id,d):write(id,d);}
+const getSong=id=>{const d=docs.get(id);return d?{id,...d}:null;};
+const getSec=id=>{const d=docs.get(id);return d?{id,...d}:null;};
+
+/* ---------- state ---------- */
+const st={view:"home",song:null,slot:"fn",tab:"qv",open:null,speed:1,mirror:false,count:true,cd:false,test:false,A:null,B:null,loop:false,queue:null,qi:0,qrep:0,confirm:null,taps:[],busy:""};
+const urlsBy={},namesBy={};   // lesson -> slot -> blob url / file name (this session)
+let urls={},fileNames={};
+function useLesson(lid){st.lesson=lid;urls=urlsBy[lid]=urlsBy[lid]||{};fileNames=namesBy[lid]=namesBy[lid]||{};}
+const curLesson=()=>{const s=getSong(st.song);return (s&&(s.lessons||[]).find(l=>l.id===st.lesson))||null;};
+function patchLesson(fn,soon){const s=getSong(st.song);const L=s&&(s.lessons||[]).find(l=>l.id===st.lesson);if(!L)return;fn(L);saveSong(s,soon);}
+const curAnchor=()=>{const L=curLesson();return (L&&L.anchor)||0;};
+const lessonNo=lid=>{const s=getSong(st.song);return lessonsOf(s).findIndex(l=>l.id===lid)+1;};
+let V=null;          // video element
+
+/* ---------- beat grid ---------- */
+function beatInfo(song,t){
+  if(!song||!song.bpm)return null;const spb=60/song.bpm;const b=Math.floor((t-curAnchor())/spb+1e-6);
+  if(b<0)return {eight:0,count:0,b};return {eight:Math.floor(b/8)+1,count:(b%8)+1,b};
+}
+const eightStart=(song,k)=>curAnchor()+(k-1)*8*60/song.bpm;
+function eightLabel(song,a,b){if(!song||!song.bpm)return "";const ia=beatInfo(song,a+.01),ib=beatInfo(song,b-.05);if(!ia||!ib||ia.eight<1)return "";return ia.eight===ib.eight?"8拍 #"+ia.eight:"8拍 #"+ia.eight+"–"+ib.eight;}
+
+/* ---------- time mapping between synced slots ---------- */
+const off=slot=>{const L=curLesson();return (L&&L.offsets&&L.offsets[slot])||0;};
+const slotInfo=id=>SLOTS.find(x=>x.id===id);
+const synced=()=>slotInfo(st.slot).sync;
+const gT=()=>V?V.currentTime-(synced()?off(st.slot):0):0; // global (front-normal) time
+function seekG(t){if(!V)return;V.currentTime=Math.max(0,t+(synced()?off(st.slot):0));}
+
+/* ---------- audio BPM detection ---------- */
+async function detectBpm(file){
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw new Error("no audio");
+  const ac=new AC();const buf=await ac.decodeAudioData(await file.arrayBuffer());try{ac.close();}catch(e){}
+  const sr=buf.sampleRate,ch=buf.getChannelData(0),hop=512,len=Math.floor(ch.length/hop);
+  const env=new Float32Array(len);for(let i=0;i<len;i++){let s=0;const o=i*hop;for(let j=0;j<hop;j++){const v=ch[o+j]||0;s+=v*v;}env[i]=Math.log(1e-9+s);}
+  const on=new Float32Array(len);for(let i=1;i<len;i++){const d=env[i]-env[i-1];on[i]=d>0?d:0;}
+  let mean=0;for(const v of on)mean+=v;mean/=len;for(let i=0;i<len;i++)on[i]=Math.max(0,on[i]-mean);
+  const fps=sr/hop,s0=Math.floor(len*.1),s1=Math.min(len,s0+Math.floor(fps*90));
+  let best=0,bestLag=0;const minL=Math.floor(fps*60/180),maxL=Math.ceil(fps*60/70);
+  for(let L=minL;L<=maxL;L++){let s=0;for(let i=s0;i<s1-L;i++)s+=on[i]*on[i+L];const bpm=60*fps/L;const w=Math.exp(-Math.pow(Math.log2(bpm/115),2)/.5);s*=w;if(s>best){best=s;bestLag=L;}}
+  // refine tempo and phase together on a fine grid
+  const coarse=60*fps/bestLag;let bp=-1,bpm=coarse,bph=0;
+  for(let cand=coarse-2.5;cand<=coarse+2.5;cand+=.05){const spbF=fps*60/cand;
+    for(let ph=0;ph<spbF;ph+=.5){let s=0;for(let k=0;;k++){const i=Math.round(s0+ph+k*spbF);if(i>=s1)break;s+=on[i]+.5*((on[i-1]||0)+(on[i+1]||0));}if(s>bp){bp=s;bpm=cand;bph=ph;}}}
+  let anchor=(s0+bph)/fps;const spb=60/bpm;anchor=anchor-Math.floor(anchor/spb)*spb;
+  return {bpm:Math.round(bpm*10)/10,anchor:Math.round(anchor*1000)/1000};
+}
+
+/* ---------- practice queue ---------- */
+function buildQueue(kind){
+  const s=getSong(st.song);const all=secsOf(st.song);if(!all.length)return null;const reps=Math.max(1,s.reps||3);
+  let list=all,q=[];
+  if(kind==="weak"){list=all.filter(x=>x.status!=="g");if(!list.length){toast("全部都是綠燈了！");return null;}list.forEach(x=>q.push({a:x.start,b:x.end,reps,label:x.name}));}
+  else if(kind==="chain"){for(let i=0;i<all.length;i++){q.push({a:all[i].start,b:all[i].end,reps,label:all[i].name});if(i>0)q.push({a:all[0].start,b:all[i].end,reps:Math.max(1,reps-1),label:all[0].name+" → "+all[i].name});}}
+  else if(kind==="review"){const weak=all.filter(x=>x.status!=="g"),ok=all.filter(x=>x.status==="g");
+    weak.forEach(x=>q.push({a:x.start,b:x.end,reps:2,label:x.name}));ok.forEach(x=>q.push({a:x.start,b:x.end,reps:1,label:x.name}));q.push({a:all[0].start,b:all[all.length-1].end,reps:1,label:"這堂從頭到尾"});}
+  else if(kind==="whole"){q.push({a:all[0].start,b:all[all.length-1].end,reps:reps,label:"整首（到目前進度）"});}
+  return q;
+}
+function startQueue(kind){const q=buildQueue(kind);if(!q)return;if(!V||!V.src){toast("先選一支正面或背面（正常版）影片");return;}
+  if(!synced()){const s=getSong(st.song);st.slot=urls.fn?"fn":urls.bn?"bn":st.slot;}
+  st.queue=q;st.qi=0;st.qrep=0;st.loop=false;st.A=q[0].a;st.B=q[0].b;seekG(q[0].a);render();goPlay();}
+function stopQueue(){st.queue=null;render();}
+
+/* ---------- playback loop ---------- */
+let cdTimer=0,cdLeft=0;
+function goPlay(){if(!V)return;if(st.cd){countdown(()=>V.play().catch(()=>{}));}else V.play().catch(()=>{});}
+function countdown(done){const s=getSong(st.song);const step=s&&s.bpm?60/s.bpm*1000/Math.min(1,st.speed||1)*Math.min(1,st.speed||1):700;
+  V.pause();cdLeft=3;paintCd();clearInterval(cdTimer);cdTimer=setInterval(()=>{cdLeft--;if(cdLeft<=0){clearInterval(cdTimer);paintCd();done();}else paintCd();},Math.max(350,s&&s.bpm?60000/s.bpm/(st.speed||1):700));}
+function paintCd(){const el=$("#cd");if(!el)return;el.hidden=cdLeft<=0;el.textContent=cdLeft;}
+function tick(){
+  requestAnimationFrame(tick);if(!V||st.view!=="song")return;
+  const t=gT(),song=getSong(st.song);
+  if(synced()){
+    let lo=null,hi=null;
+    if(st.queue){const it=st.queue[st.qi];lo=it.a;hi=it.b;}else if(st.loop&&st.A!=null&&st.B!=null&&st.B>st.A){lo=st.A;hi=st.B;}
+    if(hi!=null&&!V.paused&&t>=hi){
+      if(st.queue){const it=st.queue[st.qi];st.qrep++;if(st.qrep>=it.reps){st.qrep=0;st.qi++;if(st.qi>=st.queue.length){st.queue=null;V.pause();toast("練習完成！");render();return;}}
+        const nx=st.queue[st.qi];st.A=nx.a;st.B=nx.b;seekG(nx.a);paintQueue();if(st.cd)goPlay();}
+      else{seekG(lo);if(st.cd)goPlay();}
+    }
+  }
+  paintOverlay(t,song);
+}
+function paintOverlay(t,song){
+  const c=$("#ovc"),sc=$("#ovs"),sb=$("#scrub"),tl=$("#tnow");
+  if(sb&&!sb.matches(":active")){sb.max=V.duration||0;sb.value=V.currentTime;}
+  if(tl)tl.textContent=fmt1(V.currentTime)+" / "+fmt(V.duration||0);
+  const bi=synced()&&st.count?beatInfo(song,t):null;
+  if(c){if(bi&&bi.eight>0){c.hidden=false;c.innerHTML=`${bi.count}<small>8拍 #${bi.eight}</small>`;c.classList.toggle("one",bi.count===1);}else c.hidden=true;}
+  const secs=synced()?secsOf(st.song):[];const cur=secs.find(x=>t>=x.start&&t<x.end);
+  if(sc){sc.innerHTML=cur?`${esc(cur.name)}<small>${esc(cur.cue||"")}</small>`:"";}
+  const tst=$("#ovt");if(tst){tst.hidden=!st.test;if(st.test){tst.innerHTML=cur?`<span>${esc(cur.name)}</span><b>${esc(cur.cue||"（還沒寫口訣）")}</b>${bi&&bi.eight>0?`<span class="num">${bi.count}</span>`:""}`:`<span>這段沒有段落卡</span>`;}}
+  document.querySelectorAll(".qrow").forEach(r=>{const on=cur&&r.dataset.id===cur.id;if(on!==r.classList.contains("now")){r.classList.toggle("now",on);if(on&&!st.open&&st.follow)r.scrollIntoView({block:"nearest",behavior:"smooth"});}});
+}
+function paintQueue(){const q=$("#queue");if(!q||!st.queue)return;q.querySelectorAll("div").forEach((d,i)=>d.classList.toggle("now",i===st.qi));const r=$("#qrep");if(r)r.textContent=`第 ${st.qi+1}/${st.queue.length} 組・第 ${st.qrep+1}/${st.queue[st.qi].reps} 遍`;}
+
+/* ---------- loading videos ---------- */
+async function loadSlotFile(slot,file,remember){
+  if(urls[slot])URL.revokeObjectURL(urls[slot]);urls[slot]=URL.createObjectURL(file);fileNames[slot]=file.name;
+  patchLesson(L=>{L.files=L.files||{};L.files[slot]=file.name;});
+  switchSlot(slot,true);
+  if(remember){const key=st.song+"/"+st.lesson+"/"+slot;IDB.put(key,file).then(ok=>toast(ok?"已存在這台裝置，下次打開會自動載入":"這台裝置存不下這支影片，下次需要重新選擇"));}
+}
+async function restoreSlots(){const song=getSong(st.song);const Ls=lessonsOf(song);
+  for(const [i,L] of Ls.entries()){urlsBy[L.id]=urlsBy[L.id]||{};namesBy[L.id]=namesBy[L.id]||{};
+    for(const sl of SLOTS){if(urlsBy[L.id][sl.id])continue;let f=await IDB.get(st.song+"/"+L.id+"/"+sl.id);if(!f&&i===0)f=await IDB.get(st.song+"/"+sl.id);
+      if(f){urlsBy[L.id][sl.id]=URL.createObjectURL(f);namesBy[L.id][sl.id]=f.name||"已存影片";}}}
+  useLesson(st.lesson);pickSlotAndShow();}
+function pickSlotAndShow(){const first=urls[st.slot]?st.slot:(SLOTS.find(x=>urls[x.id])||{}).id;if(first&&(!V||!V.src||V.src!==urls[first]))switchSlot(first,true);else render();}
+function switchSlot(slot,keep){
+  const t=V&&V.src?gT():0,wasPlaying=V&&!V.paused;st.slot=slot;render();
+  if(!urls[slot])return;V.src=urls[slot];V.playbackRate=st.speed;
+  V.onloadedmetadata=()=>{V.playbackRate=st.speed;if(st.pendingSeek!=null){seekG(st.pendingSeek);st.pendingSeek=null;}else if(slotInfo(slot).sync&&keep!=="fresh")seekG(t);if(wasPlaying)V.play().catch(()=>{});};
+}
+function clearUrls(){for(const l in urlsBy){for(const k in urlsBy[l])URL.revokeObjectURL(urlsBy[l][k]);delete urlsBy[l];delete namesBy[l];}urls={};fileNames={};}
+
+/* ---------- views ---------- */
+const ties='';
+function vHome(){
+  const ss=songs();
+  return `
+  <section class="panel">
+    <div class="eyebrow">HIGH HEELS · CLASS NOTES</div>
+    <h1>HH 舞蹈筆記</h1>
+    <p class="sub" style="margin:4px 0 0">一首歌一本。上課錄影、切段、寫口訣，練習只練不熟的段落。</p>${ties}
+  </section>
+  <section class="panel stack">
+    <h2>我的歌</h2>
+    ${ss.length?`<div>${ss.map(s=>{const sc=secsOf(s.id,"*"),g=sc.filter(x=>x.status==="g").length,y=sc.filter(x=>x.status==="y").length,r=sc.length-g-y;const L=(s.lessons||[]).length;
+      return `<button class="song" data-act="open" data-id="${esc(s.id)}"><span><b>${esc(s.title)}</b><br><span class="note">${esc([s.artist,s.studio,s.teacher].filter(Boolean).join("・"))}</span></span>
+        <span class="num note" style="text-align:right">${sc.length} 段・${L} 堂</span>
+        <span class="bar">${sc.length?`<i style="width:${g/sc.length*100}%;background:var(--moss)"></i><i style="width:${y/sc.length*100}%;background:var(--moss-tint)"></i>`:""}</span></button>`;}).join("")}</div>`
+      :`<p class="sub" style="margin:0">還沒有歌。新增第一首，選一支上課影片就能開始切段、練習。</p>`}
+  </section>
+  <section class="panel stack">
+    <h2>新增一首</h2>
+    <div class="grid2">
+      <label class="lab"><span>歌名</span><input class="line" id="nTitle" placeholder="歌名"></label>
+      <label class="lab"><span>歌手</span><input class="line" id="nArtist"></label>
+      <label class="lab"><span>教室</span><input class="line" id="nStudio" placeholder="例如：桃園教室"></label>
+      <label class="lab"><span>老師</span><input class="line" id="nTeacher"></label>
+    </div>
+    <div class="row"><button class="btn rose" data-act="add-song">建立</button></div>
+  </section>`;
+}
+function vSong(){
+  const s=getSong(st.song);if(!s){st.view="home";return vHome();}
+  const secs=secsOf(s.id),info=slotInfo(st.slot),dur=V&&V.duration||0;
+  const col=x=>x.status==="g"?"var(--moss)":x.status==="y"?"#b9c6b0":"#9c9a94";
+  const tl=dur&&info.sync?secs.map(x=>`<i style="left:${(x.start+off(st.slot))/dur*100}%;width:${Math.max(.4,(x.end-x.start)/dur*100)}%;background:${col(x)}"></i>`).join("")+(st.A!=null&&st.B!=null&&st.B>st.A?`<span class="ab" style="left:${(st.A+off(st.slot))/dur*100}%;width:${(st.B-st.A)/dur*100}%"></span>`:""):"";
+  const has=!!urls[st.slot];const PH={s:"32vh",m:"48vh",l:"70vh"};
+  return `
+  <section class="panel bare stack" style="gap:2px">
+    <span class="sub">${esc([s.artist,s.studio,s.teacher].filter(Boolean).join(" · "))}${s.bpm?` · <span class="num">${s.bpm} BPM</span>`:""}</span>
+    <h1>${esc(s.title)}</h1>
+  </section>
+  <section class="panel playerCard" style="padding:10px">
+  <div class="lessons" role="group" aria-label="第幾堂">${lessonsOf(s).map((l,i)=>`<button class="${l.id===st.lesson?"on":""}" data-act="lesson" data-id="${esc(l.id)}"><b>第 ${i+1} 堂</b><span class="num">${esc((l.date||"").slice(5).replace("-","/"))}</span></button>`).join("")}<button class="add" data-act="addles" aria-label="新增一堂">＋ 一堂</button></div>
+    <div class="player" style="--ph:${PH[st.psize||"m"]}">
+      <video id="vid" playsinline preload="metadata" class="${st.mirror?"mirror":""}" ${has?"":"hidden"}></video>
+      ${has?"":(()=>{const lf=(curLesson()||{}).files||{};const loaded=SLOTS.filter(x=>urls[x.id]);return `<div class="empty"><div><b>第 ${lessonNo(st.lesson)} 堂・${info.name}・${info.kind}版</b><br>${lf[st.slot]?`上次用的是「${esc(lf[st.slot])}」，請重新選擇。<br>`:""}<button class="btn" data-act="pick" data-slot="${st.slot}" style="margin-top:10px">選擇影片</button>${loaded.length?`<div style="margin-top:12px">這堂已載入：${loaded.map(x=>`<button class="link" style="color:#e6e4df" data-act="slot" data-slot="${x.id}">${x.name}・${x.kind}版</button>`).join("　")}</div>`:""}</div></div>`;})()}
+      <div class="ov-count" id="ovc" hidden></div><div class="ov-sec" id="ovs"></div>
+      <div class="ov-test" id="ovt" hidden></div><div class="ov-cd" id="cd" hidden></div>
+      ${has?`<div class="ov-size" role="group" aria-label="畫面大小">${[["s","小"],["m","中"],["l","大"]].map(([k,t])=>`<button class="${(st.psize||"m")===k?"on":""}" data-act="psize" data-v="${k}">${t}</button>`).join("")}</div>`:""}
+    </div>
+    <div style="margin-top:8px"><input type="range" class="scrub" id="scrub" min="0" step="0.01" value="0" aria-label="播放位置"><div class="timeline">${tl}</div>
+      <div class="row between" style="margin-top:2px"><span class="num note" id="tnow">0:00</span><span class="note">${info.sync?"":"講解版：自由播放，不套用段落"}</span></div></div>
+    <div class="quick">
+      <button data-act="prev" aria-label="上一段">⏮</button>
+      <button class="play" data-act="play" id="playBtn">▶︎ 播放</button>
+      <button data-act="next" aria-label="下一段">⏭</button>
+      <button data-act="speedcyc" aria-label="切換速度"><span class="num">${st.speed}×</span></button>
+      <button class="${st.mirror?"on":""}" data-act="tg" data-k="mirror">鏡射</button>
+      <button class="${st.loop?"on":""}" data-act="loopcur" aria-label="循環目前這段">循環</button>
+      ${info.sync?`<button data-act="cut" ${V&&V.src?"":"disabled"} aria-label="在這裡切開">＋切開</button>`:""}
+      <button data-act="focus" aria-label="${st.focus?"縮小":"放大全螢幕"}">${st.focus?"縮小":"⛶ 放大"}</button>
+    </div>
+  </section>
+  <section class="panel stack" style="gap:10px">
+    <details class="more" ${st.more?"open":""} id="moreBox"><summary>更多控制：慢速細調、數拍、自測、正背面切換、A-B 循環 ▾</summary>
+    <div class="stack" style="gap:10px;margin-top:10px">
+    <div class="speeds">${[.25,.5,.75,1].map(v=>`<button class="${st.speed===v?"on":""}" data-act="speed" data-v="${v}">${v}×</button>`).join("")}</div>
+    <div class="toggles">
+      <button class="btn sm ${st.count?"on":""}" data-act="tg" data-k="count">數拍</button>
+      <button class="btn sm ${st.cd?"on":""}" data-act="tg" data-k="cd">循環前倒數</button>
+      <button class="btn sm ${st.test?"on":""}" data-act="tg" data-k="test">自測模式</button>
+      <button class="btn sm ghost" data-act="back">−2 秒</button>
+    </div>
+    <div class="slots">${SLOTS.map(x=>`<button class="slot${urls[x.id]?" has":""}${x.id===st.slot?" on":""}" data-act="slot" data-slot="${x.id}"><b>${x.name}</b>${x.kind}</button>`).join("")}</div>
+    <div class="row" style="gap:6px;justify-content:flex-end"><button class="btn sm ghost" data-act="frame" data-d="-1" aria-label="上一格">◀ 格</button><button class="btn sm ghost" data-act="frame" data-d="1" aria-label="下一格">格 ▶</button></div>
+    </div></details>
+  </section>
+
+  ${guideCard(s,secs)}
+  ${st.queue?`<section class="panel stack"><div class="row between"><h2>練習中</h2><button class="btn sm danger" data-act="stopq">停止</button></div><div class="note" id="qrep"></div>
+    <div class="queue" id="queue">${st.queue.map((q,i)=>`<div class="${i===st.qi?"now":""}"><span>${esc(q.label)}</span><span class="num">${fmt(q.a)}–${fmt(q.b)} ×${q.reps}</span></div>`).join("")}</div></section>`:""}
+  <div class="seg">${[["qv","速覽"],["pr","練習"],["beat","拍子"],["vid","影片"],["les","課堂"]].map(([k,t])=>`<button class="${st.tab===k?"on":""}" data-act="tab" data-t="${k}">${t}</button>`).join("")}</div>
+  <section class="panel stack">
+    ${({qv:vQuick,pr:vPractice,beat:vBeat,vid:vVideos,les:vLessons})[st.tab](s,secs)}
+  </section>`;
+}
+function abCard(){
+  const L=curLesson()||{},loops=(L.loops||[]).slice().sort((a,b)=>a.a-b.a);
+  const active=x=>st.loop&&Math.abs(st.A-x.a)<.01&&Math.abs(st.B-x.b)<.01;
+  return `<section class="panel stack" style="gap:10px">
+    <div class="row between"><h2>A-B 循環</h2>${loops.length>1?`<button class="btn sm" data-act="aball">連續練全部 ${loops.length} 段</button>`:""}</div>
+    <div class="row" style="gap:6px">
+      <button class="btn sm ${st.A!=null?"on":""}" data-act="setA">A　${st.A!=null?fmt1(st.A):"設起點"}</button>
+      <button class="btn sm ${st.B!=null?"on":""}" data-act="setB">B　${st.B!=null?fmt1(st.B):"設終點"}</button>
+      <button class="btn sm solid" data-act="saveab" ${st.A!=null&&st.B!=null?"":"disabled"}>＋ 存成一段循環</button>
+      ${st.A!=null||st.B!=null?`<button class="link" data-act="clearAB">清除</button>`:""}
+    </div>
+    ${loops.length?`<div class="loops">${loops.map((x,i)=>`<div class="loopi${active(x)?" on":""}"><button class="lp" data-act="abplay" data-id="${esc(x.id)}"><b>${esc(x.name||("循環 "+(i+1)))}</b><span class="num">${fmt1(x.a)} – ${fmt1(x.b)}</span></button><input class="line" aria-label="循環名稱" id="lpn-${esc(x.id)}" data-lpn="${esc(x.id)}" value="${esc(x.name||"")}" placeholder="取個名字，例如：轉圈接撥髮"><button class="x" data-act="abdel" data-id="${esc(x.id)}" aria-label="刪除這段循環">×</button></div>`).join("")}</div>`
+      :`<p class="note" style="margin:0">播放到想練的地方按 A，再到結束按 B，按「存成一段循環」。可以存很多段，點一段就開始重複播放。</p>`}
+  </section>`;
+}
+function guideCard(s,secs){
+  if(st.guideOff)return "";
+  const hasV=SLOTS.some(x=>urls[x.id]),hasCue=secs.some(x=>(x.cue||"").trim());
+  const steps=[[hasV,"選這一堂的影片","按影片框裡的「選擇影片」，正面或背面都可以"],[!!s.bpm,"設定拍子（可略過）","到下面「拍子」按「自動抓 BPM」，之後就能自動切段、數拍"],[secs.length>0,"切開影片","播放時，在每個動作開始的地方按「＋切開」；影片會一段一段接下去。也可以在「速覽」按「依拍子自動切段」"],[hasCue,"寫口訣、標熟練度","在「速覽」每段按「編輯」寫口訣；圓圈點一下換 不會／卡卡／會了"]];
+  if(steps.every(x=>x[0]))return "";
+  return `<section class="panel stack" style="gap:8px"><div class="row between"><h2>第 ${lessonNo(st.lesson)} 堂・怎麼開始</h2><button class="link" data-act="guideoff">先收起</button></div>
+    <ol class="guide">${steps.map(([d,t,h])=>`<li class="${d?"done":""}"><b>${t}</b><span>${h}</span></li>`).join("")}</ol></section>`;
+}
+function autoSplit(per){
+  const s=getSong(st.song);if(!s.bpm||!V||!V.duration){toast("先設定拍子並載入影片");return;}
+  const spb=60/s.bpm,len=8*per*spb,end=V.duration-(synced()?off(st.slot):0);let t=curAnchor();while(t-len>0)t-=len;if(t<0)t+=len;
+  const exist=secsOf(s.id);let made=0,k=secsOf(s.id,"*").length;
+  for(;t+spb*2<end;t+=len){const a=Math.round(t*100)/100,b=Math.round(Math.min(end,t+len)*100)/100;
+    if(exist.some(x=>a<x.end-.05&&b>x.start+.05))continue;
+    k++;made++;saveSec({id:"sec_"+uid(),type:"sec",song:s.id,lesson:st.lesson,name:"第 "+k+" 段",start:a,end:b,cue:"",story:"",status:"r",details:[],snaps:[],note:""});}
+  toast(made?"切好 "+made+" 段，不需要的可以合併或刪除":"沒有空白的地方可以切");render();
+}
+function vQuick(s,secs){
+  const scope=st.qscope||"lesson";
+  const scopeSeg=`<div class="seg" style="max-width:240px">${[["lesson","這一堂"],["all","整首"]].map(([k,t])=>`<button class="${scope===k?"on":""}" data-act="qscope" data-v="${k}">${t}</button>`).join("")}</div>`;
+  if(scope==="all"){const all=secsOf(s.id,"*");let last="";
+    return scopeSeg+(all.length?`<div class="qv">${all.map(x=>{const head=x.lesson!==last?(last=x.lesson,`<div class="eyebrow" style="padding:12px 8px 4px">第 ${lessonNo(x.lesson)} 堂</div>`):"";
+      return head+`<div class="qrow" data-act="rowtap" data-id="${esc(x.id)}"><span class="t">${fmt(x.start)}</span><span class="c"><b>${esc(x.cue||x.name)}</b>${x.story?`<em>${esc(x.story)}</em>`:""}<span>${esc(x.name)}</span></span><span class="st ${x.status||"r"}" aria-hidden="true"></span></div>`;}).join("")}</div>
+      <p class="note" style="margin:0">整首速覽會把每一堂的段落依序接起來，封存的舊版不顯示。點一段會切到那一堂的影片。</p>`:`<p class="sub" style="margin:0">還沒有段落。</p>`);}
+  return scopeSeg+`
+  ${s.bpm&&synced()&&V&&V.src?`<div class="row" style="gap:6px"><span class="note">依拍子自動切段：</span><button class="btn sm" data-act="autosplit" data-v="1">每 1 個 8 拍</button><button class="btn sm" data-act="autosplit" data-v="2">每 2 個 8 拍</button></div>`:""}
+  <p class="note" style="margin:0">播放時，在每個動作開始的地方按「＋ 切開」，影片就會從那裡切成新的一段。點一段就重複播放那段；想把幾段連起來練，按「連起來練」。</p>
+  <div class="row" style="gap:8px;flex-wrap:nowrap"><button class="btn solid big" style="flex:2" data-act="cut" ${synced()&&V&&V.src?"":"disabled"}>＋ 在這裡切開</button>
+    ${secs.length>1?`<button class="btn big ${st.selMode?"on":""}" style="flex:1" data-act="selmode">${st.selMode?"取消選取":"連起來練"}</button>`:""}</div>
+  ${st.selMode?`<div class="selbar"><span>${st.sel&&st.sel.length?`已選 ${st.sel.length} 段`:"點選要連起來的段落"}</span><button class="btn sm solid" data-act="selloop" ${st.sel&&st.sel.length?"":"disabled"}>重複播放這幾段</button></div>`:""}
+  <div class="row between"><span class="legend"><span><i></i>不會</span><span><i class="y"></i>卡卡</span><span><i class="g"></i>會了</span></span>
+    <label class="row note" style="gap:4px"><input type="checkbox" id="follow" ${st.follow?"checked":""}> 播放時自動捲動</label></div>
+  ${!s.bpm?`<p class="note" style="margin:0">先到「拍子」設定 BPM，切段時會自動對齊 8 拍，播放時也會數拍。</p>`:""}
+  ${secs.length?`<div class="qv">${secs.map((x,i)=>`
+    <div class="qrow${st.selMode&&(st.sel||[]).includes(x.id)?" sel":""}${st.loop&&Math.abs(st.A-x.start)<.01&&Math.abs(st.B-x.end)<.01?" looping":""}" data-act="rowtap" data-id="${esc(x.id)}">
+      <span class="t">${st.selMode?`<span class="ck">${(st.sel||[]).includes(x.id)?"✓":""}</span>`:fmt(x.start)}</span>
+      <span class="c"><b>${esc(x.cue||x.name)}</b>${x.story?`<em>${esc(x.story)}</em>`:""}<span>${esc(x.name)}${eightLabel(s,x.start,x.end)?"・"+esc(eightLabel(s,x.start,x.end)):""}・${fmt(x.end-x.start)}</span></span>
+      <span class="row" style="gap:6px;flex-wrap:nowrap"><button class="st ${x.status||"r"}" data-act="cyc" data-id="${esc(x.id)}" aria-label="切換熟練度"></button><button class="btn sm ghost" data-act="edit" data-id="${esc(x.id)}">${st.open===x.id?"收起":"編輯"}</button></span>
+    </div>${st.open===x.id?vEdit(s,x,secs[i-1],secs[i+1]):""}`).join("")}</div>`
+  :`<p class="sub" style="margin:0">還沒有段落。播放影片，在第一個動作開始時按「＋ 在這裡切開」。</p>`}`;
+}
+function vEdit(s,x,prev,next){
+  const L=(s.lessons||[]);
+  return `<div class="ed">
+    <div class="grid2">
+      <label class="lab"><span>段落名稱</span><input class="line" data-f="name" data-id="${esc(x.id)}" id="e-name-${esc(x.id)}" value="${esc(x.name)}"></label>
+      <div class="lab"><span>老師改了這段？</span><button class="btn sm ${x.archived?"on":"ghost"}" data-act="archive" data-id="${esc(x.id)}" style="align-self:flex-start">${x.archived?"已封存（整首速覽不顯示）":"封存舊版"}</button></div>
+    </div>
+    <div class="row" style="gap:6px">
+      <span class="note">開始</span><button class="btn sm ghost" data-act="setStart" data-id="${esc(x.id)}">${fmt1(x.start)}・設為目前</button>
+      <span class="note">結束</span><button class="btn sm ghost" data-act="setEnd" data-id="${esc(x.id)}">${fmt1(x.end)}・設為目前</button>
+      <button class="btn sm" data-act="loopSec" data-id="${esc(x.id)}">循環這段</button>
+    </div>
+    <label class="lab"><span>口訣（快速版，用・分隔）</span><input class="line" data-f="cue" data-id="${esc(x.id)}" id="e-cue-${esc(x.id)}" value="${esc(x.cue||"")}" placeholder="踩・踩・轉・甩髮"></label>
+    <div class="stpick">${[["r","不會"],["y","卡卡"],["g","會了"]].map(([k,t])=>`<button class="${k}${(x.status||"r")===k?" on":""}" data-act="setst" data-v="${k}" data-id="${esc(x.id)}">${t}</button>`).join("")}</div>
+    <div class="stack" style="gap:6px"><div class="row between"><span class="eyebrow">小故事</span>${sample?`<button class="btn sm" data-act="story" data-id="${esc(x.id)}" ${st.busy?"disabled":""}>${st.busy==="story"+x.id?"寫故事中…":"幫我故事化"}</button>`:""}</div>
+      <textarea class="line" rows="2" data-f="story" data-id="${esc(x.id)}" id="e-story-${esc(x.id)}" placeholder="把口訣串成一個畫面，結尾留一句接到下一段">${esc(x.story||"")}</textarea></div>
+    <div class="stack" style="gap:6px"><span class="eyebrow">動作細節（練習時一項一項打勾）</span>
+      <div class="checks">${(x.details||[]).map((d,i)=>`<label><input type="checkbox" data-act="dchk" data-id="${esc(x.id)}" data-i="${i}" ${d.done?"checked":""}><span style="flex:1">${esc(d.t)}</span><button class="link" data-act="ddel" data-id="${esc(x.id)}" data-i="${i}">刪</button></label>`).join("")}</div>
+      <div class="row" style="flex-wrap:nowrap"><input class="line" id="dnew-${esc(x.id)}" placeholder="例如：胯先走，手再跟"><button class="btn sm" data-act="dadd" data-id="${esc(x.id)}">加入</button></div></div>
+    <div class="stack" style="gap:6px"><div class="row between"><span class="eyebrow">定格比對</span>
+      <span class="row" style="gap:6px"><button class="btn sm" data-act="snap" data-id="${esc(x.id)}">截目前畫面</button>${sample&&sampleImg?`<button class="btn sm" data-act="askframe" data-id="${esc(x.id)}" ${st.busy?"disabled":""}>${st.busy==="frame"+x.id?"Claude 看畫面中…":"請 Claude 看這一格"}</button>`:""}</span></div>
+      ${(x.snaps||[]).length?`<div class="snaps">${x.snaps.map((p,i)=>`<figure><img src="${esc(p.id?"/_blob/"+p.id:p.url)}" alt="定格 ${esc(p.label||"")}"><figcaption>${esc(p.label||"")}</figcaption><button class="x" data-act="sdel" data-id="${esc(x.id)}" data-i="${i}" aria-label="刪除定格">×</button></figure>`).join("")}</div>`:`<p class="note" style="margin:0">停在老師的關鍵姿勢按「截目前畫面」，切到自己的練習影片同一拍再截一張，就能並排比對。</p>`}</div>
+    <label class="lab"><span>老師提醒・其他筆記</span><textarea class="line" rows="2" data-f="note" data-id="${esc(x.id)}" id="e-note-${esc(x.id)}">${esc(x.note||"")}</textarea></label>
+    <div class="row between">${prev||next?`<span class="note">${prev?"上一段："+esc(prev.cue||prev.name):""}</span>`:"<span></span>"}
+      ${next?`<button class="btn sm ghost" data-act="merge" data-id="${esc(x.id)}">併入下一段</button>`:""}
+      ${st.confirm===x.id?`<span class="confirm">刪除這段？<button class="btn sm danger" data-act="delsec-yes" data-id="${esc(x.id)}">刪除</button><button class="btn sm ghost" data-act="delsec-no">取消</button></span>`:`<button class="link" data-act="delsec" data-id="${esc(x.id)}">刪除這段</button>`}</div>
+  </div>`;
+}
+function vPractice(s,secs){
+  const g=secs.filter(x=>x.status==="g").length;
+  return `
+  <p class="sub" style="margin:0">${secs.length?`${secs.length} 段：會了 ${g}・卡卡 ${secs.filter(x=>x.status==="y").length}・不會 ${secs.length-g-secs.filter(x=>x.status==="y").length}`:"先在「速覽」切好段落，這裡就能排練習。"}</p>
+  <label class="lab" style="max-width:180px"><span>每組重複遍數</span><input class="line num" id="reps" inputmode="numeric" value="${s.reps||3}"></label>
+  <div class="stack" style="gap:8px">
+    <button class="btn rose" data-act="q" data-k="review" ${secs.length?"":"disabled"}>上課前 5 分鐘複習</button>
+    <span class="note">播上一堂課教的段落和還沒變綠燈的段落，最後從頭跳到目前進度一遍。</span>
+    <button class="btn" data-act="q" data-k="chain" ${secs.length?"":"disabled"}>串連練習：1 → 1+2 → 1+2+3</button>
+    <span class="note">每學一段就接回前面，比每次從頭看到尾更快記住順序。</span>
+    <button class="btn" data-act="q" data-k="weak" ${secs.length?"":"disabled"}>只練紅黃燈</button>
+    <button class="btn" data-act="q" data-k="whole" ${secs.length?"":"disabled"}>整首到目前進度</button>
+  </div>
+  <p class="note" style="margin:0">建議搭配：「循環前倒數」讓你有時間站好；練熟後打開「自測模式」，只聽音樂、看口訣自己跳，跳不出來的段落就標紅。</p>`;
+}
+function vBeat(s){
+  return `
+  <p class="sub" style="margin:0">設定好拍子，畫面會數 1～8，切段也會自動對齊 8 拍。</p>
+  <div class="grid2">
+    <label class="lab"><span>BPM</span><input class="line num" id="bpm" inputmode="decimal" value="${s.bpm||""}" placeholder="例如 96"></label>
+    <label class="lab"><span>第一個「1」在（秒）</span><input class="line num" id="anchor" inputmode="decimal" value="${curAnchor()}"></label>
+  </div>
+  <div class="row" style="gap:6px">
+    <button class="btn" data-act="detect" ${urls.fn||urls.bn?"":"disabled"}>${st.busy==="bpm"?"分析音樂中…":"自動抓 BPM"}</button>
+    <button class="btn" data-act="tap">跟著拍子點 ${st.taps.length>1?"("+st.taps.length+")":""}</button>
+    <button class="btn rose" data-act="one" ${V&&V.src&&synced()?"":"disabled"}>現在這拍是「1」</button>
+  </div>
+  <div class="row" style="gap:6px"><span class="note">微調「1」</span><button class="btn sm ghost" data-act="nudge" data-d="-0.05">−0.05s</button><button class="btn sm ghost" data-act="nudge" data-d="-0.01">−0.01s</button><button class="btn sm ghost" data-act="nudge" data-d="0.01">+0.01s</button><button class="btn sm ghost" data-act="nudge" data-d="0.05">+0.05s</button></div>
+  <p class="note" style="margin:0">做法：先按「自動抓 BPM」，或播放時跟著節奏按「跟著拍子點」8 下以上。接著播放到老師數「5、6、7、8」之後的那個「1」，按「現在這拍是 1」。數拍偏掉時，在偏掉的地方再按一次就好。</p>`;
+}
+function vVideos(s){
+  const lf=(curLesson()||{}).files||{};
+  return `
+  <p class="eyebrow" style="margin:0">第 ${lessonNo(st.lesson)} 堂的影片</p>
+  <p class="sub" style="margin:0">影片不會上傳，只從你的裝置播放。勾選「存在這台裝置」，下次打開會自動載入。</p>
+  <div class="stack" style="gap:10px">${SLOTS.map(x=>`
+    <div class="row between" style="border-top:1px solid var(--line);padding-top:10px">
+      <span><b>${x.name}・${x.kind}版</b><br><span class="note">${urls[x.id]?esc(fileNames[x.id]||"已載入"):lf[x.id]?"上次："+esc(lf[x.id]):"還沒選"}</span></span>
+      <span class="row" style="gap:6px"><button class="btn sm" data-act="pick" data-slot="${x.id}">${urls[x.id]?"更換":"選擇"}</button>${urls[x.id]?`<button class="link" data-act="forget" data-slot="${x.id}">移除</button>`:""}</span>
+    </div>
+    ${x.id==="bn"?`<div class="row" style="gap:6px"><span class="note">背面對齊正面：差</span><input class="line num" id="offbn" inputmode="decimal" value="${off("bn")}" style="width:80px"><span class="note">秒</span><button class="btn sm ghost" data-act="aligntip">怎麼對齊？</button></div>`:""}`).join("")}
+  </div>
+  <label class="row note" style="gap:6px"><input type="checkbox" id="remember" ${st.remember!==false?"checked":""}> 選檔時存在這台裝置（佔用瀏覽器空間，清除瀏覽資料會不見）</label>
+  ${st.alignTip?`<p class="note" style="margin:0">在正面影片停在一個明顯的動作（例如拍手）記下時間，切到背面找同一個動作的時間，填入「背面時間 − 正面時間」。對齊後切換正面、背面會停在同一拍。</p>`:""}`;
+}
+function vLessons(s){
+  const Ls=lessonsOf(s);
+  return `
+  <div class="grid2">${[["title","歌名"],["artist","歌手"],["studio","教室"],["teacher","老師"]].map(([k,t])=>`<label class="lab"><span>${t}</span><input class="line" id="sf-${k}" data-sf="${k}" value="${esc(s[k]||"")}"></label>`).join("")}</div>
+  <p class="sub" style="margin:0">老師一堂教一段、每週往下接。每一堂有自己的影片和段落；在上方切換第幾堂。</p>
+  ${Ls.map((l,i)=>{const ss=secsOf(s.id,l.id);const nf=Object.keys(l.files||{}).length;return `<div class="stack" style="gap:6px;border-top:1px solid var(--line);padding-top:12px">
+    <div class="row between"><b>第 ${i+1} 堂${l.id===st.lesson?"・目前":""}</b><span class="note">${ss.length} 段・${nf} 支影片</span></div>
+    <div class="grid2" style="grid-template-columns:150px 1fr"><label class="lab"><span>日期</span><input class="line num" type="date" id="ld-${esc(l.id)}" data-lid="${esc(l.id)}" data-lf="date" value="${esc(l.date||"")}"></label>
+      <label class="lab"><span>這堂重點、老師改了哪裡</span><input class="line" id="ln-${esc(l.id)}" data-lid="${esc(l.id)}" data-lf="note" value="${esc(l.note||"")}"></label></div>
+    ${ss.length?`<p class="note" style="margin:0">${ss.map(x=>esc(x.cue||x.name)).join("　／　")}</p>`:""}
+    <div class="row" style="gap:10px">${l.id!==st.lesson?`<button class="btn sm" data-act="lesson" data-id="${esc(l.id)}">切到這堂</button>`:""}
+    ${st.confirm==="L"+l.id?`<span class="confirm">刪除這堂和它的段落？<button class="btn sm danger" data-act="delles-yes" data-id="${esc(l.id)}">刪除</button><button class="btn sm ghost" data-act="delsec-no">取消</button></span>`:`<button class="link" data-act="delles" data-id="${esc(l.id)}">刪除這堂</button>`}</div>
+  </div>`;}).join("")}
+  <button class="btn solid" data-act="addles">＋ 新增一堂</button>`;
+}
+
+/* ---------- songs & lessons ---------- */
+function resetPlayback(){if(V){V.pause();V.removeAttribute("src");try{V.load();}catch(e){}}st.A=st.B=null;st.loop=false;st.queue=null;st.open=null;st.confirm=null;}
+function openSong(id,tabName){
+  clearUrls();resetPlayback();V=null;st.song=id;st.view="song";st.slot="fn";st.tab=tabName||"qv";st.qscope="lesson";
+  const s=getSong(id);
+  if(!(s.lessons||[]).length||(s.lessons||[]).some(l=>l.files===undefined)){ // migrate older songs: song-level video settings become lesson 1
+    s.lessons=(s.lessons||[]).map(l=>Object.assign({anchor:0,offsets:{},files:{}},l));
+    if(!s.lessons.length)s.lessons.push({id:"l"+uid(),date:today(),note:""});
+    const first=lessonsOf(s)[0];const L0=s.lessons.find(l=>l.id===first.id);
+    if(s.anchor!=null&&!L0.anchor)L0.anchor=s.anchor;if(s.offsets&&!Object.keys(L0.offsets||{}).length)L0.offsets=s.offsets;if(s.files&&!Object.keys(L0.files||{}).length)L0.files=s.files;
+    L0.offsets=L0.offsets||{};L0.files=L0.files||{};delete s.anchor;delete s.offsets;delete s.files;saveSong(s);
+  }
+  const Ls=lessonsOf(getSong(id)),ids=Ls.map(l=>l.id);
+  [...docs.entries()].filter(([k,v])=>v&&v.type==="sec"&&v.song===id&&!ids.includes(v.lesson)).forEach(([k,v])=>write(k,{...v,lesson:ids[0]}));
+  useLesson(ids[ids.length-1]);render();window.scrollTo(0,0);restoreSlots();
+}
+function goLesson(lid,seekTo){
+  resetPlayback();useLesson(lid);st.pendingSeek=seekTo!=null?seekTo:null;
+  st.slot=urls.fn?"fn":urls.bn?"bn":(SLOTS.find(x=>urls[x.id])||{id:"fn"}).id;
+  if(urls[st.slot])switchSlot(st.slot,"fresh");else render();
+}
+
+/* ---------- render ---------- */
+let pending=false;
+function render(){
+  pending=false;
+  const keepV=V;const ph=keepV&&keepV.parentNode;
+  main.innerHTML=st.view==="song"?vSong():vHome();$("#backBtn").hidden=st.view!=="song";
+  const slot=$("#vid");
+  if(slot){ // re-use the same <video> element so playback continues across renders
+    if(keepV){keepV.className=slot.className;keepV.hidden=slot.hidden;slot.replaceWith(keepV);V=keepV;}
+    else{V=slot;bindVideo(V);}
+  }
+  paintQueue();
+}
+function bindVideo(v){
+  v.addEventListener("play",()=>{const b=$("#playBtn");if(b)b.textContent="❚❚ 暫停";});
+  v.addEventListener("pause",()=>{const b=$("#playBtn");if(b)b.textContent="▶︎ 播放";});
+  v.addEventListener("loadedmetadata",()=>safeRender());
+}
+function safeRender(){const a=document.activeElement;if(a&&main.contains(a)&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)&&a.type!=="range"&&a.type!=="checkbox"){pending=true;return;}render();}
+main.addEventListener("focusout",()=>setTimeout(()=>{if(pending)safeRender();},0));
+
+/* ---------- section helpers ---------- */
+function renumber(){const all=[...docs.entries()].filter(([k,v])=>v&&v.type==="sec"&&v.song===st.song).map(([k,v])=>({id:k,...v}));
+  const order=lessonsOf(getSong(st.song)).map(l=>l.id);all.sort((a,b)=>(order.indexOf(a.lesson)-order.indexOf(b.lesson))||a.start-b.start);
+  all.forEach((x,i)=>{if(/^第 \d+ 段$/.test(x.name||"")&&x.name!=="第 "+(i+1)+" 段"){x.name="第 "+(i+1)+" 段";saveSec(x);}});}
+function newSectionAt(t){
+  const s=getSong(st.song),secs=secsOf(s.id);let a=t;
+  if(s.bpm){const spb=60/s.bpm;const k=Math.round((t-curAnchor())/spb);const snap=curAnchor()+k*spb;if(Math.abs(snap-t)<spb*.5)a=snap;}
+  a=Math.round(Math.max(0,a)*100)/100;
+  const end=Math.round((((V&&V.duration)||a+8)-(synced()?off(st.slot):0))*100)/100;
+  const host=secs.find(x=>a>x.start+.05&&a<x.end-.05);let b;
+  if(host){b=host.end;host.end=a;saveSec(host);}
+  else{if(secs.some(x=>Math.abs(x.start-a)<.1)){toast("這裡已經是一段的開頭");return;}const nx=secs.find(x=>x.start>a);b=nx?nx.start:end;}
+  const sec={id:"sec_"+uid(),type:"sec",song:s.id,name:"第 "+(secsOf(s.id,"*").length+1)+" 段",start:a,end:b,cue:"",story:"",status:"r",details:[],snaps:[],note:"",lesson:st.lesson};
+  saveSec(sec);renumber();toast(host?"已從這裡切開：前一段到這裡結束":"新的一段從這裡開始");render();
+}
+function frameBlob(){return new Promise(res=>{try{const c=document.createElement("canvas");const w=V.videoWidth,h=V.videoHeight;const k=Math.min(1,720/Math.max(w,h));c.width=Math.round(w*k);c.height=Math.round(h*k);
+  const g=c.getContext("2d");if(st.mirror){g.translate(c.width,0);g.scale(-1,1);}g.drawImage(V,0,0,c.width,c.height);c.toBlob(b=>res(b),"image/jpeg",.82);}catch(e){res(null);}});}
+
+/* ---------- events ---------- */
+window.addEventListener("error",ev=>{try{toast("發生錯誤："+(ev.message||"")+"　請截圖給 Claude");}catch(e){}});
+window.addEventListener("unhandledrejection",ev=>{try{const r=ev.reason;toast("發生錯誤："+((r&&(r.message||r.code))||r)+"　請截圖給 Claude");}catch(e){}});
+document.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-act]");if(!b)return;const a=b.dataset.act;
+  if(b.closest(".qrow")&&a!=="seek"&&b.closest(".qrow")!==b)e.stopPropagation();
+  const s=st.song?getSong(st.song):null;
+  if(a==="home"){if(V)V.pause();st.focus=false;document.body.classList.remove("focus");st.view="home";st.queue=null;render();window.scrollTo(0,0);}
+  else if(a==="open"){openSong(b.dataset.id,"qv");}
+  else if(a==="add-song"){const t=$("#nTitle").value.trim();if(!t){$("#nTitle").focus();toast("先輸入歌名");return;}
+    const id="song_"+uid();write(id,{type:"song",title:t,artist:$("#nArtist").value.trim(),studio:$("#nStudio").value.trim(),teacher:$("#nTeacher").value.trim(),bpm:0,lessons:[{id:"l"+uid(),date:today(),note:"",anchor:0,offsets:{},files:{}}],reps:3,updated:new Date().toISOString()});
+    openSong(id,"vid");}
+  else if(a==="pick"){st.pickSlot=b.dataset.slot;$("#filePick").value="";$("#filePick").click();}
+  else if(a==="forget"){const sl=b.dataset.slot;if(urls[sl])URL.revokeObjectURL(urls[sl]);delete urls[sl];delete fileNames[sl];IDB.del(st.song+"/"+st.lesson+"/"+sl);if(lessonNo(st.lesson)===1)IDB.del(st.song+"/"+sl);patchLesson(L=>{if(L.files)delete L.files[sl];});if(st.slot===sl&&V){V.pause();V.removeAttribute("src");}render();}
+  else if(a==="slot"){const sl=b.dataset.slot;if(!urls[sl]){st.pickSlot=sl;$("#filePick").value="";$("#filePick").click();return;}switchSlot(sl);}
+  else if(a==="play"){if(!V||!V.src)return;if(V.paused)goPlay();else{V.pause();clearInterval(cdTimer);cdLeft=0;paintCd();}}
+  else if(a==="back"||a==="fwd"){if(V)V.currentTime=Math.max(0,V.currentTime+(a==="back"?-2:2));}
+  else if(a==="frame"){if(!V)return;V.pause();V.currentTime=Math.max(0,V.currentTime+n(b.dataset.d)/30);}
+  else if(a==="prev"||a==="next"){if(!V||!synced())return;const t=gT(),ss=secsOf(st.song);let tgt;
+    if(a==="next")tgt=ss.find(x=>x.start>t+.1);else{const before=ss.filter(x=>x.start<t-.6);tgt=before[before.length-1];}
+    if(tgt){seekG(tgt.start);if(st.loop){st.A=tgt.start;st.B=tgt.end;render();}}}
+  else if(a==="speed"){st.speed=n(b.dataset.v);if(V)V.playbackRate=st.speed;render();}
+  else if(a==="speedcyc"){const L=[1,.75,.5,.25];st.speed=L[(L.indexOf(st.speed)+1)%L.length];if(V)V.playbackRate=st.speed;render();}
+  else if(a==="focus"){st.focus=!st.focus;document.body.classList.toggle("focus",st.focus);render();if(!st.focus)window.scrollTo(0,0);}
+  else if(a==="loopcur"){if(st.loop){st.loop=false;render();return;}const t=gT(),x=secsOf(st.song).find(y=>t>=y.start&&t<y.end);if(x){st.A=x.start;st.B=x.end;}if(st.A==null||st.B==null){toast("這裡還沒有段落，先切一段");return;}st.loop=true;render();goPlay();}
+  else if(a==="saveab"){if(st.A==null||st.B==null)return;const x={id:"ab"+uid(),a:Math.round(st.A*100)/100,b:Math.round(st.B*100)/100,name:""};patchLesson(L=>{L.loops=L.loops||[];L.loops.push(x);});st.loop=true;render();toast("已存成一段循環");}
+  else if(a==="abplay"){const x=((curLesson()||{}).loops||[]).find(l=>l.id===b.dataset.id);if(!x)return;if(st.loop&&Math.abs(st.A-x.a)<.01&&Math.abs(st.B-x.b)<.01){st.loop=false;render();return;}st.queue=null;st.A=x.a;st.B=x.b;st.loop=true;seekG(x.a);render();goPlay();}
+  else if(a==="abdel"){const id=b.dataset.id;patchLesson(L=>{L.loops=(L.loops||[]).filter(l=>l.id!==id);});render();}
+  else if(a==="aball"){const s2=getSong(st.song);const loops=((curLesson()||{}).loops||[]).slice().sort((p,q)=>p.a-q.a);if(!loops.length||!V||!V.src)return;const reps=Math.max(1,s2.reps||3);
+    st.queue=loops.map((x,i)=>({a:x.a,b:x.b,reps,label:x.name||("循環 "+(i+1))}));st.qi=0;st.qrep=0;st.loop=false;st.A=loops[0].a;st.B=loops[0].b;seekG(loops[0].a);render();goPlay();}
+  else if(a==="guideoff"){st.guideOff=true;render();}
+  else if(a==="autosplit"){autoSplit(+b.dataset.v);}
+  else if(a==="merge"){const ss=secsOf(st.song),i=ss.findIndex(y=>y.id===b.dataset.id),x=ss[i],nx=ss[i+1];if(!nx)return;x.end=nx.end;x.cue=[x.cue,nx.cue].filter(Boolean).join("・");x.details=[...(x.details||[]),...(nx.details||[])];x.snaps=[...(x.snaps||[]),...(nx.snaps||[])];saveSec(x);write(nx.id,null);renumber();render();}
+  else if(a==="psize"){st.psize=b.dataset.v;render();}
+  else if(a==="tg"){const k=b.dataset.k;st[k]=!st[k];render();}
+  else if(a==="setA"){st.A=gT();if(st.B!=null&&st.B<=st.A)st.B=null;render();}
+  else if(a==="setB"){st.B=gT();if(st.A!=null&&st.B<=st.A){toast("B 要在 A 後面");st.B=null;}render();}
+  else if(a==="loop"){if(st.A==null||st.B==null){toast("先設定 A 和 B，或在段落上按「循環這段」");return;}st.loop=!st.loop;render();if(st.loop){seekG(st.A);goPlay();}}
+  else if(a==="clearAB"){st.A=st.B=null;st.loop=false;render();}
+  else if(a==="tab"){st.tab=b.dataset.t;st.confirm=null;render();}
+  else if(a==="cut"){newSectionAt(gT());}
+  else if(a==="rowtap"){const x=getSec(b.dataset.id);if(!x)return;
+    if(st.selMode&&x.lesson===st.lesson){st.sel=st.sel||[];const i=st.sel.indexOf(x.id);if(i>=0)st.sel.splice(i,1);else st.sel.push(x.id);render();return;}
+    if(x.lesson!==st.lesson){goLesson(x.lesson,x.start);st.A=x.start;st.B=x.end;st.loop=true;return;}
+    if(st.loop&&Math.abs(st.A-x.start)<.01&&Math.abs(st.B-x.end)<.01){st.loop=false;render();return;}
+    if(!V||!V.src){toast("先選這堂的影片");return;}st.queue=null;st.A=x.start;st.B=x.end;st.loop=true;seekG(x.start);render();goPlay();}
+  else if(a==="selmode"){st.selMode=!st.selMode;st.sel=[];render();}
+  else if(a==="selloop"){const ss=(st.sel||[]).map(getSec).filter(Boolean);if(!ss.length)return;st.A=Math.min(...ss.map(x=>x.start));st.B=Math.max(...ss.map(x=>x.end));st.loop=true;st.queue=null;st.selMode=false;st.sel=[];seekG(st.A);render();goPlay();toast("重複播放 "+fmt(st.A)+" – "+fmt(st.B));}
+  else if(a==="seek"){const x=getSec(b.dataset.id);if(x&&x.lesson!==st.lesson){goLesson(x.lesson,x.start);return;}if(x&&V&&V.src){if(!synced()){const to=urls.fn?"fn":urls.bn?"bn":null;if(to){switchSlot(to);setTimeout(()=>seekG(x.start),300);return;}}seekG(x.start);if(st.loop){st.A=x.start;st.B=x.end;render();}}}
+  else if(a==="edit"){e.stopPropagation();st.open=st.open===b.dataset.id?null:b.dataset.id;st.confirm=null;render();}
+  else if(a==="cyc"){e.stopPropagation();const x=getSec(b.dataset.id);x.status=({r:"y",y:"g",g:"r"})[x.status||"r"];saveSec(x);render();}
+  else if(a==="setst"){const x=getSec(b.dataset.id);x.status=b.dataset.v;saveSec(x);render();}
+  else if(a==="setStart"||a==="setEnd"){const x=getSec(b.dataset.id);const t=Math.round(gT()*100)/100;if(a==="setStart"){if(t>=x.end){toast("開始要在結束之前");return;}x.start=t;}else{if(t<=x.start){toast("結束要在開始之後");return;}x.end=t;}saveSec(x);render();}
+  else if(a==="loopSec"){const x=getSec(b.dataset.id);st.A=x.start;st.B=x.end;st.loop=true;seekG(x.start);render();goPlay();}
+  else if(a==="dadd"){const i=document.getElementById("dnew-"+b.dataset.id);const v=i.value.trim();if(!v)return i.focus();const x=getSec(b.dataset.id);x.details=x.details||[];x.details.push({t:v,done:false});saveSec(x);render();}
+  else if(a==="ddel"){e.preventDefault();const x=getSec(b.dataset.id);x.details.splice(+b.dataset.i,1);saveSec(x);render();}
+  else if(a==="dchk"){const x=getSec(b.dataset.id);x.details[+b.dataset.i].done=b.checked;saveSec(x);}
+  else if(a==="delsec"){st.confirm=b.dataset.id;render();}
+  else if(a==="delsec-no"){st.confirm=null;render();}
+  else if(a==="delsec-yes"){write(b.dataset.id,null);renumber();st.confirm=null;st.open=null;render();}
+  else if(a==="snap"){if(!V||!V.src||!V.videoWidth){toast("先播放影片並停在要截的畫面");return;}
+    if(!assets){toast("這個檢視不能存圖片");return;}const blob=await frameBlob();if(!blob){toast("截圖失敗");return;}
+    try{toast("儲存定格中…");const r=await assets.upload(blob);const x=getSec(b.dataset.id);x.snaps=x.snaps||[];const bi=beatInfo(s,gT());
+      x.snaps.push({id:r.id,url:r.url,label:slotInfo(st.slot).name+slotInfo(st.slot).kind+" "+(bi&&bi.eight>0?"#"+bi.eight+"-"+bi.count:fmt1(gT()))});saveSec(x);render();toast("已存定格");}
+    catch(err){toast("存圖失敗："+((err&&err.code)||"請稍後再試"));}}
+  else if(a==="sdel"){const x=getSec(b.dataset.id);const p=x.snaps.splice(+b.dataset.i,1)[0];saveSec(x);render();if(assets&&p&&p.id){try{await assets.delete(p.id);}catch(err){}}}
+  else if(a==="story"){if(!sample||st.busy)return;const x=getSec(b.dataset.id);if(!(x.cue||"").trim()){toast("先寫口訣，再故事化");return;}
+    const ss=secsOf(st.song,"*"),i=ss.findIndex(y=>y.id===x.id),prev=i>0?ss[i-1]:null;st.busy="story"+x.id;render();
+    const prompt=`你在幫一位上高跟鞋舞蹈（Heels）課的學生記舞步。請把這一段的口訣變成一則很短、有畫面感的小故事（繁體中文，30～60 字），讓她一想到故事就能依序想起動作。
+規則：口訣裡的每個動作都要依原本順序出現；用生活化、好想像的畫面，可以帶點女人味和自信；最後一句留一個能接到下一段的鉤子。只輸出故事本身，不要標題或解釋。
+歌曲：${s.title}${s.artist?"（"+s.artist+"）":""}
+這一段：${x.name}
+口訣：${x.cue}
+${prev&&prev.story?"上一段的故事（請自然接續它的結尾）："+prev.story:"這是第一段或上一段還沒有故事。"}`;
+    try{const r=await sample(prompt,{modelTier:"default"});const y=getSec(x.id);y.story=(r.text||"").trim();saveSec(y);}
+    catch(err){toast(err&&err.code==="not_granted"?"需要允許這個頁面使用 Claude":"故事化失敗，請稍後再試");}
+    st.busy="";render();}
+  else if(a==="askframe"){if(!sample||st.busy)return;if(!V||!V.videoWidth){toast("先停在要看的畫面");return;}const x=getSec(b.dataset.id);const blob=await frameBlob();if(!blob)return;
+    st.busy="frame"+x.id;render();
+    const prompt=`這是一張高跟鞋舞蹈（Heels）課的影片畫面${st.mirror?"（已鏡射）":""}，拍攝角度：${slotInfo(st.slot).name}。這一段的口訣是「${x.cue||"未填"}」。
+請用繁體中文條列描述畫面中老師的身體姿勢，幫學生抓動作細節：頭與視線、肩膀、手臂與手、胸口、腰與胯的方向、重心在哪隻腳、膝蓋、腳與鞋跟。每項一行、簡短具體。只描述看得到的，看不清楚就寫「看不清楚」。畫面裡如果有好幾個人，以最前面、看起來是老師的人為準。`;
+    try{const r=await sample(prompt,{images:[blob],modelTier:"default"});const y=getSec(x.id);y.note=((y.note?y.note+"\n\n":"")+"【Claude 看 "+fmt1(gT())+"】\n"+(r.text||"").trim()).trim();saveSec(y);toast("已加到「老師提醒・其他筆記」");}
+    catch(err){toast(err&&err.code==="not_granted"?"需要允許這個頁面使用 Claude":"分析失敗，請稍後再試");}
+    st.busy="";render();}
+  else if(a==="q"){startQueue(b.dataset.k);window.scrollTo({top:0,behavior:"smooth"});}
+  else if(a==="stopq"){stopQueue();}
+  else if(a==="detect"){const f=await IDB.get(st.song+"/"+st.lesson+"/"+(urls.fn?"fn":"bn"));const file=f||st.lastFile&&st.lastFile[st.lesson+"/"+(urls.fn?"fn":"bn")];
+    if(!file){toast("請先在這次重新選擇正面或背面影片");return;}st.busy="bpm";render();
+    try{const r=await detectBpm(file);const t=getSong(st.song);t.bpm=r.bpm;const L=(t.lessons||[]).find(l=>l.id===st.lesson);if(L)L.anchor=r.anchor-((urls.fn?0:off("bn")));saveSong(t);toast("抓到約 "+r.bpm+" BPM，記得按「現在這拍是 1」校正");}
+    catch(err){toast("這支影片的聲音讀不到，請用「跟著拍子點」");}st.busy="";render();}
+  else if(a==="tap"){const now=performance.now();st.taps=st.taps.filter(x=>now-x<3000*1).concat(now);if(st.taps.length>=4){const iv=[];for(let i=1;i<st.taps.length;i++)iv.push(st.taps[i]-st.taps[i-1]);iv.sort((x,y)=>x-y);const med=iv[Math.floor(iv.length/2)];const t=getSong(st.song);t.bpm=Math.round(60000/med*10)/10;saveSong(t);}render();}
+  else if(a==="one"){const t=getSong(st.song);if(!t.bpm){toast("先設定 BPM");return;}const v=Math.round(gT()*1000)/1000;patchLesson(L=>L.anchor=v);toast("已把這一拍設為 1");render();}
+  else if(a==="nudge"){const v=Math.round((curAnchor()+n(b.dataset.d))*1000)/1000;patchLesson(L=>L.anchor=v);render();}
+  else if(a==="aligntip"){st.alignTip=!st.alignTip;render();}
+  else if(a==="addles"){const t=getSong(st.song);if(!t){toast("找不到這首歌，請回「我的歌」重新打開");return;}
+    t.lessons=(t.lessons||[]).filter(Boolean);const id="l"+uid();t.lessons.push({id,date:today(),note:"",anchor:0,offsets:{},files:{}});saveSong(t);
+    try{goLesson(id);}catch(err){toast("切換到新的一堂時出錯："+err.message);render();}
+    toast("已新增第 "+lessonNo(id)+" 堂，選這堂的影片就能開始切段");
+    setTimeout(()=>{const s2=getSong(st.song);if(!s2||!(s2.lessons||[]).some(l=>l.id===id))toast("新增的一堂沒有存住，請截圖給 Claude（同步狀態："+$("#sync").textContent+"）");},2500);}
+  else if(a==="lesson"){goLesson(b.dataset.id);}
+  else if(a==="qscope"){st.qscope=b.dataset.v;st.open=null;render();}
+  else if(a==="archive"){const x=getSec(b.dataset.id);x.archived=!x.archived;saveSec(x);render();}
+  else if(a==="delles"){st.confirm="L"+b.dataset.id;render();}
+  else if(a==="delles-yes"){const t=getSong(st.song);if((t.lessons||[]).length<=1){toast("至少要留一堂");st.confirm=null;render();return;}const lid=b.dataset.id;
+    secsOf(st.song,lid).forEach(x=>write(x.id,null));for(const sl of SLOTS)IDB.del(st.song+"/"+lid+"/"+sl.id);
+    t.lessons=t.lessons.filter(l=>l.id!==lid);saveSong(t);st.confirm=null;if(st.lesson===lid){const Ls=lessonsOf(t);goLesson(Ls[Ls.length-1].id);}else render();}
+});
+$("#filePick").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(!f||!st.pickSlot)return;st.lastFile=st.lastFile||{};st.lastFile[st.lesson+"/"+st.pickSlot]=f;loadSlotFile(st.pickSlot,f,st.remember!==false);});
+main.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.id==="scrub"){if(V)V.currentTime=n(t.value);return;}
+  if(t.dataset.f&&t.dataset.id){const x=getSec(t.dataset.id);if(!x)return;x[t.dataset.f]=t.value;saveSec(x,true);return;}
+  const s=st.song?getSong(st.song):null;
+  if(t.id==="bpm"){s.bpm=n(t.value);saveSong(s,true);}
+  else if(t.id==="anchor"){patchLesson(L=>L.anchor=n(t.value),true);}
+  else if(t.id==="offbn"){patchLesson(L=>{L.offsets=L.offsets||{};L.offsets.bn=n(t.value);},true);}
+  else if(t.dataset.lpn){const id=t.dataset.lpn;patchLesson(L=>{const x=(L.loops||[]).find(l=>l.id===id);if(x)x.name=t.value;},true);}
+  else if(t.dataset.sf){s[t.dataset.sf]=t.value;saveSong(s,true);}
+  else if(t.dataset.lf&&t.dataset.lid){const sg=getSong(st.song);const L=(sg.lessons||[]).find(l=>l.id===t.dataset.lid);if(L){L[t.dataset.lf]=t.value;saveSong(sg,true);}}
+  else if(t.id==="reps"){s.reps=Math.max(1,Math.min(20,n(t.value)|0));saveSong(s,true);}
+});
+main.addEventListener("toggle",e=>{if(e.target.id==="moreBox")st.more=e.target.open;},true);
+main.addEventListener("change",e=>{const t=e.target;
+  if(t.id==="follow"){st.follow=t.checked;}
+  else if(t.id==="remember"){st.remember=t.checked;}
+
+});
+document.addEventListener("keydown",e=>{if(st.view!=="song"||!V||/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||""))return;
+  if(e.key===" "){e.preventDefault();V.paused?goPlay():V.pause();}else if(e.key==="ArrowLeft")V.currentTime-=2;else if(e.key==="ArrowRight")V.currentTime+=2;else if(e.key==="m")$('[data-k="mirror"]').click();});
+
+if(!(window.claude&&window.claude.use)){const sy=$("#sync");if(sy)sy.hidden=true;}
+render();connect();requestAnimationFrame(tick);
+})();
+</script>
+
+<a class="to-origina" href="https://fuwei0618-cmd.github.io/Entry/map/" aria-label="回到 Origina 地圖">↖ Origina</a><script>if(window.top!==window.self){var _o=document.querySelector(".to-origina");_o&&_o.remove();}</script>
+<style>.to-origina{position:fixed;left:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:9;font:600 12px/1 "Noto Sans TC",system-ui,sans-serif;letter-spacing:.04em;text-decoration:none;color:#232321;background:rgba(250,249,246,.9);box-shadow:0 0 0 1px rgba(60,58,52,.12),0 6px 14px -8px rgba(40,36,30,.5);border-radius:999px;padding:8px 12px}body.focus .to-origina{display:none}</style>
+</body></html>
