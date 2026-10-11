@@ -286,7 +286,7 @@ async function connect(){
     if(!uid)return;
     col=db.collection("data/users/"+uid);
     col.onSnapshot(async snap=>{
-      const m=new Map(snap.docs.map(d=>[d.id,d.data()]));
+      const m=new Map(snap.docs.map(d=>[d.id,JSON.parse(JSON.stringify(d.data()||{}))]));
       if(firstSnap){
         firstSnap=false;backend="cloud";setSync("雲端同步中",true);
         if(m.size===0&&docs.size>0){for(const [id,d] of docs){try{await col.doc(id).set(d);}catch(e){}}return;}
