@@ -177,9 +177,13 @@ body.focus .ov-sec{font-size:18px}body.focus .ov-sec small{font-size:15px}
 .vgallery figure{margin:0;position:relative}.vgallery img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;display:block;box-shadow:var(--shadow)}
 .vgallery .x,.reframe .x,.wins .x{border:0;background:transparent;color:var(--ink-3);font-size:18px;padding:0 4px}
 .vgallery .x{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.5);color:#fff;border-radius:12px;width:24px;height:24px;font-size:13px}
-.reframe{display:grid;grid-template-columns:1fr auto 1fr 24px;gap:8px;align-items:center}
+.reframe{display:flex;flex-direction:column;gap:2px;background:var(--well);border-radius:12px;padding:6px 10px 8px}
+.rf-q,.rf-a{display:grid;grid-template-columns:1fr 24px;gap:6px;align-items:start}
+.rf-a{grid-template-columns:18px 1fr}
+.rf-a span{color:var(--moss-deep);font-weight:700;padding-top:7px}
+.reframe textarea{resize:none;overflow:hidden;line-height:1.5;border-bottom-color:transparent}
+.reframe textarea:focus{border-bottom-color:var(--moss-deep)}
 .reframe .q{color:var(--ink-2)}.reframe .a{color:var(--moss-deep);font-weight:500}
-@media (max-width:480px){.reframe{grid-template-columns:1fr 24px}.reframe span{display:none}.reframe .a{grid-column:1}.reframe .x{grid-row:1;grid-column:2}}
 .lchip{border:0;background:var(--well);padding:6px 10px;font-size:13px;color:var(--ink);border-radius:9px}
 .lchip:hover{background:var(--moss-tint);color:var(--moss-deep)}
 .wins{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
@@ -480,7 +484,7 @@ function vVision(){
   <section class="panel stack">
     <h2>腦中的那句話 → 我的回答</h2>
     <p class="note" style="margin:0">當你想找理由不去時，那句話通常會是什麼？寫下來，再替自己寫一個回答。</p>
-    ${v.reframes.map((r,i)=>`<div class="reframe"><input class="line q" id="vq${i}" data-rq="${i}" value="${esc(r.q)}" placeholder="腦中的那句話"><span aria-hidden="true">→</span><input class="line a" id="va${i}" data-ra="${i}" value="${esc(r.a)}" placeholder="我的回答"><button class="x" data-act="rfdel" data-i="${i}" aria-label="刪除">×</button></div>`).join("")}
+    ${v.reframes.map((r,i)=>`<div class="reframe"><div class="rf-q"><textarea class="line q grow" rows="1" id="vq${i}" data-rq="${i}" placeholder="腦中的那句話">${esc(r.q)}</textarea><button class="x" data-act="rfdel" data-i="${i}" aria-label="刪除">×</button></div><div class="rf-a"><span aria-hidden="true">→</span><textarea class="line a grow" rows="1" id="va${i}" data-ra="${i}" placeholder="我的回答">${esc(r.a)}</textarea></div></div>`).join("")}
     <button class="link" data-act="rfadd" style="align-self:flex-start">＋ 再加一句</button>
   </section>
   <section class="panel stack">
@@ -768,7 +772,7 @@ function render(){
     if(keepV){keepV.className=slot.className;keepV.hidden=slot.hidden;slot.replaceWith(keepV);V=keepV;}
     else{V=slot;bindVideo(V);}
   }
-  paintQueue();
+  paintQueue();if(st.view==="vision")requestAnimationFrame(growAll);
 }
 function bindVideo(v){
   v.addEventListener("play",()=>{const b=$("#playBtn");if(b)b.textContent="❚❚ 暫停";});
@@ -911,7 +915,8 @@ ${prev&&prev.story?"上一段的故事（請自然接續它的結尾）："+prev
     t.lessons=t.lessons.filter(l=>l.id!==lid);saveSong(t);st.confirm=null;if(st.lesson===lid){const Ls=lessonsOf(t);goLesson(Ls[Ls.length-1].id);}else render();}
 });
 $("#filePick").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(!f||!st.pickSlot)return;st.lastFile=st.lastFile||{};st.lastFile[st.lesson+"/"+st.pickSlot]=f;loadSlotFile(st.pickSlot,f,st.remember!==false);});
-main.addEventListener("input",e=>{
+function growAll(){document.querySelectorAll("textarea.grow").forEach(t=>{t.style.height="auto";t.style.height=t.scrollHeight+"px";});}
+main.addEventListener("input",e=>{if(e.target.classList&&e.target.classList.contains("grow")){e.target.style.height="auto";e.target.style.height=e.target.scrollHeight+"px";}
   const t=e.target;
   if(t.id==="scrub"){if(V)V.currentTime=n(t.value);return;}
   if(t.dataset.f&&t.dataset.id){const x=getSec(t.dataset.id);if(!x)return;x[t.dataset.f]=t.value;saveSec(x,true);return;}
