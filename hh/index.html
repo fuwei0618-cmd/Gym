@@ -169,6 +169,10 @@ body.focus .ov-sec{font-size:18px}body.focus .ov-sec small{font-size:15px}
 .vstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .vstats div{background:rgba(250,249,246,.8);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column}
 .vstats b{font-size:26px;font-weight:900;line-height:1.1;color:var(--moss-deep)}.vstats span{font-size:12px;color:var(--ink-3)}
+.vfold summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.vfold summary::-webkit-details-marker{display:none}
+.vfold summary h2::after{content:" ▸";font-size:14px;color:var(--ink-3)}
+.vfold[open] summary h2::after{content:" ▾"}
 .vgallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .vgallery figure{margin:0;position:relative}.vgallery img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;display:block;box-shadow:var(--shadow)}
 .vgallery .x,.reframe .x,.wins .x{border:0;background:transparent;color:var(--ink-3);font-size:18px;padding:0 4px}
@@ -464,7 +468,6 @@ function vVision(){
     <p class="vnote">${esc(v.note).replace(/\n/g,"<br>")}</p>
     <div class="vstats"><div><b class="num">${classes}</b><span>堂課</span></div><div><b class="num">${green}</b><span>段會了</span></div><div><b class="num">${v.wins.length}</b><span>個小勝利</span></div></div>
   </section>
-  ${visionImgs().length?`<section class="vgallery">${visionImgs().map(x=>`<figure><img src="${esc(x.url)}" alt="願景照片"><button class="x" data-act="vimgdel" data-id="${esc(x.id)}" data-kind="${x.kind}" aria-label="移除照片">×</button></figure>`).join("")}</section>`:""}
   <section class="panel stack">
     <h2>我為什麼想學高跟鞋</h2>
     <textarea class="line" rows="3" id="vWhy" placeholder="例如：我想在舞台上更有自信、想喜歡鏡子裡的自己、想讓身體記住音樂……">${esc(v.why)}</textarea>
@@ -492,10 +495,15 @@ function vVision(){
     <p class="note" style="margin:0">寫給猶豫中的自己。第一行會顯示在首頁。</p>
     <textarea class="line" rows="4" id="vNote">${esc(v.note)}</textarea>
   </section>
-  <section class="panel stack">
-    <h2>願景照片</h2>
-    <p class="note" style="margin:0">放喜歡的舞者、想穿的鞋、想成為的樣子。照片會跟著筆記同步，換裝置也看得到。</p>
-    <label class="btn" style="align-self:flex-start">＋ 加照片<input type="file" id="vImg" accept="image/*" multiple hidden></label>
+  <section class="panel">
+    <details class="vfold" id="vFold" ${st.vOpen?"open":""}>
+      <summary><h2>願景照片</h2><span class="note">${visionImgs().length?visionImgs().length+" 張・":""}${st.vOpen?"點這裡收起":"點這裡打開"}</span></summary>
+      <div class="stack" style="margin-top:10px">
+        ${visionImgs().length?`<div class="vgallery">${visionImgs().map(x=>`<figure><img src="${esc(x.url)}" alt="願景照片" loading="lazy"><button class="x" data-act="vimgdel" data-id="${esc(x.id)}" data-kind="${x.kind}" aria-label="移除照片">×</button></figure>`).join("")}</div>`:""}
+        <p class="note" style="margin:0">放喜歡的舞者、想穿的鞋、想成為的樣子。平常是收起來的，只有你點開才看得到；照片會跟著筆記同步。</p>
+        <label class="btn" style="align-self:flex-start">＋ 加照片<input type="file" id="vImg" accept="image/*" multiple hidden></label>
+      </div>
+    </details>
   </section>`;
 }
 function vHome(){
@@ -919,7 +927,7 @@ main.addEventListener("input",e=>{
   else if(t.dataset.lf&&t.dataset.lid){const sg=getSong(st.song);const L=(sg.lessons||[]).find(l=>l.id===t.dataset.lid);if(L){L[t.dataset.lf]=t.value;saveSong(sg,true);}}
   else if(t.id==="reps"){s.reps=Math.max(1,Math.min(20,n(t.value)|0));saveSong(s,true);}
 });
-main.addEventListener("toggle",e=>{if(e.target.id==="moreBox")st.more=e.target.open;},true);
+main.addEventListener("toggle",e=>{if(e.target.id==="moreBox")st.more=e.target.open;if(e.target.id==="vFold"){st.vOpen=e.target.open;const n=e.target.querySelector("summary .note");if(n){const c=visionImgs().length;n.textContent=(c?c+" 張・":"")+(st.vOpen?"點這裡收起":"點這裡打開");}}},true);
 main.addEventListener("change",async e=>{const t=e.target;
   if(t.id==="vImg"&&t.files&&t.files.length){toast("照片上傳中…");let n=0;for(const f of t.files){try{await addVisionImage(f);n++;}catch(err){toast("有一張照片存不進去："+((err&&(err.code||err.message))||""));}}if(n)toast("已加入 "+n+" 張照片");render();return;}
   if(t.id==="follow"){st.follow=t.checked;}
