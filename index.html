@@ -319,10 +319,10 @@ const allSets=w=>w.exercises.reduce((s,e)=>s+e.sets.length,0);
 
 
 /* ---------- yoga courses: digest a class, practice, graduate, next ---------- */
+const POSES01=[["動態摩天式展臂","站"],["動態摩天式提腳跟","站"],["靜態抱肘摩天式","站"],["手臂環抱繞頸式","站"],["手扶膝半蹲起","半蹲"],["手扶膝半蹲繞圈式","半蹲"],["動態貓式","跪"],["跪姿手腕伸展式","跪"],["屈膝肘撐板式","趴"],["肘撐板式","趴"],["動態單腿蝗蟲式（右）","趴"],["動態單腿蝗蟲式（左）","趴"],["單腿坐姿扭轉（左）","坐"],["單腿坐姿扭轉（右）","坐"],["仰臥鎖腿（右）","躺"],["仰臥鎖腿（左）","躺"],["仰臥束角式","躺"],["挺屍式","躺"]].map(([name,pos])=>({name,pos,note:""}));
 const YOGA_SEED={type:"yoga",cur:"c1",courses:[{id:"c1",name:"零基礎入門計畫（上）",src:"每日瑜伽 · Sophie Wong",cur:0,
- lessons:[["全身活動舒展",15],["核心初步穩定",10],["基礎柔韌建立",10],["肩頸腰背修復",10],["脊柱舒適流動",10],["綜合協調性提升",10],["流動串聯序列",15]].map(([name,min],i)=>({name,min,status:i?"todo":"doing",days:[],note:"",grad:""})),
- poses:[["動態摩天式展臂","站"],["動態摩天式提腳跟","站"],["靜態抱肘摩天式","站"],["手臂環抱繞頸式","站"],["手扶膝半蹲起","半蹲"],["手扶膝半蹲繞圈式","半蹲"],["動態貓式","跪"],["跪姿手腕伸展式","跪"],["屈膝肘撐板式","趴"],["肘撐板式","趴"],["動態單腿蝗蟲式（右）","趴"],["動態單腿蝗蟲式（左）","趴"],["單腿坐姿扭轉（左）","坐"],["單腿坐姿扭轉（右）","坐"],["仰臥鎖腿（右）","躺"],["仰臥鎖腿（左）","躺"],["仰臥束角式","躺"],["挺屍式","躺"]].map(([name,pos])=>({name,pos,note:""}))}]};
-const yoga=()=>docs.get("yoga")||YOGA_SEED;
+ lessons:[["全身活動舒展",15],["核心初步穩定",10],["基礎柔韌建立",10],["肩頸腰背修復",10],["脊柱舒適流動",10],["綜合協調性提升",10],["流動串聯序列",15]].map(([name,min],i)=>({name,min,status:i?"todo":"doing",days:[],note:"",grad:"",poses:i?[]:POSES01})), }]};
+const yoga=()=>{const y=docs.get("yoga");if(!y)return YOGA_SEED;(y.courses||[]).forEach(c=>{if(c.poses&&c.poses.length&&c.lessons[0]&&!(c.lessons[0].poses||[]).length){c.lessons[0].poses=c.poses;}delete c.poses;c.lessons.forEach(l=>{l.poses=l.poses||[];});});return y;};
 const myYoga=()=>JSON.parse(JSON.stringify(yoga()));
 const curCourse=y=>(y.courses.find(c=>c.id===y.cur)||y.courses[y.courses.length-1]);
 let yOpen=null, yNew=false;
@@ -351,6 +351,7 @@ function vYoga(){
           <button class="btn${did?" solid":""}" data-act="y-day" data-c="${esc(c.id)}" data-i="${i}">${did?"今天練了 ✓":"今天練了"}</button>
           ${l.status==="done"?`<span class="note">${esc(l.grad)} 畢業</span><button class="link" data-act="y-undo" data-i="${i}">取消畢業</button>`:`<button class="btn ghost" data-act="y-grad" data-i="${i}">畢業 → 下一堂</button>`}
         </div>
+        ${l.poses.length?`<div class="eyebrow" style="margin-top:4px">體式（${l.poses.length}）・站 → 躺</div>${POS.map(ps=>{const list=l.poses.map((p,j)=>[p,j]).filter(([p])=>p.pos===ps);return list.length?`<div><div class="note" style="margin:6px 0 2px">${ps}</div>${list.map(([p,j])=>`<label class="lab ypose"><span>${esc(p.name)}</span><input class="line" id="yp-${i}-${j}" data-yp="${i}-${j}" value="${esc(p.note)}" placeholder="一句提示／代償／輔具"></label>`).join("")}</div>`:"";}).join("")}`:""}
         ${l.days.length?`<p class="note" style="margin:0">練習日：${l.days.slice().sort().map(d=>d.slice(5).replace("-","/")).join("、")}</p>`:""}
       </div>
     </details>`}).join("");
@@ -368,9 +369,6 @@ function vYoga(){
     ${done===all?`<p class="note" style="margin:12px 0 0">🎓 整個計畫畢業了！在下面新增下一個計畫。</p>`:""}
   </section>
   <section class="panel">${lessons}</section>
-  ${c.poses.length?"":"<!--"}<section class="panel"><details class="rec"><summary><span class="t">體式庫（${c.poses.length}）</span><span class="chip">站 → 躺</span></summary>
-    <div class="stack" style="margin-top:10px">${POS.map(ps=>{const list=c.poses.map((p,j)=>[p,j]).filter(([p])=>p.pos===ps);return list.length?`<div><div class="eyebrow">${ps}</div>${list.map(([p,j])=>`<label class="lab ypose"><span>${esc(p.name)}</span><input class="line" id="yp-${j}" data-yp="${j}" value="${esc(p.note)}" placeholder="一句提示／代償／輔具"></label>`).join("")}</div>`:""}).join("")}</div>
-  </details></section>${c.poses.length?"":"-->"}
   <section class="panel">
     ${others.length?`<div class="eyebrow">其他計畫</div><div class="row" style="flex-wrap:wrap;gap:6px;margin:8px 0 12px">${others.map(x=>`<button class="btn small ghost" data-act="y-cur" data-c="${esc(x.id)}">${esc(x.name)}　${x.lessons.filter(l=>l.status==="done").length}/${x.lessons.length}</button>`).join("")}</div>`:""}
     ${yNew?`<div class="stack"><label class="lab"><span>計畫名稱</span><input class="line" id="ycName" placeholder="例如：零基礎入門計畫（下）"></label>
@@ -1108,7 +1106,7 @@ main.addEventListener("input",e=>{
   else if(t.id==="ptScore"){const id="pt_"+todayStr();const d=JSON.parse(JSON.stringify(docs.get(id)||{type:"posture",date:todayStr(),scores:{}}));d.scores[MV.post]=+t.value;$("#ptScoreV").textContent=t.value;writeSoon(id,d,700);}
   else if(t.id==="ptGoal"){const d=JSON.parse(JSON.stringify(docs.get("pt_goals")||{type:"ptgoals",goals:{}}));d.goals[MV.post]=t.value;writeSoon("pt_goals",d);}
   else if(t.dataset.yn!=null){const y=myYoga();curCourse(y).lessons[+t.dataset.yn].note=t.value;writeSoon("yoga",y);t.style.height="auto";t.style.height=t.scrollHeight+"px";}
-  else if(t.dataset.yp!=null){const y=myYoga();curCourse(y).poses[+t.dataset.yp].note=t.value;writeSoon("yoga",y);}
+  else if(t.dataset.yp!=null){const y=myYoga(),[li,pj]=t.dataset.yp.split("-").map(Number);curCourse(y).lessons[li].poses[pj].note=t.value;writeSoon("yoga",y);}
   else if(t.id==="mvHold"){MV.hold=Math.max(0,Math.min(60,n(t.value)));}
   else if(t.id==="mvReps"){MV.reps=Math.max(1,Math.min(20,n(t.value)|0));}
   else if(t.id==="mvSpeed"){MV.speed=n(t.value)||1;}
