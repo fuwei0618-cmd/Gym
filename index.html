@@ -171,6 +171,10 @@ label.lab span{font-size:12px;color:var(--ink-3)}
 .ymk ellipse.s{fill:none;stroke:#cf4f3a;stroke-width:2;vector-effect:non-scaling-stroke}
 .ylab{position:absolute;z-index:2;white-space:nowrap;font-size:11.5px;font-weight:700;letter-spacing:.02em;color:#b8432f;background:rgba(255,255,255,.94);padding:2px 8px;border-radius:999px;box-shadow:0 1px 3px rgba(60,40,30,.18);pointer-events:none}
 .ycard.nomk .ymk,.ycard.nomk .ylab{display:none}
+.ypc-story{margin:0;font-size:15px;line-height:1.6;color:#7a5a2e;font-weight:500}
+.yc-st.on{background:#f6ecd9;color:#7a5a2e;border-color:#e8d3ad}
+.ypc-f{transition:visibility 0s .27s}.ypc.flip .ypc-f{visibility:hidden}
+.ypc-b{visibility:hidden;transition:visibility 0s .27s}.ypc.flip .ypc-b{visibility:visible}
 .yc-mk.on{background:#fbe9e5;color:#b8432f;border-color:#efc4ba}
 .ypc-img::after{content:"";position:absolute;left:18%;right:18%;bottom:12px;height:8px;border-radius:50%;background:rgba(40,50,35,.12);filter:blur(4px)}
 .ypc-n{position:absolute;top:10px;left:14px;font-family:var(--f-mono);font-size:13px;color:var(--moss-deep)}
@@ -386,7 +390,8 @@ const YAR={"動態摩天式展臂": 0.2058, "動態摩天式提腳跟": 0.2019, 
 const YMARK={"動態摩天式展臂": [[50, 40, 34, 7, "肋骨內收", "r"], [50, 28, 44, 3, "肩膀遠離耳朵", "l"]], "動態摩天式提腳跟": [[50, 38, 34, 7, "肋骨內收", "r"], [50, 96, 48, 4, "腳跟慢慢提起", "l"]], "靜態抱肘摩天式": [[50, 14, 22, 7, "頭不往前推", "r"], [50, 47, 40, 5, "骨盆穩定", "l"]], "手臂環抱繞頸式": [[50, 16, 26, 6, "脖子不用力・小圈", "l"]], "手扶膝半蹲起": [[33, 69, 10, 6, "膝蓋朝腳尖", "l"], [64, 32, 16, 12, "背打平", "r"]], "手扶膝半蹲繞圈式": [[33, 64, 12, 7, "膝蓋小圈繞", "l"]], "動態貓式": [[40, 12, 14, 14, "從背中段開始動", "t"], [25, 88, 10, 9, "手推地", "b"]], "跪姿手腕伸展式": [[27, 86, 9, 10, "手背貼地・輕壓", "t"]], "屈膝肘撐板式": [[42, 30, 13, 18, "小腹收・不塌腰", "t"]], "肘撐板式": [[50, 32, 16, 16, "身體一直線", "t"]], "動態單腿蝗蟲式（右）": [[40, 72, 12, 14, "骨盆貼地", "b"], [85, 15, 9, 14, "抬低一點沒關係", "l"]], "動態單腿蝗蟲式（左）": [[42, 70, 12, 14, "骨盆貼地", "b"], [85, 14, 9, 14, "抬低一點沒關係", "l"]], "單腿坐姿扭轉（左）": [[70, 48, 9, 22, "先坐高再轉", "l"], [66, 90, 10, 8, "可坐瑜珈磚", "b"]], "單腿坐姿扭轉（右）": [[72, 42, 10, 22, "背不能圓", "l"], [74, 88, 10, 8, "可坐瑜珈磚", "b"]], "仰臥鎖腿（右）": [[58, 72, 10, 12, "下背貼地", "b"], [62, 18, 10, 16, "大腿拉近小腹", "t"]], "仰臥鎖腿（左）": [[70, 78, 10, 12, "下背貼地", "b"], [63, 12, 10, 14, "大腿拉近小腹", "t"]], "仰臥束角式": [[38, 18, 10, 18, "膝蓋自然往外倒", "t"], [52, 50, 8, 15, "骨盆前側打開", "b"]], "挺屍式": [[50, 45, 46, 36, "全身放掉", "t"], [24, 45, 6, 18, "膝下可墊滾筒", "b"]]};
 const YWIDE=new Set(["動態貓式", "跪姿手腕伸展式", "屈膝肘撐板式", "肘撐板式", "動態單腿蝗蟲式（右）", "動態單腿蝗蟲式（左）", "單腿坐姿扭轉（左）", "單腿坐姿扭轉（右）", "仰臥鎖腿（右）", "仰臥鎖腿（左）", "仰臥束角式", "挺屍式"]);
 const YFLOW={"站":"0:28","半蹲":"4:30","跪":"5:20","趴":"9:40","坐":"11:00","躺":"13:10"};
-let yCard=null, yMk=true;
+let yCard=null, yMk=true, yStory=false;
+const YSTORY={"動態摩天式展臂": "清晨在森林木屋前醒來，雙手翻掌，把太陽捧過頭頂，伸一個大懶腰。", "動態摩天式提腳跟": "踮起腳尖，想摘樹梢最高的那顆蘋果，摘不到就放下來再試一次。", "靜態抱肘摩天式": "抱著手肘當帽子、踮腳站好——樹上的松鼠在看，不能晃。", "手臂環抱繞頸式": "歪頭聽左邊的鳥叫、右邊的溪水，再慢慢轉一圈，看看森林醒了沒。", "手扶膝半蹲起": "手扶膝蓋蹲下，看看地上冒出的小蘑菇，再站起來。", "手扶膝半蹲繞圈式": "膝蓋畫小圈，像在攪一鍋剛採的蘑菇湯。", "動態貓式": "跪下來變成一隻貓：抬頭看月亮，再弓背伸懶腰。", "跪姿手腕伸展式": "貓咪把前掌翻過來，輕輕按一按自己的肉球。", "屈膝肘撐板式": "躲進草叢，手肘撐地、肚子收好，不讓狐狸發現。", "肘撐板式": "變成一座木頭橋，讓小螞蟻排隊走過去。", "動態單腿蝗蟲式（右）": "趴在溪邊，右腳像蠍子尾巴，輕輕點三下水。", "動態單腿蝗蟲式（左）": "換左腳點三下，濺起的水花剛好驚動一條小魚。", "單腿坐姿扭轉（左）": "坐起來，坐得高高的，轉身回頭看看剛走過的小路。", "單腿坐姿扭轉（右）": "再往另一邊轉，找到躲在樹後的那隻松鼠。", "仰臥鎖腿（右）": "躺上草地，抱住右膝，像抱著一顆暖暖的南瓜。", "仰臥鎖腿（左）": "換抱左邊的南瓜，越抱越近、越抱越暖。", "仰臥束角式": "腳掌合起來，膝蓋像蝴蝶翅膀，慢慢往兩邊打開。", "挺屍式": "整個人融進草地，聽著風聲，睡一個好長的午覺。"};
 function yFig(nm){const ar=YAR[nm]||1,R=100/ar,mk=YMARK[nm]||[];
   const svg=mk.length?`<svg class="ymk" viewBox="0 0 100 ${R.toFixed(2)}" preserveAspectRatio="none" aria-hidden="true">${mk.map(([x,y,rx,ry])=>`<ellipse class="g" cx="${x}" cy="${(y*R/100).toFixed(2)}" rx="${rx}" ry="${(ry*R/100).toFixed(2)}"/><ellipse class="s" cx="${x}" cy="${(y*R/100).toFixed(2)}" rx="${rx}" ry="${(ry*R/100).toFixed(2)}"/>`).join("")}</svg>`:"";
   const labs=mk.map(([x,y,rx,ry,t,sd])=>{const st=sd==="l"?`left:${x-rx}%;top:${y}%;transform:translate(calc(-100% - 4px),-50%)`:sd==="r"?`left:${x+rx}%;top:${y}%;transform:translate(4px,-50%)`:sd==="t"?`left:${x}%;top:${y-ry}%;transform:translate(-50%,calc(-100% - 4px))`:`left:${x}%;top:${y+ry}%;transform:translate(-50%,4px)`;return `<span class="ylab" style="${st}">${esc(t)}</span>`;}).join("");
@@ -402,15 +407,15 @@ function yCardView(c,i){
     return `<div class="ygrp" id="yg-${ps}"><b>${ps}</b><i></i></div>`+list.map(([p,j])=>{n++;const t=yParse(p.note),side=(p.name.match(/（(.)）/)||[])[1],nm=p.name.replace(/（.）/,"");
     return `<div class="ypc${YWIDE.has(p.name)?" wide":""}" data-yflip="${j}"><div class="ypc-in">
       <div class="ypc-f"><div class="ypc-img"><span class="ypc-n">${pad(n)}</span>${side?`<span class="ypc-side">${side}側</span>`:""}${YIMG[p.name]?yFig(p.name):""}</div>
-        <div class="ypc-t"><h3>${esc(nm)}</h3>${t.cue?`<p class="ypc-cue">${esc(t.cue)}</p>`:`<p class="ypc-cue" style="color:var(--ink-3)">點一下寫下提示</p>`}
-        ${t.prop?`<div class="ypc-prop"><b>${esc(t.plabel)}</b><span>${esc(t.prop)}</span></div>`:""}</div></div>
+        <div class="ypc-t"><h3>${esc(nm)}</h3>${yStory&&YSTORY[p.name]?`<p class="ypc-story">${esc(YSTORY[p.name])}</p>`:t.cue?`<p class="ypc-cue">${esc(t.cue)}</p>`:`<p class="ypc-cue" style="color:var(--ink-3)">點一下寫下提示</p>`}
+        ${!yStory&&t.prop?`<div class="ypc-prop"><b>${esc(t.plabel)}</b><span>${esc(t.prop)}</span></div>`:""}</div></div>
       <div class="ypc-b"><span class="lbl">老師怎麼說</span><h3>${esc(p.name)}</h3>
         <textarea id="yp-${i}-${j}" data-yp="${i}-${j}" aria-label="${esc(p.name)} 筆記">${esc(p.note)}</textarea>
         <div class="ypc-hint">直接改，會自動存　·　點卡片外框翻回去</div></div>
     </div></div>`}).join("")}).join("");
   return `<div class="ycard${yMk?"":" nomk"}" role="dialog" aria-label="課卡">
     <div class="yc-head"><div><div class="eyebrow">${esc(c.name)}${l.min?" · "+l.min+" 分鐘":""}</div><h1><small>${pad(i+1)}</small>${esc(l.name)}</h1></div>
-      <div class="yc-act"><button class="btn small ghost yc-mk${yMk?" on":""}" data-act="y-mk">◯ 重點圈</button><span class="chip">${YST[l.status]} · 練了 ${l.days.length} 次</span><button class="btn${did?" solid":""}" data-act="y-day" data-c="${esc(c.id)}" data-i="${i}">${did?"今天練了 ✓":"今天練了"}</button><button class="yc-x" data-act="y-card-x" aria-label="關閉">✕</button></div></div>
+      <div class="yc-act"><button class="btn small ghost yc-st${yStory?" on":""}" data-act="y-story">📖 故事</button><button class="btn small ghost yc-mk${yMk?" on":""}" data-act="y-mk">◯ 重點圈</button><span class="chip">${YST[l.status]} · 練了 ${l.days.length} 次</span><button class="btn${did?" solid":""}" data-act="y-day" data-c="${esc(c.id)}" data-i="${i}">${did?"今天練了 ✓":"今天練了"}</button><button class="yc-x" data-act="y-card-x" aria-label="關閉">✕</button></div></div>
     <div class="yc-flow">${POS.map((ps,k)=>cnt[k]?`<button data-act="y-jump" data-p="${ps}" style="--n:${cnt[k]}">${ps}${YFLOW[ps]?`<i>${YFLOW[ps]}</i>`:""}</button>`:"").join("")}</div>
     <div class="yriver" id="yriver">${river}<div style="flex:none;width:8px"></div></div>
     ${rem.length?`<div class="yc-foot"><span class="eyebrow">一直出現的提醒</span>${rem.map(r=>`<span class="r">${esc(r)}</span>`).join("")}</div>`:""}
@@ -1185,6 +1190,7 @@ document.addEventListener("click",e=>{
   else if(a==="y-undo"){const y=myYoga(),c=curCourse(y),i=+b.dataset.i;c.lessons[i].status="doing";c.lessons[i].grad="";yOpen=i;write("yoga",y);render();}
   else if(a==="y-card"){yCard=+b.dataset.i;render();}
   else if(a==="y-mk"){yMk=!yMk;const cd=document.querySelector(".ycard");if(cd)cd.classList.toggle("nomk",!yMk);b.classList.toggle("on",yMk);}
+  else if(a==="y-story"){yStory=!yStory;render();}
   else if(a==="y-card-x"){yCard=null;render();}
   else if(a==="y-jump"){const g=document.getElementById("yg-"+b.dataset.p),r=$("#yriver");if(g&&r)r.scrollTo({left:g.offsetLeft-r.offsetLeft-8,behavior:"smooth"});}
   else if(a==="y-cur"){const y=myYoga();y.cur=b.dataset.c;yOpen=null;write("yoga",y);render();}
