@@ -943,6 +943,8 @@ document.addEventListener("keydown",e=>{if(st.view!=="song"||!V||/INPUT|TEXTAREA
   if(e.key===" "){e.preventDefault();V.paused?goPlay():V.pause();}else if(e.key==="ArrowLeft")V.currentTime-=2;else if(e.key==="ArrowRight")V.currentTime+=2;else if(e.key==="m")$('[data-k="mirror"]').click();});
 
 if(!(window.claude&&window.claude.use)){const sy=$("#sync");if(sy)sy.hidden=true;}
+if(/^#(belief|vision)$/.test(location.hash)){st.view="vision";setTimeout(()=>{try{loadVisionImgs();}catch(e){}},0);}   // #belief：直接打開 HH 信念板（給鬧鐘捷徑和「全部信念」用）
+addEventListener("hashchange",()=>{if(/^#(belief|vision)$/.test(location.hash)){st.view="vision";render();window.scrollTo(0,0);}});
 render();connect();requestAnimationFrame(tick);
 })();
 </script>
