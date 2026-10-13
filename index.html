@@ -189,9 +189,15 @@ label.lab span{font-size:12px;color:var(--ink-3)}
 .ypc-f{transition:visibility 0s .27s}.ypc.flip .ypc-f{visibility:hidden}
 .ypc-b{visibility:hidden;transition:visibility 0s .27s}.ypc.flip .ypc-b{visibility:visible}
 .yc-flow button em{font-style:normal;font-weight:700;font-size:12px;color:#7a5a2e;margin-left:6px}
-.yc-tale p{margin:0;flex:1;min-width:0;font-size:13.5px;line-height:1.6;color:var(--ink-2)}.yc-tale p b{color:#7a5a2e}
 .ycard{padding-top:max(10px,env(safe-area-inset-top))}.yc-head h1{font-size:clamp(22px,3vw,30px)}.yc-flow{margin-top:10px}.yriver{padding-top:12px;padding-bottom:8px}
 .ycard.story .ypc-t{flex-basis:100px}
+.yc-foot{position:relative}
+.yc-talebtn{all:unset;cursor:pointer;margin-left:auto;display:flex;align-items:center;gap:8px;background:#f6ecd9;border:1px solid #e8d3ad;border-radius:999px;padding:6px 14px;font-size:13px;color:#7a5a2e;max-width:100%;box-sizing:border-box}
+.yc-talebtn b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.yc-talebtn i{font-style:normal;font-size:12px;opacity:.75;flex:none}
+.yc-talepop{position:absolute;right:24px;bottom:calc(100% + 10px);width:min(440px,calc(100vw - 48px));background:#fffaf1;border:1px solid #e8d3ad;border-radius:18px;box-shadow:0 14px 34px -12px rgba(60,45,20,.35);padding:14px 18px 16px;z-index:5}
+.yc-talepop p{margin:8px 0 0;font-size:14px;line-height:1.65;color:var(--ink)}.yc-talepop p b{color:#7a5a2e}
+.yc-talepop p.one{margin-top:12px;padding-top:10px;border-top:1px dashed #e8d3ad}
+.yc-x.sm{width:30px;height:30px;font-size:14px}
 .yc-mk.on{background:#fbe9e5;color:#b8432f;border-color:#efc4ba}
 .ypc-img::after{content:"";position:absolute;left:18%;right:18%;bottom:12px;height:8px;border-radius:50%;background:rgba(40,50,35,.12);filter:blur(4px)}
 .ypc-n{position:absolute;top:10px;left:14px;font-family:var(--f-mono);font-size:13px;color:var(--moss-deep)}
@@ -409,7 +415,7 @@ const YWIDE=new Set(["動態貓式", "跪姿手腕伸展式", "屈膝肘撐板�
 const YFLOW={"站":"0:28","半蹲":"4:30","跪":"5:20","趴":"9:40","坐":"11:00","躺":"13:10"};
 let yCard=null, yMk=true, yStory=false;
 const YCHAP={"站": "起床", "半蹲": "採蘑菇", "跪": "當貓咪", "趴": "玩水", "坐": "找松鼠", "躺": "抱南瓜睡覺"};
-const YTALE="早上起床，先<b>捧太陽</b>伸懶腰，踮腳<b>摘蘋果</b>，摘不到就<b>戴帽子站好</b>，歪頭<b>聽鳥叫</b>。低頭<b>看蘑菇</b>，順手<b>攪蘑菇湯</b>。吃飽<b>變成貓</b>，舔舔<b>按肉球</b>，<b>躲草叢</b>偷看，再<b>變木橋</b>讓螞蟻過河。溪邊<b>右腳點水</b>、<b>左腳點水</b>。坐起來<b>回頭看路</b>，咦，<b>找松鼠</b>！躺下<b>抱右邊南瓜</b>、<b>抱左邊南瓜</b>，膝蓋<b>蝴蝶開翅膀</b>，然後<b>睡午覺</b>。";
+const YTALE=["早上起床，先<b>捧太陽</b>伸個懶腰，踮腳<b>摘蘋果</b>，摘不到就<b>戴帽子站好</b>，歪頭<b>聽鳥叫</b>。", "低頭<b>看蘑菇</b>，順手<b>攪蘑菇湯</b>。", "吃飽了<b>變成貓</b>，舔舔<b>按肉球</b>，<b>躲草叢</b>偷看，再<b>變木橋</b>讓螞蟻過河。", "走到溪邊，<b>右腳點水</b>、<b>左腳點水</b>。", "坐起來<b>回頭看路</b>，咦，<b>找松鼠</b>！", "最後躺下來，<b>抱右邊南瓜</b>、<b>抱左邊南瓜</b>，膝蓋像<b>蝴蝶開翅膀</b>，然後<b>睡午覺</b>。"];
 const YSTORY={"動態摩天式展臂": "捧太陽", "動態摩天式提腳跟": "摘蘋果", "靜態抱肘摩天式": "戴帽子站好", "手臂環抱繞頸式": "聽鳥叫", "手扶膝半蹲起": "看蘑菇", "手扶膝半蹲繞圈式": "攪蘑菇湯", "動態貓式": "變成貓", "跪姿手腕伸展式": "按肉球", "屈膝肘撐板式": "躲草叢", "肘撐板式": "變木橋", "動態單腿蝗蟲式（右）": "右腳點水", "動態單腿蝗蟲式（左）": "左腳點水", "單腿坐姿扭轉（左）": "回頭看路", "單腿坐姿扭轉（右）": "找松鼠", "仰臥鎖腿（右）": "抱右邊南瓜", "仰臥鎖腿（左）": "抱左邊南瓜", "仰臥束角式": "蝴蝶開翅膀", "挺屍式": "睡午覺"};
 let yPT=null,yPI=0,yPL=[],yPPause=false;
 function yPlayShow(){const el=document.querySelector(".yplay");if(!el)return;const p=yPL[yPI];
@@ -455,7 +461,9 @@ function yCardView(c,i){
       <div class="yc-act"><button class="btn small solid" data-act="y-play" data-i="${i}">▶ 播放</button><button class="btn small ghost yc-st${yStory?" on":""}" data-act="y-story">📖 故事</button><button class="btn small ghost yc-mk${yMk?" on":""}" data-act="y-mk">◯ 重點圈</button><span class="chip">${YST[l.status]} · 練了 ${l.days.length} 次</span><button class="btn${did?" solid":""}" data-act="y-day" data-c="${esc(c.id)}" data-i="${i}">${did?"今天練了 ✓":"今天練了"}</button><button class="yc-x" data-act="y-card-x" aria-label="關閉">✕</button></div></div>
     <div class="yc-flow">${POS.map((ps,k)=>cnt[k]?`<button data-act="y-jump" data-p="${ps}" style="--n:${cnt[k]}">${ps}${YCHAP[ps]?`<em>${YCHAP[ps]}</em>`:""}${YFLOW[ps]?`<i>${YFLOW[ps]}</i>`:""}</button>`:"").join("")}</div>
     <div class="yriver" id="yriver">${river}<div style="flex:none;width:8px"></div></div>
-    ${yStory?`<div class="yc-foot yc-tale"><span class="eyebrow">📖 森林裡的一天</span><p>${YTALE}</p></div>`:rem.length?`<div class="yc-foot"><span class="eyebrow">一直出現的提醒</span>${rem.map(r=>`<span class="r">${esc(r)}</span>`).join("")}</div>`:""}
+    <div class="yc-foot">${rem.length?`<span class="eyebrow">一直出現的提醒</span>${rem.map(r=>`<span class="r">${esc(r)}</span>`).join("")}`:""}
+      <button class="yc-talebtn" data-act="y-tale">📖 <b>起床、採蘑菇、當貓咪、玩水、找松鼠、抱南瓜睡覺</b><i>看故事 ›</i></button>
+      <div class="yc-talepop" hidden><div class="row between"><span class="eyebrow">📖 森林裡的一天</span><button class="yc-x sm" data-act="y-tale" aria-label="收起">✕</button></div>${YTALE.map(t=>`<p>${t}</p>`).join("")}<p class="one">一句話記：<b>起床、採蘑菇、當貓咪、玩水、找松鼠、抱南瓜睡覺。</b></p></div></div>
   </div>`;
 }
 
@@ -1229,6 +1237,7 @@ document.addEventListener("click",e=>{
   else if(a==="y-card"){yCard=+b.dataset.i;render();}
   else if(a==="y-mk"){yMk=!yMk;const cd=document.querySelector(".ycard");if(cd)cd.classList.toggle("nomk",!yMk);b.classList.toggle("on",yMk);}
   else if(a==="y-play"){const c=curCourse(yoga());yPlayOpen(c.lessons[+b.dataset.i].poses);}
+  else if(a==="y-tale"){const pp=document.querySelector(".yc-talepop");if(pp)pp.hidden=!pp.hidden;}
   else if(a==="y-story"){yStory=!yStory;render();}
   else if(a==="y-card-x"){yCard=null;render();}
   else if(a==="y-jump"){const g=document.getElementById("yg-"+b.dataset.p),r=$("#yriver");if(g&&r)r.scrollTo({left:g.offsetLeft-r.offsetLeft-8,behavior:"smooth"});}
