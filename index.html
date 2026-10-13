@@ -171,7 +171,20 @@ label.lab span{font-size:12px;color:var(--ink-3)}
 .ymk ellipse.s{fill:none;stroke:#cf4f3a;stroke-width:2;vector-effect:non-scaling-stroke}
 .ylab{position:absolute;z-index:2;white-space:nowrap;font-size:11.5px;font-weight:700;letter-spacing:.02em;color:#b8432f;background:rgba(255,255,255,.94);padding:2px 8px;border-radius:999px;box-shadow:0 1px 3px rgba(60,40,30,.18);pointer-events:none}
 .ycard.nomk .ymk,.ycard.nomk .ylab{display:none}
-.ypc-story{margin:0;font-size:15px;line-height:1.6;color:#7a5a2e;font-weight:500}
+.ypc-story{margin:0;font-size:22px;line-height:1.3;color:#7a5a2e;font-weight:900;letter-spacing:.04em}
+.yplay{position:fixed;inset:0;z-index:60;background:var(--ground);background-image:radial-gradient(ellipse 55% 55% at 50% 45%,#fff,var(--moss-tint) 80%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;cursor:pointer;user-select:none}
+.yplay .pp-x{position:absolute;top:max(16px,env(safe-area-inset-top));right:20px}
+.yplay .pp-pos{font-family:var(--f-mono);font-size:13px;letter-spacing:.2em;color:var(--moss-deep)}
+.yplay .pp-img{height:min(52vh,420px);width:min(86vw,760px);display:flex;align-items:flex-end;justify-content:center;margin:10px 0 18px}
+.yplay .pp-img img{max-width:100%;max-height:100%;filter:drop-shadow(0 10px 12px rgba(40,50,35,.2));animation:ppIn .7s cubic-bezier(.2,.7,.2,1)}
+.yplay .pp-word{font-size:clamp(36px,6vw,64px);font-weight:900;color:#7a5a2e;letter-spacing:.06em;animation:ppUp .6s .1s both}
+.yplay .pp-name{margin-top:6px;font-size:15px;color:var(--ink-2);animation:ppUp .6s .2s both}
+.yplay .pp-dots{display:flex;gap:6px;margin-top:22px}
+.yplay .pp-dots i{width:7px;height:7px;border-radius:50%;background:rgba(60,58,52,.18)}
+.yplay .pp-dots i.on{background:var(--moss-deep);width:18px;border-radius:4px}
+.yplay .pp-hint{position:absolute;bottom:max(16px,env(safe-area-inset-bottom));font-size:12px;color:var(--ink-3)}
+@keyframes ppIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes ppUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .yc-st.on{background:#f6ecd9;color:#7a5a2e;border-color:#e8d3ad}
 .ypc-f{transition:visibility 0s .27s}.ypc.flip .ypc-f{visibility:hidden}
 .ypc-b{visibility:hidden;transition:visibility 0s .27s}.ypc.flip .ypc-b{visibility:visible}
@@ -391,7 +404,25 @@ const YMARK={"動態摩天式展臂": [[50, 40, 34, 7, "肋骨內收", "r"], [50
 const YWIDE=new Set(["動態貓式", "跪姿手腕伸展式", "屈膝肘撐板式", "肘撐板式", "動態單腿蝗蟲式（右）", "動態單腿蝗蟲式（左）", "單腿坐姿扭轉（左）", "單腿坐姿扭轉（右）", "仰臥鎖腿（右）", "仰臥鎖腿（左）", "仰臥束角式", "挺屍式"]);
 const YFLOW={"站":"0:28","半蹲":"4:30","跪":"5:20","趴":"9:40","坐":"11:00","躺":"13:10"};
 let yCard=null, yMk=true, yStory=false;
-const YSTORY={"動態摩天式展臂": "清晨在森林木屋前醒來，雙手翻掌，把太陽捧過頭頂，伸一個大懶腰。", "動態摩天式提腳跟": "踮起腳尖，想摘樹梢最高的那顆蘋果，摘不到就放下來再試一次。", "靜態抱肘摩天式": "抱著手肘當帽子、踮腳站好——樹上的松鼠在看，不能晃。", "手臂環抱繞頸式": "歪頭聽左邊的鳥叫、右邊的溪水，再慢慢轉一圈，看看森林醒了沒。", "手扶膝半蹲起": "手扶膝蓋蹲下，看看地上冒出的小蘑菇，再站起來。", "手扶膝半蹲繞圈式": "膝蓋畫小圈，像在攪一鍋剛採的蘑菇湯。", "動態貓式": "跪下來變成一隻貓：抬頭看月亮，再弓背伸懶腰。", "跪姿手腕伸展式": "貓咪把前掌翻過來，輕輕按一按自己的肉球。", "屈膝肘撐板式": "躲進草叢，手肘撐地、肚子收好，不讓狐狸發現。", "肘撐板式": "變成一座木頭橋，讓小螞蟻排隊走過去。", "動態單腿蝗蟲式（右）": "趴在溪邊，右腳像蠍子尾巴，輕輕點三下水。", "動態單腿蝗蟲式（左）": "換左腳點三下，濺起的水花剛好驚動一條小魚。", "單腿坐姿扭轉（左）": "坐起來，坐得高高的，轉身回頭看看剛走過的小路。", "單腿坐姿扭轉（右）": "再往另一邊轉，找到躲在樹後的那隻松鼠。", "仰臥鎖腿（右）": "躺上草地，抱住右膝，像抱著一顆暖暖的南瓜。", "仰臥鎖腿（左）": "換抱左邊的南瓜，越抱越近、越抱越暖。", "仰臥束角式": "腳掌合起來，膝蓋像蝴蝶翅膀，慢慢往兩邊打開。", "挺屍式": "整個人融進草地，聽著風聲，睡一個好長的午覺。"};
+const YSTORY={"動態摩天式展臂": "捧太陽", "動態摩天式提腳跟": "摘蘋果", "靜態抱肘摩天式": "戴帽子站好", "手臂環抱繞頸式": "聽鳥叫", "手扶膝半蹲起": "看蘑菇", "手扶膝半蹲繞圈式": "攪蘑菇湯", "動態貓式": "變成貓", "跪姿手腕伸展式": "按肉球", "屈膝肘撐板式": "躲草叢", "肘撐板式": "變木橋", "動態單腿蝗蟲式（右）": "右腳點水", "動態單腿蝗蟲式（左）": "左腳點水", "單腿坐姿扭轉（左）": "回頭看路", "單腿坐姿扭轉（右）": "找松鼠", "仰臥鎖腿（右）": "抱右邊南瓜", "仰臥鎖腿（左）": "抱左邊南瓜", "仰臥束角式": "蝴蝶開翅膀", "挺屍式": "睡午覺"};
+let yPT=null,yPI=0,yPL=[],yPPause=false;
+function yPlayShow(){const el=document.querySelector(".yplay");if(!el)return;const p=yPL[yPI];
+  el.querySelector(".pp-pos").textContent=p.pos+" · "+(yPI+1)+" / "+yPL.length;
+  el.querySelector(".pp-img").innerHTML=YIMG[p.name]?`<img src="${YIMG[p.name]}" alt="">`:"";
+  const w=el.querySelector(".pp-word"),nm=el.querySelector(".pp-name");w.textContent=YSTORY[p.name]||p.name;nm.textContent=p.name;
+  [w,nm].forEach(x=>{x.style.animation="none";void x.offsetWidth;x.style.animation="";});
+  el.querySelector(".pp-dots").innerHTML=yPL.map((_,k)=>`<i class="${k===yPI?"on":""}"></i>`).join("");
+  el.querySelector(".pp-hint").textContent=yPPause?"已暫停・點一下繼續":"點一下暫停・左右滑換張";}
+function yPlayStep(d){yPI=(yPI+d+yPL.length)%yPL.length;yPlayShow();}
+function yPlayTimer(){clearInterval(yPT);if(!yPPause)yPT=setInterval(()=>{if(yPI===yPL.length-1){clearInterval(yPT);yPPause=true;yPlayShow();return;}yPlayStep(1);},2600);}
+function yPlayOpen(poses){const POS=["站","半蹲","跪","趴","坐","躺"];yPL=POS.flatMap(ps=>poses.filter(p=>p.pos===ps));if(!yPL.length)return;yPI=0;yPPause=false;
+  const el=document.createElement("div");el.className="yplay";el.innerHTML=`<button class="yc-x pp-x" aria-label="關閉">✕</button><div class="pp-pos"></div><div class="pp-img"></div><div class="pp-word"></div><div class="pp-name"></div><div class="pp-dots"></div><div class="pp-hint"></div>`;
+  document.body.appendChild(el);let sx=null;
+  el.addEventListener("click",e=>{e.stopPropagation();if(e.target.closest(".pp-x")){clearInterval(yPT);el.remove();return;}if(yPPause&&yPI===yPL.length-1){yPI=-1;yPlayStep(1);}yPPause=!yPPause;yPlayShow();yPlayTimer();});
+  el.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;},{passive:true});
+  el.addEventListener("touchend",e=>{if(sx==null)return;const dx=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(dx)>40){e.preventDefault();yPlayStep(dx<0?1:-1);yPlayTimer();}});
+  yPlayShow();yPlayTimer();}
+
 function yFig(nm){const ar=YAR[nm]||1,R=100/ar,mk=YMARK[nm]||[];
   const svg=mk.length?`<svg class="ymk" viewBox="0 0 100 ${R.toFixed(2)}" preserveAspectRatio="none" aria-hidden="true">${mk.map(([x,y,rx,ry])=>`<ellipse class="g" cx="${x}" cy="${(y*R/100).toFixed(2)}" rx="${rx}" ry="${(ry*R/100).toFixed(2)}"/><ellipse class="s" cx="${x}" cy="${(y*R/100).toFixed(2)}" rx="${rx}" ry="${(ry*R/100).toFixed(2)}"/>`).join("")}</svg>`:"";
   const labs=mk.map(([x,y,rx,ry,t,sd])=>{const st=sd==="l"?`left:${x-rx}%;top:${y}%;transform:translate(calc(-100% - 4px),-50%)`:sd==="r"?`left:${x+rx}%;top:${y}%;transform:translate(4px,-50%)`:sd==="t"?`left:${x}%;top:${y-ry}%;transform:translate(-50%,calc(-100% - 4px))`:`left:${x}%;top:${y+ry}%;transform:translate(-50%,4px)`;return `<span class="ylab" style="${st}">${esc(t)}</span>`;}).join("");
@@ -415,7 +446,7 @@ function yCardView(c,i){
     </div></div>`}).join("")}).join("");
   return `<div class="ycard${yMk?"":" nomk"}" role="dialog" aria-label="課卡">
     <div class="yc-head"><div><div class="eyebrow">${esc(c.name)}${l.min?" · "+l.min+" 分鐘":""}</div><h1><small>${pad(i+1)}</small>${esc(l.name)}</h1></div>
-      <div class="yc-act"><button class="btn small ghost yc-st${yStory?" on":""}" data-act="y-story">📖 故事</button><button class="btn small ghost yc-mk${yMk?" on":""}" data-act="y-mk">◯ 重點圈</button><span class="chip">${YST[l.status]} · 練了 ${l.days.length} 次</span><button class="btn${did?" solid":""}" data-act="y-day" data-c="${esc(c.id)}" data-i="${i}">${did?"今天練了 ✓":"今天練了"}</button><button class="yc-x" data-act="y-card-x" aria-label="關閉">✕</button></div></div>
+      <div class="yc-act"><button class="btn small solid" data-act="y-play" data-i="${i}">▶ 播放</button><button class="btn small ghost yc-st${yStory?" on":""}" data-act="y-story">📖 故事</button><button class="btn small ghost yc-mk${yMk?" on":""}" data-act="y-mk">◯ 重點圈</button><span class="chip">${YST[l.status]} · 練了 ${l.days.length} 次</span><button class="btn${did?" solid":""}" data-act="y-day" data-c="${esc(c.id)}" data-i="${i}">${did?"今天練了 ✓":"今天練了"}</button><button class="yc-x" data-act="y-card-x" aria-label="關閉">✕</button></div></div>
     <div class="yc-flow">${POS.map((ps,k)=>cnt[k]?`<button data-act="y-jump" data-p="${ps}" style="--n:${cnt[k]}">${ps}${YFLOW[ps]?`<i>${YFLOW[ps]}</i>`:""}</button>`:"").join("")}</div>
     <div class="yriver" id="yriver">${river}<div style="flex:none;width:8px"></div></div>
     ${rem.length?`<div class="yc-foot"><span class="eyebrow">一直出現的提醒</span>${rem.map(r=>`<span class="r">${esc(r)}</span>`).join("")}</div>`:""}
@@ -1190,6 +1221,7 @@ document.addEventListener("click",e=>{
   else if(a==="y-undo"){const y=myYoga(),c=curCourse(y),i=+b.dataset.i;c.lessons[i].status="doing";c.lessons[i].grad="";yOpen=i;write("yoga",y);render();}
   else if(a==="y-card"){yCard=+b.dataset.i;render();}
   else if(a==="y-mk"){yMk=!yMk;const cd=document.querySelector(".ycard");if(cd)cd.classList.toggle("nomk",!yMk);b.classList.toggle("on",yMk);}
+  else if(a==="y-play"){const c=curCourse(yoga());yPlayOpen(c.lessons[+b.dataset.i].poses);}
   else if(a==="y-story"){yStory=!yStory;render();}
   else if(a==="y-card-x"){yCard=null;render();}
   else if(a==="y-jump"){const g=document.getElementById("yg-"+b.dataset.p),r=$("#yriver");if(g&&r)r.scrollTo({left:g.offsetLeft-r.offsetLeft-8,behavior:"smooth"});}
