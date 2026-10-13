@@ -140,7 +140,7 @@ label.lab span{font-size:12px;color:var(--ink-3)}
 
 .chip.doing{background:var(--moss-tint);color:var(--moss-deep)}.chip.done{background:var(--moss);color:#fff}
 .ylesson.done .t{color:var(--ink-2)}
-label.lab.ypose{display:grid;grid-template-columns:minmax(0,9em) 1fr;gap:10px;align-items:center;margin:4px 0}label.lab.ypose span{font-size:14px;color:var(--ink)}
+label.lab.ypose{display:block;margin:6px 0 10px}label.lab.ypose span{display:block;font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px}label.lab.ypose textarea{width:100%;resize:none;overflow:hidden;font-size:13.5px;line-height:1.6;color:var(--ink-2,#55524c)}
 textarea.grow{resize:none;overflow:hidden;line-height:1.55}
 .empty{color:var(--ink-2);font-size:14px;padding:6px 0}
 .note{font-size:12px;color:var(--ink-3)}
@@ -320,9 +320,11 @@ const allSets=w=>w.exercises.reduce((s,e)=>s+e.sets.length,0);
 
 /* ---------- yoga courses: digest a class, practice, graduate, next ---------- */
 const POSES01=[["動態摩天式展臂","站"],["動態摩天式提腳跟","站"],["靜態抱肘摩天式","站"],["手臂環抱繞頸式","站"],["手扶膝半蹲起","半蹲"],["手扶膝半蹲繞圈式","半蹲"],["動態貓式","跪"],["跪姿手腕伸展式","跪"],["屈膝肘撐板式","趴"],["肘撐板式","趴"],["動態單腿蝗蟲式（右）","趴"],["動態單腿蝗蟲式（左）","趴"],["單腿坐姿扭轉（左）","坐"],["單腿坐姿扭轉（右）","坐"],["仰臥鎖腿（右）","躺"],["仰臥鎖腿（左）","躺"],["仰臥束角式","躺"],["挺屍式","躺"]].map(([name,pos])=>({name,pos,note:""}));
+const DIGEST01={"lesson": "全程節奏：吸氣向上延伸、呼氣放下或加深。\n三個一直出現的提醒：\n① 髖關節（骨盆）穩定：站姿提腳跟、抱肘平衡時\n② 肩膀遠離耳朵、手臂推地拉長頸部：貓式、板式\n③ 小腹收向後背、不塌腰：板式、蝗蟲式\n流程：站 0:28 → 半蹲 4:30 → 跪 5:20 → 趴 9:40 → 坐 11:00 → 躺 13:10（影片時間）\n大休息後起身：先向右側躺，再慢慢起來。", "poses": {"動態摩天式展臂": "口令：雙腳與肩同寬，十指相扣；吸氣翻掌舉過頭、抬頭看手，呼氣翻回放下，做 3 次。肩不舒服可以微彎手肘。\n提示：肋骨往內收，肩膀遠離耳朵。", "動態摩天式提腳跟": "口令：吸氣手臂上舉，同時踮起腳跟；呼氣手落下、腳跟落下，做 3 次。保持髖關節穩定。\n提示：肋骨往內收，肩膀遠離耳朵。\n不夠軟／不穩：提腳跟時一手扶牆。", "靜態抱肘摩天式": "口令：體前互抱手肘，吸氣雙肘舉過頭、踮起腳跟；目視固定一點，停 3 個呼吸，注意力放在髖關節穩定、脊柱立直。\n提示：頭不要往前推。\n不夠軟：抱不到手肘 → 雙手抓彈力帶兩端往上。", "手臂環抱繞頸式": "口令：① 側彎：右手繞過頭頂扶左耳上方，左手指尖輕觸肩膀，呼氣左肩下沉、頭往右延伸，換邊。② 繞環：小臂胸前交叉、雙手扶肩，低頭，頸部向後繞、向前收，兩個方向各 2 圈。\n提示：小圈、慢慢繞，脖子不用力壓；側彎時手只是輕放。\n不夠軟：繞的範圍縮小。", "手扶膝半蹲起": "口令：轉向墊子側邊，雙腳併攏，微彎膝、手扶膝；吸氣伸直膝蓋，呼氣微彎向下，做 4 次。\n提示：膝蓋朝腳尖方向，不往內夾；背打平。\n不夠軟：蹲淺一點。", "手扶膝半蹲繞圈式": "口令：手扶膝，膝蓋左右繞圈各 2 圈，幅度小一點；收回時膝蓋朝正前方。接著手落地，雙腿依次往後退、膝蓋跪地。\n提示：膝蓋朝腳尖方向，不往內夾；背打平。\n不夠軟：蹲淺一點、圈畫小一點。", "動態貓式": "口令：手臂和大腿垂直地板，與肩同寬；腳背平放（想更穩就勾腳趾，腳跟朝正上方不外開）。吸氣抬頭、開胸、尾骨向後，肩膀不聳、手往下推地拉長頸部；呼氣收小腹、弓背低頭看肚臍。做 5 次，把呼吸帶進動作。\n提示：動作從背的中段開始，不只是抬頭。\n不夠軟：膝蓋下墊折好的毛巾。", "跪姿手腕伸展式": "口令：右手掌心向上、指尖朝後，手背落地；吃力就彎右手肘，或試著伸直手臂，找到舒服的位置，感受前臂外側拉伸；做完活動一下手腕，換左手。力量不要過大。\n提示：輕輕的，不要壓到痛。\n不夠軟：手腕只輕輕壓，手肘彎著做。", "屈膝肘撐板式": "口令：手肘落地、大臂垂直地面，雙手相扣；雙膝併攏、勾腳趾。不要塌腰，小腹收向後背（像肚臍貼後背），肩膀和骨盆跟地面平行，停約 5 個呼吸。\n提示：屁股不翹也不塌腰，肚子微收。\n不夠力：先停在屈膝版。", "肘撐板式": "口令：可以屈膝保持，或蹬直膝蓋做肘撐板式；5 個呼吸，持續收緊小腹。結束時膝蓋落下、放平腳背，慢慢趴下。\n提示：屁股不翹也不塌腰，肚子微收。\n不夠力：屈膝版做穩了再換直腿，撐的秒數先減半。", "動態單腿蝗蟲式（右）": "口令：趴著，額頭先落地再換下巴落地，掌心向下壓地，雙腿與肩同寬；小腹微收，吸氣右大腿離地，呼氣輕輕落下，做 3 次。\n提示：兩邊骨盆貼地，腿抬低一點沒關係。\n不夠力：不要用腰硬抬。", "動態單腿蝗蟲式（左）": "口令：吸氣左腿抬起，呼氣輕輕落下，做 3 次。結束時額頭落地，雙手放胸口兩側推地，膝蓋往前挪一小步，坐到墊子上。\n提示：兩邊骨盆貼地，腿抬低一點沒關係。\n不夠力：不要用腰硬抬。", "單腿坐姿扭轉（左）": "口令：彎左膝，左腳掌貼右大腿內側，右腳尖朝天、盡量伸直右膝；右手輕觸左膝，左手指尖點地放臀部後方。吸氣立直脊柱，呼氣左肩往左後方轉，眼睛看左肩延伸線；停 3 個呼吸，每次吸氣往上長、呼氣轉多一點。\n提示：先坐高再轉，背不能圓。\n不夠軟：屁股下坐一塊瑜珈磚（最重要的一個）。", "單腿坐姿扭轉（右）": "口令：伸直左腿，彎右膝，右腳掌貼左大腿內側，左腳尖朝天；左手輕觸右膝，右手指尖點地。吸氣延伸脊椎，呼氣右肩慢慢向後打開，停 3 個呼吸。結束時臀部往前挪，雙手扶大腿、弓背，慢慢躺下。\n提示：先坐高再轉，背不能圓。\n不夠軟：屁股下坐一塊瑜珈磚（最重要的一個）。", "仰臥鎖腿（右）": "口令：屈膝、腳掌踩地，後腦勺平貼墊子，小腹輕收向地面；右膝提起靠近小腹，雙手環抱，左腿慢慢伸直、腳尖朝上。呼氣把大腿拉近小腹，吸氣伸直手臂放鬆，做 3 次。\n提示：下背貼地，肩膀放鬆。\n不夠軟：抱不到膝蓋 → 手抱大腿後側，或用彈力帶。", "仰臥鎖腿（左）": "口令：左膝提起，雙手環抱，右腿慢慢伸直、腳尖朝上；呼氣拉近，吸氣略微放鬆，做 3 次。\n提示：下背貼地，肩膀放鬆。\n不夠軟：抱不到膝蓋 → 手抱大腿後側，或用彈力帶。", "仰臥束角式": "口令：腳跟靠近臀部，雙膝往兩側打開、腳掌相對；雙手放體側、掌心向上，讓膝蓋自然下沉，感受骨盆前側舒展，可以閉眼。結束時雙手扶大腿外側，幫忙把雙膝併攏。\n提示：讓腿自然往外倒，不要往下壓。\n不夠軟：兩邊大腿外側各墊一塊瑜珈磚。", "挺屍式": "口令：雙腿自然分開、腳尖稍朝外，雙手攤在體側、掌心向上，整個背和腿平貼地面；閉眼自然呼吸，想像緊繃的地方變柔軟、貼向地面。要起身時先向右側躺。\n提示：全身放掉。\n不夠舒服：膝蓋下墊滾筒，下背會比較舒服。"}};
+POSES01.forEach(x=>{x.note=DIGEST01.poses[x.name]||"";});
 const YOGA_SEED={type:"yoga",cur:"c1",courses:[{id:"c1",name:"零基礎入門計畫（上）",src:"每日瑜伽 · Sophie Wong",cur:0,
- lessons:[["全身活動舒展",15],["核心初步穩定",10],["基礎柔韌建立",10],["肩頸腰背修復",10],["脊柱舒適流動",10],["綜合協調性提升",10],["流動串聯序列",15]].map(([name,min],i)=>({name,min,status:i?"todo":"doing",days:[],note:"",grad:"",poses:i?[]:POSES01})), }]};
-const yoga=()=>{const y=docs.get("yoga");if(!y)return YOGA_SEED;(y.courses||[]).forEach(c=>{if(c.poses&&c.poses.length&&c.lessons[0]&&!(c.lessons[0].poses||[]).length){c.lessons[0].poses=c.poses;}delete c.poses;c.lessons.forEach(l=>{l.poses=l.poses||[];});});return y;};
+ lessons:[["全身活動舒展",15],["核心初步穩定",10],["基礎柔韌建立",10],["肩頸腰背修復",10],["脊柱舒適流動",10],["綜合協調性提升",10],["流動串聯序列",15]].map(([name,min],i)=>({name,min,status:i?"todo":"doing",days:[],note:i?"":DIGEST01.lesson,grad:"",poses:i?[]:POSES01})), }]};
+const yoga=()=>{const y=docs.get("yoga");if(!y)return YOGA_SEED;(y.courses||[]).forEach(c=>{if(c.poses&&c.poses.length&&c.lessons[0]&&!(c.lessons[0].poses||[]).length){c.lessons[0].poses=c.poses;}delete c.poses;c.lessons.forEach(l=>{l.poses=l.poses||[];});if(/零基礎入門計畫（上）/.test(c.name)&&c.lessons[0]){const l=c.lessons[0];if(!l.note)l.note=DIGEST01.lesson;l.poses.forEach(x=>{if(!x.note)x.note=DIGEST01.poses[x.name]||"";});}});return y;};
 const myYoga=()=>JSON.parse(JSON.stringify(yoga()));
 const curCourse=y=>(y.courses.find(c=>c.id===y.cur)||y.courses[y.courses.length-1]);
 let yOpen=null, yNew=false;
@@ -351,7 +353,7 @@ function vYoga(){
           <button class="btn${did?" solid":""}" data-act="y-day" data-c="${esc(c.id)}" data-i="${i}">${did?"今天練了 ✓":"今天練了"}</button>
           ${l.status==="done"?`<span class="note">${esc(l.grad)} 畢業</span><button class="link" data-act="y-undo" data-i="${i}">取消畢業</button>`:`<button class="btn ghost" data-act="y-grad" data-i="${i}">畢業 → 下一堂</button>`}
         </div>
-        ${l.poses.length?`<div class="eyebrow" style="margin-top:4px">體式（${l.poses.length}）・站 → 躺</div>${POS.map(ps=>{const list=l.poses.map((p,j)=>[p,j]).filter(([p])=>p.pos===ps);return list.length?`<div><div class="note" style="margin:6px 0 2px">${ps}</div>${list.map(([p,j])=>`<label class="lab ypose"><span>${esc(p.name)}</span><input class="line" id="yp-${i}-${j}" data-yp="${i}-${j}" value="${esc(p.note)}" placeholder="一句提示／代償／輔具"></label>`).join("")}</div>`:"";}).join("")}`:""}
+        ${l.poses.length?`<div class="eyebrow" style="margin-top:4px">體式（${l.poses.length}）・站 → 躺</div>${POS.map(ps=>{const list=l.poses.map((p,j)=>[p,j]).filter(([p])=>p.pos===ps);return list.length?`<div><div class="note" style="margin:6px 0 2px">${ps}</div>${list.map(([p,j])=>`<label class="lab ypose"><span>${esc(p.name)}</span><textarea class="line grow" rows="1" id="yp-${i}-${j}" data-yp="${i}-${j}" placeholder="口令／一句提示／柔軟度不夠時">${esc(p.note)}</textarea></label>`).join("")}</div>`:"";}).join("")}`:""}
         ${l.days.length?`<p class="note" style="margin:0">練習日：${l.days.slice().sort().map(d=>d.slice(5).replace("-","/")).join("、")}</p>`:""}
       </div>
     </details>`}).join("");
@@ -1106,7 +1108,7 @@ main.addEventListener("input",e=>{
   else if(t.id==="ptScore"){const id="pt_"+todayStr();const d=JSON.parse(JSON.stringify(docs.get(id)||{type:"posture",date:todayStr(),scores:{}}));d.scores[MV.post]=+t.value;$("#ptScoreV").textContent=t.value;writeSoon(id,d,700);}
   else if(t.id==="ptGoal"){const d=JSON.parse(JSON.stringify(docs.get("pt_goals")||{type:"ptgoals",goals:{}}));d.goals[MV.post]=t.value;writeSoon("pt_goals",d);}
   else if(t.dataset.yn!=null){const y=myYoga();curCourse(y).lessons[+t.dataset.yn].note=t.value;writeSoon("yoga",y);t.style.height="auto";t.style.height=t.scrollHeight+"px";}
-  else if(t.dataset.yp!=null){const y=myYoga(),[li,pj]=t.dataset.yp.split("-").map(Number);curCourse(y).lessons[li].poses[pj].note=t.value;writeSoon("yoga",y);}
+  else if(t.dataset.yp!=null){const y=myYoga(),[li,pj]=t.dataset.yp.split("-").map(Number);curCourse(y).lessons[li].poses[pj].note=t.value;writeSoon("yoga",y);t.style.height="auto";t.style.height=t.scrollHeight+"px";}
   else if(t.id==="mvHold"){MV.hold=Math.max(0,Math.min(60,n(t.value)));}
   else if(t.id==="mvReps"){MV.reps=Math.max(1,Math.min(20,n(t.value)|0));}
   else if(t.id==="mvSpeed"){MV.speed=n(t.value)||1;}
