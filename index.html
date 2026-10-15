@@ -523,7 +523,7 @@ function vYoga(){
 }
 
 /* ---------- views ---------- */
-let tab=(location.hash.match(/tab=(today|log|plan|body|move|timer)/)||[])[1]||"today", planDay=new Date().getDay(), logConfirm=null, bodyConfirm=null;
+let tab=(location.hash.match(/tab=(today|log|plan|yoga|body|move|timer)/)||[])[1]||"today", planDay=new Date().getDay(), logConfirm=null, bodyConfirm=null;
 const ties='';
 const subSeg=()=>`<div class="seg">${[["today","今天"],["log","紀錄"],["timer","計時"]].map(([k,t])=>`<button class="${tab===k?"on":""}" data-tab="${k}">${t}</button>`).join("")}</div>`;
 
