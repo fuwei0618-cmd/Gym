@@ -468,7 +468,7 @@ function vVision(){
   const secsAll=[...docs.values()].filter(x=>x&&x.type==="sec"&&!x.archived);const green=secsAll.filter(x=>x.status==="g").length;
   return `
   <section class="panel visionHero stack">
-    <div class="eyebrow">MY HH VISION</div>
+    <div class="eyebrow" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span>MY HH VISION</span><a href="https://fuwei0618-cmd.github.io/Entry/bedside/#all" target="_top" style="font-size:12px;letter-spacing:0;color:inherit;text-decoration:underline;text-underline-offset:3px">← 信念彙集</a></div>
     <p class="vnote">${esc(v.note).replace(/\n/g,"<br>")}</p>
     <div class="vstats"><div><b class="num">${classes}</b><span>堂課</span></div><div><b class="num">${green}</b><span>段會了</span></div><div><b class="num">${v.wins.length}</b><span>個小勝利</span></div></div>
   </section>
