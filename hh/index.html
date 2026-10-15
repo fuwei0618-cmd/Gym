@@ -467,8 +467,9 @@ function vVision(){
   const classes=songs().reduce((n,s)=>n+((s.lessons||[]).length),0);
   const secsAll=[...docs.values()].filter(x=>x&&x.type==="sec"&&!x.archived);const green=secsAll.filter(x=>x.status==="g").length;
   return `
+  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:0 0 10px;font-size:13px"><a href="https://fuwei0618-cmd.github.io/Entry/bedside/#all" target="_top" style="color:inherit;text-decoration:underline;text-underline-offset:3px">← 信念彙集</a><span style="color:#B08D57;font-weight:600;letter-spacing:.06em">一句話 → 使命 → 身份 → 行為 → 卡住時</span></div>
   <section class="panel visionHero stack">
-    <div class="eyebrow" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span>MY HH VISION</span><a href="https://fuwei0618-cmd.github.io/Entry/bedside/#all" target="_top" style="font-size:12px;letter-spacing:0;color:inherit;text-decoration:underline;text-underline-offset:3px">← 信念彙集</a></div>
+    <div class="eyebrow">MY HH VISION</div>
     <p class="vnote">${esc(v.note).replace(/\n/g,"<br>")}</p>
     <div class="vstats"><div><b class="num">${classes}</b><span>堂課</span></div><div><b class="num">${green}</b><span>段會了</span></div><div><b class="num">${v.wins.length}</b><span>個小勝利</span></div></div>
   </section>
