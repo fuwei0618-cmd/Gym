@@ -474,21 +474,24 @@ function vVision(){
     <div class="vstats"><div><b class="num">${classes}</b><span>堂課</span></div><div><b class="num">${green}</b><span>段會了</span></div><div><b class="num">${v.wins.length}</b><span>個小勝利</span></div></div>
   </section>
   <section class="panel stack">
+    <div class="eyebrow">一句話</div>
+    <h2>出發前讀這段</h2>
+    <p class="note" style="margin:0">寫給猶豫中的自己。第一行會顯示在首頁。</p>
+    <textarea class="line" rows="4" id="vNote">${esc(v.note)}</textarea>
+  </section>
+  <section class="panel stack">
+    <div class="eyebrow">使命</div>
     <h2>我為什麼想學高跟鞋</h2>
     <textarea class="line" rows="3" id="vWhy" placeholder="例如：我想在舞台上更有自信、想喜歡鏡子裡的自己、想讓身體記住音樂……">${esc(v.why)}</textarea>
   </section>
   <section class="panel stack">
+    <div class="eyebrow">身份</div>
     <h2>我想成為的樣子</h2>
     ${v.become.map((b,i)=>`<input class="line" id="vB${i}" data-vb="${i}" value="${esc(b)}" placeholder="${["例如：穿高跟鞋走路也很穩、很好看","例如：上課時敢站在前排","例如：能完整跳完一首歌，錄給自己看"][i]||""}">`).join("")}
     <button class="link" data-act="vbadd" style="align-self:flex-start">＋ 再加一個</button>
   </section>
   <section class="panel stack">
-    <h2>腦中的那句話 → 我的回答</h2>
-    <p class="note" style="margin:0">當你想找理由不去時，那句話通常會是什麼？寫下來，再替自己寫一個回答。</p>
-    ${v.reframes.map((r,i)=>`<div class="reframe"><div class="rf-q"><textarea class="line q grow" rows="1" id="vq${i}" data-rq="${i}" placeholder="腦中的那句話">${esc(r.q)}</textarea><button class="x" data-act="rfdel" data-i="${i}" aria-label="刪除">×</button></div><div class="rf-a"><span aria-hidden="true">→</span><textarea class="line a grow" rows="1" id="va${i}" data-ra="${i}" placeholder="我的回答">${esc(r.a)}</textarea></div></div>`).join("")}
-    <button class="link" data-act="rfadd" style="align-self:flex-start">＋ 再加一句</button>
-  </section>
-  <section class="panel stack">
+    <div class="eyebrow">行為</div>
     <h2>小勝利罐子</h2>
     <p class="note" style="margin:0">有去上課、記住一段、敢錄一次影片，再小都記下來。想放棄的時候，回來看這裡。</p>
     <div class="row" style="flex-wrap:nowrap"><input class="line" id="vWin" placeholder="例如：今天有去上課！"><button class="btn solid" data-act="winadd" style="white-space:nowrap">放進罐子</button></div>
@@ -496,10 +499,13 @@ function vVision(){
     ${v.wins.length?`<ul class="wins">${v.wins.slice().reverse().map((w,ri)=>{const i=v.wins.length-1-ri;return `<li><span class="num note">${esc(w.d)}</span><span>${esc(w.t)}</span><button class="x" data-act="windel" data-i="${i}" aria-label="刪除">×</button></li>`;}).join("")}</ul>`:""}
   </section>
   <section class="panel stack">
-    <h2>出發前讀這段</h2>
-    <p class="note" style="margin:0">寫給猶豫中的自己。第一行會顯示在首頁。</p>
-    <textarea class="line" rows="4" id="vNote">${esc(v.note)}</textarea>
+    <div class="eyebrow">卡住時</div>
+    <h2>腦中的那句話 → 我的回答</h2>
+    <p class="note" style="margin:0">當你想找理由不去時，那句話通常會是什麼？寫下來，再替自己寫一個回答。</p>
+    ${v.reframes.map((r,i)=>`<div class="reframe"><div class="rf-q"><textarea class="line q grow" rows="1" id="vq${i}" data-rq="${i}" placeholder="腦中的那句話">${esc(r.q)}</textarea><button class="x" data-act="rfdel" data-i="${i}" aria-label="刪除">×</button></div><div class="rf-a"><span aria-hidden="true">→</span><textarea class="line a grow" rows="1" id="va${i}" data-ra="${i}" placeholder="我的回答">${esc(r.a)}</textarea></div></div>`).join("")}
+    <button class="link" data-act="rfadd" style="align-self:flex-start">＋ 再加一句</button>
   </section>
+
   <section class="panel">
     <details class="vfold" id="vFold" ${st.vOpen?"open":""}>
       <summary><h2>願景照片</h2><span class="note">${visionImgs().length?visionImgs().length+" 張・":""}${st.vOpen?"點這裡收起":"點這裡打開"}</span></summary>
