@@ -232,10 +232,15 @@ textarea.grow{resize:none;overflow:hidden;line-height:1.55}
 .rest .bar{flex:1;background:rgba(255,255,255,.15)}
 .rest .btn.ghost{color:#e6e4df;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
 .fab{position:fixed;right:12px;bottom:calc(132px + env(safe-area-inset-bottom,0px));z-index:7;width:54px;height:54px;border-radius:50%;border:0;background:var(--ink);color:#faf9f6;font-size:30px;line-height:1;box-shadow:0 6px 18px rgba(0,0,0,.2);cursor:pointer}
+.link.back{display:block;align-self:flex-start;text-align:left;margin:0 0 4px;font-size:14px}
+.week u{display:flex;gap:2px;justify-content:center;text-decoration:none;min-height:14px;margin-top:2px}.week em{font-style:normal;font-size:9px;line-height:14px;padding:0 3px;border-radius:4px;background:var(--moss-tint);color:var(--ink)}.week em.a-hh{background:#f3d9df}.week em.a-pilates{background:#e9e1cf}
+.chipbtn{border:1px solid var(--line);background:transparent;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;color:var(--ink-2)}.chipbtn.on{background:var(--ink);color:#faf9f6;border-color:var(--ink)}
+.ycourse{display:block;width:100%;text-align:left;border:0;font:inherit;color:inherit;cursor:pointer}
+a.panel.extra{display:flex;align-items:center;justify-content:space-between;text-decoration:none;color:inherit}a.panel.extra .go{font-size:22px;color:var(--ink-3)}
 nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(250,249,246,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:0 8px env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(4,1fr);z-index:6}
 nav.tabs button{border:0;background:transparent;height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;color:var(--ink-3)}
-nav.tabs b{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;font-weight:500}
-nav.tabs span{font-size:14px;font-weight:500}
+nav.tabs b{display:block;height:22px}nav.tabs b svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+nav.tabs span{font-size:12px;font-weight:500;margin-top:2px}
 nav.tabs button.on{color:var(--ink)}
 nav.tabs button.on b{color:var(--moss-deep)}
 nav.tabs button.on span{font-weight:700}
@@ -315,10 +320,10 @@ input[type=range]{accent-color:var(--moss-deep)}
 
 <button class="fab" id="fab" aria-label="新增" hidden>＋</button>
 <nav class="tabs" id="tabs">
-  <button data-tab="today"><b>TODAY</b><span>今日</span></button>
-  <button data-tab="plan"><b>PLAN</b><span>課表</span></button>
-  <button data-tab="move"><b>FIGURE</b><span>人偶</span></button>
-  <button data-tab="body"><b>BODY</b><span>身體</span></button>
+  <button data-tab="today"><b><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></b><span>今日</span></button>
+  <button data-tab="plan"><b><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></b><span>課表</span></button>
+  <button data-tab="move"><b><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.2"/><path d="M12 8v6M7 10l5-1 5 1M9 21l3-7 3 7"/></svg></b><span>人偶</span></button>
+  <button data-tab="body"><b><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6"/></svg></b><span>身體</span></button>
 </nav>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -470,14 +475,24 @@ function yCardView(c,i){
 }
 
 const YST={todo:"未開始",doing:"消化中",done:"畢業"};
-const planSeg=()=>`<div class="seg">${[["plan","每週課表"],["yoga","瑜伽課程"]].map(([k,t])=>`<button class="${tab===k?"on":""}" data-tab="${k}">${t}</button>`).join("")}</div>`;
-function yogaToday(){
+const planSeg=()=>tab==="yoga"?`<button class="link back" data-tab="plan">← 課表</button>`:"";
+/* 每天除了重訓，還可以排瑜伽、HH、皮拉提斯 */
+const ACTS=[["yoga","瑜伽"],["hh","HH"],["pilates","皮拉提斯"]];
+const actsOf=k=>(getPlan().days[k]||{}).acts||["yoga"];
+function yogaCard(){
   const y=yoga(),c=curCourse(y);if(!c)return "";
   const i=c.lessons.findIndex(l=>l.status!=="done");if(i<0)return "";
   const l=c.lessons[i],did=l.days.includes(todayStr());
-  return `<section class="panel"><div class="row between"><div><div class="eyebrow">YOGA · ${esc(c.name)}</div>
+  return `<section class="panel"><div class="row between"><div><div class="eyebrow">瑜伽 · ${esc(c.name)}</div>
     <div class="ex-name" style="margin-top:4px">第 ${i+1} 堂　${esc(l.name)}</div><div class="note">已練 ${l.days.length} 次</div></div>
     <button class="btn${did?" solid":""}" data-act="y-day" data-c="${esc(c.id)}" data-i="${i}">${did?"今天練了 ✓":"今天練了"}</button></div></section>`;
+}
+function todayExtras(){
+  const a=actsOf(new Date().getDay());let h="";
+  if(a.includes("yoga"))h+=yogaCard();
+  if(a.includes("hh"))h+=`<a class="panel extra" href="hh/"><div><div class="eyebrow">HH · 高跟鞋課</div><div class="ex-name" style="margin-top:4px">今天有 HH</div><div class="note">打開 HH 舞蹈筆記，複習影片和段落</div></div><span class="go">›</span></a>`;
+  if(a.includes("pilates"))h+=`<section class="panel"><div class="eyebrow">皮拉提斯</div><div class="ex-name" style="margin-top:4px">今天有皮拉提斯課</div><div class="note">上完在下面「今日筆記」記一句感覺</div></section>`;
+  return h;
 }
 function vYoga(){
   const y=yoga(),c=curCourse(y);
@@ -527,7 +542,7 @@ function vYoga(){
 /* ---------- views ---------- */
 let tab=(location.hash.match(/tab=(today|log|plan|yoga|body|move|timer)/)||[])[1]||"today", planDay=new Date().getDay(), logConfirm=null, bodyConfirm=null;
 const ties='';
-const subSeg=()=>`<div class="seg">${[["today","今天"],["log","紀錄"],["timer","計時"]].map(([k,t])=>`<button class="${tab===k?"on":""}" data-tab="${k}">${t}</button>`).join("")}</div>`;
+const subSeg=()=>tab==="timer"?`<button class="link back" data-tab="today">← 今日</button>`:"";
 
 function vToday(){
   const w=todayWorkout(), d=new Date();
@@ -553,9 +568,9 @@ function vToday(){
   if(!w.exercises.length)ex=`<p class="empty">今天課表是「${esc(w.title)}」，沒有排動作。想練的話，在下面加一個動作就能開始記錄。</p>`;
   return subSeg()+`
   <section class="panel ties">
-    <div class="eyebrow">${WD_EN[d.getDay()]} · ${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}</div>
+    <div class="row between"><div class="eyebrow">${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}　星期${WD[d.getDay()]}</div><button class="btn small ghost" data-tab="timer">⏱ 計時器</button></div>
     <h1 class="day">${esc(w.title)}</h1>
-    <div class="sub">星期${WD[d.getDay()]}${getPlan().starter?"・目前使用範例課表，可到「課表」改成你的":""}</div>
+    ${getPlan().starter?`<div class="sub">目前使用範例課表，可到「課表」改成你的</div>`:""}
     <div class="stats">
       <div><b class="num">${doneSets(w)}<small style="font-size:14px;color:var(--faint)">/${allSets(w)}</small></b><span>完成組數</span></div>
       <div><b class="num">${Math.round(volume(w)).toLocaleString()}</b><span>訓練量 kg</span></div>
@@ -569,7 +584,7 @@ function vToday(){
       <button class="btn" data-act="add-ex">加入</button>
     </div>
   </section>
-  ${yogaToday()}
+  ${todayExtras()}
   <section class="panel">
     <label class="lab"><span>今日筆記</span><textarea class="line" id="todayNote" rows="2" placeholder="狀態、感受、哪裡痠…">${esc(w.note)}</textarea></label>
   </section>`;
@@ -577,10 +592,10 @@ function vToday(){
 
 function vLog(){
   const ws=workouts();
-  if(!ws.length)return subSeg()+`<section class="panel ties"><h2>訓練紀錄</h2><p class="empty">還沒有紀錄。到「今日」勾選完成第一組，這裡就會出現當天的訓練。</p>${ties}</section>`;
+  if(!ws.length)return `<section class="panel ties"><h2>訓練紀錄</h2><p class="empty">還沒有紀錄。到「今日」勾選完成第一組，這裡就會出現當天的訓練。</p>${ties}</section>`;
   const total=ws.reduce((s,w)=>s+volume(w),0);
   const last30=ws.filter(w=>(Date.now()-new Date(w.date+"T00:00:00"))/864e5<=30&&doneSets(w)>0).length;
-  return subSeg()+`
+  return `
   <section class="panel ties">
     <h2>訓練紀錄</h2>
     <div class="stats" style="margin-top:0">
@@ -603,15 +618,17 @@ function vLog(){
 function vPlan(){
   const p=getPlan(), order=[1,2,3,4,5,6,0], td=new Date().getDay();
   const day=p.days[planDay]||{title:"",items:[]};
-  return planSeg()+`
+  const y=yoga(),yc=curCourse(y),yd=yc?yc.lessons.filter(l=>l.status==="done").length:0,ya=yc?yc.lessons.length:0;
+  return planSeg()+(yc?`<button class="panel ycourse" data-tab="yoga"><div class="row between"><div><div class="eyebrow">瑜伽課程</div><div class="ex-name" style="margin-top:4px">${esc(yc.name)}</div></div><span class="note">畢業 ${yd}/${ya} ›</span></div><div class="bar" style="margin-top:10px"><i style="width:${ya?yd/ya*100:0}%"></i></div></button>`:"")+`
   <section class="panel ties">
     <h2>每週課表</h2>
-    <div class="week">${order.map(k=>`<button class="${k===planDay?"on ":""}${k===td?"today":""}" data-act="plan-day" data-day="${k}"><b>${WD[k]}</b><i>${esc((p.days[k]||{}).title||"—")}</i></button>`).join("")}</div>
+    <div class="week">${order.map(k=>`<button class="${k===planDay?"on ":""}${k===td?"today":""}" data-act="plan-day" data-day="${k}"><b>${WD[k]}</b><i>${esc((p.days[k]||{}).title||"—")}</i><u>${actsOf(k).map(a=>`<em class="a-${a}">${{yoga:"瑜",hh:"H",pilates:"皮"}[a]}</em>`).join("")}</u></button>`).join("")}</div>
     ${p.starter?`<p class="note" style="margin:12px 0 0">這是範例課表，改任何一格就會存成你自己的。</p>`:""}
     ${ties}
   </section>
   <section class="panel stack">
-    <label class="lab"><span>星期${WD[planDay]}的主題</span><input class="line" id="planTitle" data-plan="title" value="${esc(day.title)}" placeholder="例如：上肢・推"></label>
+    <div class="lab"><span>星期${WD[planDay]}也要練</span><div class="row" style="flex-wrap:wrap;gap:6px">${ACTS.map(([k,t])=>`<button class="chipbtn${actsOf(planDay).includes(k)?" on":""}" data-act="plan-act" data-a="${k}">${t}</button>`).join("")}</div></div>
+    <label class="lab"><span>星期${WD[planDay]}的重訓主題</span><input class="line" id="planTitle" data-plan="title" value="${esc(day.title)}" placeholder="例如：上肢・推"></label>
     <div class="stack">${(day.items||[]).map((it,i)=>`
       <div class="plan-item" data-i="${i}">
         <label class="lab"><span>動作</span><input class="line" id="pn-${i}" data-pk="name" value="${esc(it.name)}"></label>
@@ -647,7 +664,8 @@ function chart(list){
     <text x="${W-R}" y="${H-6}" text-anchor="end">${esc(last.date.slice(5))}</text>
   </svg>`;
 }
-function vBody(){
+function vBody(){return vBodyData()+vLog();}
+function vBodyData(){
   const bs=bodies(), last=bs[bs.length-1], prev=bs[bs.length-2];
   const delta=(last&&prev&&n(last.weight)&&n(prev.weight))?(n(last.weight)-n(prev.weight)):null;
   const t=todayStr(), ex=docs.get("b_"+t)||{};
@@ -1181,15 +1199,15 @@ function vFigure(){
 let pendingRender=false;
 function render(){
   pendingRender=false;
-  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab||(b.dataset.tab==="today"&&(tab==="log"||tab==="timer"))||(b.dataset.tab==="plan"&&tab==="yoga")));
+  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab||(b.dataset.tab==="today"&&tab==="timer")||(b.dataset.tab==="body"&&tab==="log")||(b.dataset.tab==="plan"&&tab==="yoga")));
   const _rv=document.getElementById("yriver"),_rs=_rv?_rv.scrollLeft:0,_fl=[...document.querySelectorAll(".ypc.flip")].map(x=>x.dataset.yflip);
-  main.innerHTML=({today:vToday,log:vLog,plan:vPlan,body:vBody,move:vFigure,timer:vTimer,yoga:vYoga})[tab]();
+  main.innerHTML=({today:vToday,log:vBody,plan:vPlan,body:vBody,move:vFigure,timer:vTimer,yoga:vYoga})[tab]();
   {const rv=document.getElementById("yriver");if(rv){rv.scrollLeft=_rs;_fl.forEach(k=>{const el=rv.querySelector(`[data-yflip="${k}"]`);if(el)el.classList.add("flip");});}document.body.style.overflow=document.querySelector(".ycard")?"hidden":"";}
   main.querySelectorAll("textarea.grow").forEach(t=>{t.style.height="auto";t.style.height=t.scrollHeight+"px";});
   if(tab==="move"&&$("#stageSlot")){const st=buildStage();$("#stageSlot").appendChild(st.el);if(st.start)st.start();stageApply();}
   else if(S&&S.stop)S.stop();
   paintT();
-  const fb=$("#fab"),fa={today:"fab-ex",plan:"plan-add",yoga:yNew?"":"y-new",body:"fab-body"}[tab]||"";fb.hidden=!fa;fb.dataset.act=fa;
+  const fb=$("#fab"),fa={today:"fab-ex",plan:"plan-add",yoga:yNew?"":"y-new",body:"fab-body",log:"fab-body"}[tab]||"";fb.hidden=!fa;fb.dataset.act=fa;
 }
 function safeRender(){const a=document.activeElement;if(a&&main.contains(a)&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)){pendingRender=true;return;}render();}
 main.addEventListener("focusout",()=>setTimeout(()=>{if(pendingRender)safeRender();},0));
@@ -1213,6 +1231,7 @@ document.addEventListener("click",e=>{
   else if(a==="log-del-no"){logConfirm=null;render();}
   else if(a==="log-del-yes"){write(logConfirm,null);if(logConfirm===wid(todayStr()))draft=null;logConfirm=null;render();}
   else if(a==="plan-day"){planDay=+b.dataset.day;render();}
+  else if(a==="plan-act"){const p=myPlan(),d=(p.days[planDay]=p.days[planDay]||{title:"",items:[]}),cur=d.acts||["yoga"],k=b.dataset.a;d.acts=cur.includes(k)?cur.filter(x=>x!==k):[...cur,k];write("plan",p);render();}
   else if(a==="plan-add"){const p=myPlan();(p.days[planDay]=p.days[planDay]||{title:"",items:[]}).items.push({name:"",sets:3,reps:10,weight:""});write("plan",p);render();const ins=main.querySelectorAll('[data-pk="name"]');ins[ins.length-1]?.focus();}
   else if(a==="plan-del"){const p=myPlan();p.days[planDay].items.splice(+b.closest("[data-i]").dataset.i,1);write("plan",p);render();}
   else if(a==="body-save"){
