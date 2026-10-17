@@ -1,4 +1,5 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><link rel="apple-touch-icon" href="../icons/apple-touch-icon.png?v=1"><link rel="icon" href="../icons/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="HH"><meta name="theme-color" content="#d9d7d1"><script src="https://fuwei0618-cmd.github.io/Entry/sync/origina-sync.js" data-app="hh" data-keys="origina.hh.v1" data-pos="br"></script>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}.fab{position:fixed;right:12px;bottom:calc(132px + env(safe-area-inset-bottom,0px));z-index:30;width:54px;height:54px;border-radius:50%;border:0;background:var(--ink);color:#faf9f6;font-size:30px;line-height:1;box-shadow:0 6px 18px rgba(0,0,0,.2);cursor:pointer}body.focus .fab{display:none}
+</style><link rel="apple-touch-icon" href="../icons/apple-touch-icon.png?v=1"><link rel="icon" href="../icons/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="HH"><meta name="theme-color" content="#d9d7d1"><script src="https://fuwei0618-cmd.github.io/Entry/sync/origina-sync.js" data-app="hh" data-keys="origina.hh.v1" data-pos="br"></script>
 </head><body>
 <title>Origina HH</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -243,7 +244,8 @@ body.focus .ov-sec{font-size:18px}body.focus .ov-sec small{font-size:15px}
     <button class="brand" data-act="home">ORIGINA · <b>HH</b></button>
     <span class="sync" id="sync">僅存本機</span>
   </header>
-  <main id="main" class="stack"></main>
+  <button class="fab" id="fab" aria-label="新增" hidden>＋</button>
+<main id="main" class="stack"></main>
 </div>
 <input type="file" id="filePick" accept="video/*" hidden>
 <div class="toast" id="toast" hidden></div>
@@ -557,7 +559,7 @@ function vSong(){
     <h1>${esc(s.title)}</h1>
   </section>
   <section class="panel playerCard" style="padding:10px">
-  <div class="lessons" role="group" aria-label="第幾堂">${lessonsOf(s).map((l,i)=>`<button class="${l.id===st.lesson?"on":""}" data-act="lesson" data-id="${esc(l.id)}"><b>第 ${i+1} 堂</b><span class="num">${esc((l.date||"").slice(5).replace("-","/"))}</span></button>`).join("")}<button class="add" data-act="addles" aria-label="新增一堂">＋ 一堂</button></div>
+  <div class="lessons" role="group" aria-label="第幾堂">${lessonsOf(s).map((l,i)=>`<button class="${l.id===st.lesson?"on":""}" data-act="lesson" data-id="${esc(l.id)}"><b>第 ${i+1} 堂</b><span class="num">${esc((l.date||"").slice(5).replace("-","/"))}</span></button>`).join("")}</div>
     <div class="player" style="--ph:${PH[st.psize||"m"]}">
       <video id="vid" playsinline preload="metadata" class="${st.mirror?"mirror":""}" ${has?"":"hidden"}></video>
       ${has?"":(()=>{const lf=(curLesson()||{}).files||{};const loaded=SLOTS.filter(x=>urls[x.id]);return `<div class="empty"><div><b>第 ${lessonNo(st.lesson)} 堂・${info.name}・${info.kind}版</b><br>${lf[st.slot]?`上次用的是「${esc(lf[st.slot])}」，請重新選擇。<br>`:""}<button class="btn" data-act="pick" data-slot="${st.slot}" style="margin-top:10px">選擇影片</button>${loaded.length?`<div style="margin-top:12px">這堂已載入：${loaded.map(x=>`<button class="link" style="color:#e6e4df" data-act="slot" data-slot="${x.id}">${x.name}・${x.kind}版</button>`).join("　")}</div>`:""}</div></div>`;})()}
@@ -742,8 +744,7 @@ function vLessons(s){
     ${ss.length?`<p class="note" style="margin:0">${ss.map(x=>esc(x.cue||x.name)).join("　／　")}</p>`:""}
     <div class="row" style="gap:10px">${l.id!==st.lesson?`<button class="btn sm" data-act="lesson" data-id="${esc(l.id)}">切到這堂</button>`:""}
     ${st.confirm==="L"+l.id?`<span class="confirm">刪除這堂和它的段落？<button class="btn sm danger" data-act="delles-yes" data-id="${esc(l.id)}">刪除</button><button class="btn sm ghost" data-act="delsec-no">取消</button></span>`:`<button class="link" data-act="delles" data-id="${esc(l.id)}">刪除這堂</button>`}</div>
-  </div>`;}).join("")}
-  <button class="btn solid" data-act="addles">＋ 新增一堂</button>`;
+  </div>`;}).join("")}`;
 }
 
 /* ---------- songs & lessons ---------- */
@@ -773,7 +774,7 @@ let pending=false;
 function render(){
   pending=false;
   const keepV=V;const ph=keepV&&keepV.parentNode;
-  main.innerHTML=st.view==="song"?vSong():st.view==="vision"?vVision():vHome();$("#backBtn").hidden=st.view==="home";
+  main.innerHTML=st.view==="song"?vSong():st.view==="vision"?vVision():vHome();$("#backBtn").hidden=st.view==="home";{const fb=$("#fab"),fa=st.view==="song"?"addles":st.view==="home"?"fab-song":"";fb.hidden=!fa;fb.dataset.act=fa;}
   const slot=$("#vid");
   if(slot){ // re-use the same <video> element so playback continues across renders
     if(keepV){keepV.className=slot.className;keepV.hidden=slot.hidden;slot.replaceWith(keepV);V=keepV;}
@@ -814,6 +815,7 @@ document.addEventListener("click",async e=>{
   const b=e.target.closest("[data-act]");if(!b)return;const a=b.dataset.act;
   if(b.closest(".qrow")&&a!=="seek"&&b.closest(".qrow")!==b)e.stopPropagation();
   const s=st.song?getSong(st.song):null;
+  if(a==="fab-song"){const el=$("#nTitle");if(el){el.scrollIntoView({block:"center",behavior:"smooth"});el.focus();}return;}
   if(a==="home"){if(V)V.pause();st.focus=false;document.body.classList.remove("focus");st.view="home";st.queue=null;render();window.scrollTo(0,0);}
   else if(a==="open"){openSong(b.dataset.id,"qv");}
   else if(a==="add-song"){const t=$("#nTitle").value.trim();if(!t){$("#nTitle").focus();toast("先輸入歌名");return;}

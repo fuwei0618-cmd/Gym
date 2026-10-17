@@ -231,6 +231,7 @@ textarea.grow{resize:none;overflow:hidden;line-height:1.55}
 .rest .num{font-size:20px;font-weight:500}
 .rest .bar{flex:1;background:rgba(255,255,255,.15)}
 .rest .btn.ghost{color:#e6e4df;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.fab{position:fixed;right:12px;bottom:calc(132px + env(safe-area-inset-bottom,0px));z-index:7;width:54px;height:54px;border-radius:50%;border:0;background:var(--ink);color:#faf9f6;font-size:30px;line-height:1;box-shadow:0 6px 18px rgba(0,0,0,.2);cursor:pointer}
 nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(250,249,246,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:0 8px env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(4,1fr);z-index:6}
 nav.tabs button{border:0;background:transparent;height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;color:var(--ink-3)}
 nav.tabs b{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;font-weight:500}
@@ -312,6 +313,7 @@ input[type=range]{accent-color:var(--moss-deep)}
   <button class="btn small ghost" data-act="rest-stop">結束</button>
 </div>
 
+<button class="fab" id="fab" aria-label="新增" hidden>＋</button>
 <nav class="tabs" id="tabs">
   <button data-tab="today"><b>TODAY</b><span>今日</span></button>
   <button data-tab="plan"><b>PLAN</b><span>課表</span></button>
@@ -509,7 +511,7 @@ function vYoga(){
       <div><b class="num">${all-done}</b><span>還剩</span></div>
     </div>
     <div class="bar" style="margin-top:12px"><i style="width:${all?done/all*100:0}%"></i></div>
-    ${done===all?`<p class="note" style="margin:12px 0 0">🎓 整個計畫畢業了！在下面新增下一個計畫。</p>`:""}
+    ${done===all?`<p class="note" style="margin:12px 0 0">🎓 整個計畫畢業了！按右下角的＋新增下一個計畫。</p>`:""}
   </section>
   <section class="panel">${lessons}</section>
   <section class="panel">
@@ -518,7 +520,7 @@ function vYoga(){
       <label class="lab"><span>來源</span><input class="line" id="ycSrc" placeholder="例如：每日瑜伽 · 老師名字"></label>
       <label class="lab"><span>課程列表（一行一堂，可加分鐘：名稱 15）</span><textarea class="line" id="ycLessons" rows="6"></textarea></label>
       <div class="row"><button class="btn solid" data-act="y-new-save">建立</button><button class="btn ghost" data-act="y-new">取消</button></div></div>`
-     :`<button class="btn" data-act="y-new">＋ 新增下一個計畫</button>`}
+     :""}
   </section>`;
 }
 
@@ -617,9 +619,8 @@ function vPlan(){
         <label class="lab"><span>次</span><input class="line num" id="pr-${i}" data-pk="reps" inputmode="numeric" value="${esc(it.reps)}"></label>
         <label class="lab"><span>kg</span><input class="line num" id="pw-${i}" data-pk="weight" inputmode="decimal" value="${esc(it.weight)}"></label>
         <button class="x" data-act="plan-del" aria-label="刪除動作">×</button>
-      </div>`).join("")||`<p class="empty">這天休息。要排動作就按下面。</p>`}
+      </div>`).join("")||`<p class="empty">這天休息。要排動作就按右下角的＋。</p>`}
     </div>
-    <div class="row"><button class="btn" data-act="plan-add">＋ 加動作</button></div>
   </section>
   <section class="panel">
     <label class="lab"><span>預設組間休息（秒）</span><input class="line num" id="restSec" data-plan="restSec" inputmode="numeric" value="${esc(p.restSec||90)}"></label>
@@ -1188,6 +1189,7 @@ function render(){
   if(tab==="move"&&$("#stageSlot")){const st=buildStage();$("#stageSlot").appendChild(st.el);if(st.start)st.start();stageApply();}
   else if(S&&S.stop)S.stop();
   paintT();
+  const fb=$("#fab"),fa={today:"fab-ex",plan:"plan-add",yoga:yNew?"":"y-new",body:"fab-body"}[tab]||"";fb.hidden=!fa;fb.dataset.act=fa;
 }
 function safeRender(){const a=document.activeElement;if(a&&main.contains(a)&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)){pendingRender=true;return;}render();}
 main.addEventListener("focusout",()=>setTimeout(()=>{if(pendingRender)safeRender();},0));
@@ -1200,6 +1202,7 @@ document.addEventListener("click",e=>{
   const exEl=b.closest("[data-ex]"), i=exEl?+exEl.dataset.ex:-1;
   const clone=()=>JSON.parse(JSON.stringify(todayWorkout()));
   if(a==="toggle"){const w=clone(),j=+b.closest("[data-set]").dataset.set,s=w.exercises[i].sets[j];s.done=!s.done;saveToday(w);render();if(s.done)restFromSet();}
+  else if(a==="fab-ex"||a==="fab-body"){const el=$(a==="fab-ex"?"#newEx":"#bW");if(el){el.scrollIntoView({block:"center",behavior:"smooth"});el.focus();}}
   else if(a==="add-set"){const w=clone(),ss=w.exercises[i].sets,l=ss[ss.length-1]||{w:"",r:""};ss.push({w:l.w,r:l.r,done:false});saveToday(w);render();}
   else if(a==="del-set"){const w=clone();w.exercises[i].sets.pop();saveToday(w);render();}
   else if(a==="del-ex"){const w=clone();w.exercises.splice(i,1);saveToday(w);render();}
