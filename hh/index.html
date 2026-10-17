@@ -235,6 +235,10 @@ body.focus .ov-sec{font-size:18px}body.focus .ov-sec small{font-size:15px}
 .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--card-solid);padding:9px 16px;font-size:14px;z-index:9;max-width:calc(100% - 32px);border-radius:12px}
 @media (max-width:420px){h1{font-size:30px}.toggles{grid-template-columns:repeat(2,1fr)}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.modeSeg{display:inline-flex;margin:0}.modeSeg button{padding:6px 16px}
+.slotLabel{display:flex;gap:6px;align-items:center;border:0;background:transparent;font:inherit;font-size:13px;color:var(--ink-2);padding:2px 2px 8px;cursor:pointer}.slotLabel span{color:var(--ink-3)}
+.perfline{display:flex;flex-wrap:wrap;gap:6px}.perfline span{font-size:12.5px;background:var(--moss-tint);border-radius:999px;padding:4px 10px}
+.setsec{border-top:1px solid var(--line);padding-top:10px}.setsec>summary{font-weight:700;cursor:pointer;list-style:none}.setsec>summary::after{content:" ▾";color:var(--ink-3);font-weight:400}.setsec[open]>summary::after{content:" ▴"}
 </style>
 
 <div class="wrap">
@@ -523,21 +527,21 @@ function vHome(){
   const ss=songs();
   return `
   <section class="panel">
-    <div class="eyebrow">HIGH HEELS · CLASS NOTES</div>
+    <div class="eyebrow">高跟鞋課・上課筆記</div>
     <h1>HH 舞蹈筆記</h1>
     <p class="sub" style="margin:4px 0 0">一首歌一本。上課錄影、切段、寫口訣，練習只練不熟的段落。</p>${ties}
   </section>
-  <button class="panel visionEntry" data-act="vision"><span class="eyebrow">MY HH VISION</span><b>${esc(visionData().note.split("\n")[0]||"打開我的 HH 願景")}</b><span class="note">出發前先來這裡看一下 →</span></button>
+  <button class="panel visionEntry" data-act="vision"><span class="eyebrow">我的 HH 願景</span><b>${esc(visionData().note.split("\n")[0]||"打開我的 HH 願景")}</b><span class="note">出發前先來這裡看一下 →</span></button>
   <section class="panel stack">
     <h2>我的歌</h2>
     ${ss.length?`<div>${ss.map(s=>{const sc=secsOf(s.id,"*"),g=sc.filter(x=>x.status==="g").length,y=sc.filter(x=>x.status==="y").length,r=sc.length-g-y;const L=(s.lessons||[]).length;
       return `<button class="song" data-act="open" data-id="${esc(s.id)}"><span><b>${esc(s.title)}</b><br><span class="note">${esc([s.artist,s.studio,s.teacher].filter(Boolean).join("・"))}</span></span>
         <span class="num note" style="text-align:right">${sc.length} 段・${L} 堂</span>
         <span class="bar">${sc.length?`<i style="width:${g/sc.length*100}%;background:var(--moss)"></i><i style="width:${y/sc.length*100}%;background:var(--moss-tint)"></i>`:""}</span></button>`;}).join("")}</div>`
-      :`<p class="sub" style="margin:0">還沒有歌。新增第一首，選一支上課影片就能開始切段、練習。</p>`}
+      :`<p class="sub" style="margin:0">還沒有歌。按右下角的＋新增第一首，選一支上課影片就能開始切段、練習。</p>`}
   </section>
-  <section class="panel stack">
-    <h2>新增一首</h2>
+  ${st.addOpen?`<section class="panel stack">
+    <div class="row between"><h2>新增一首</h2><button class="link" data-act="add-close">取消</button></div>
     <div class="grid2">
       <label class="lab"><span>歌名</span><input class="line" id="nTitle" placeholder="歌名"></label>
       <label class="lab"><span>歌手</span><input class="line" id="nArtist"></label>
@@ -545,21 +549,24 @@ function vHome(){
       <label class="lab"><span>老師</span><input class="line" id="nTeacher"></label>
     </div>
     <div class="row"><button class="btn rose" data-act="add-song">建立</button></div>
-  </section>`;
+  </section>`:""}`;
 }
 function vSong(){
   const s=getSong(st.song);if(!s){st.view="home";return vHome();}
   const secs=secsOf(s.id),info=slotInfo(st.slot),dur=V&&V.duration||0;
   const col=x=>x.status==="g"?"var(--moss)":x.status==="y"?"#b9c6b0":"#9c9a94";
   const tl=dur&&info.sync?secs.map(x=>`<i style="left:${(x.start+off(st.slot))/dur*100}%;width:${Math.max(.4,(x.end-x.start)/dur*100)}%;background:${col(x)}"></i>`).join("")+(st.A!=null&&st.B!=null&&st.B>st.A?`<span class="ab" style="left:${(st.A+off(st.slot))/dur*100}%;width:${(st.B-st.A)/dur*100}%"></span>`:""):"";
-  const has=!!urls[st.slot];const PH={s:"32vh",m:"48vh",l:"70vh"};
+  const has=!!urls[st.slot];const PH={s:"32vh",m:"48vh",l:"70vh"};const mode=st.mode||"practice";const etab=["qv","perf","set"].includes(st.tab)?st.tab:"qv";
   return `
   <section class="panel bare stack" style="gap:2px">
     <span class="sub">${esc([s.artist,s.studio,s.teacher].filter(Boolean).join(" · "))}${s.bpm?` · <span class="num">${s.bpm} BPM</span>`:""}</span>
-    <h1>${esc(s.title)}</h1>
+    <div class="row between" style="align-items:flex-end"><h1>${esc(s.title)}</h1>
+      <div class="seg modeSeg">${[["practice","練"],["edit","整理"]].map(([k,t])=>`<button class="${mode===k?"on":""}" data-act="mode" data-v="${k}">${t}</button>`).join("")}</div></div>
   </section>
   <section class="panel playerCard" style="padding:10px">
   <div class="lessons" role="group" aria-label="第幾堂">${lessonsOf(s).map((l,i)=>`<button class="${l.id===st.lesson?"on":""}" data-act="lesson" data-id="${esc(l.id)}"><b>第 ${i+1} 堂</b><span class="num">${esc((l.date||"").slice(5).replace("-","/"))}</span></button>`).join("")}</div>
+    <button class="slotLabel" data-act="slotpick">第 ${lessonNo(st.lesson)} 堂・${info.name}・${info.kind}版 <span>${st.slotPick?"▴":"▾"}</span></button>
+    ${st.slotPick?`<div class="slots" style="margin:6px 0 8px">${SLOTS.map(x=>`<button class="slot${urls[x.id]?" has":""}${x.id===st.slot?" on":""}" data-act="slot" data-slot="${x.id}"><b>${x.name}</b>${x.kind}</button>`).join("")}</div>`:""}
     <div class="player" style="--ph:${PH[st.psize||"m"]}">
       <video id="vid" playsinline preload="metadata" class="${st.mirror?"mirror":""}" ${has?"":"hidden"}></video>
       ${has?"":(()=>{const lf=(curLesson()||{}).files||{};const loaded=SLOTS.filter(x=>urls[x.id]);return `<div class="empty"><div><b>第 ${lessonNo(st.lesson)} 堂・${info.name}・${info.kind}版</b><br>${lf[st.slot]?`上次用的是「${esc(lf[st.slot])}」，請重新選擇。<br>`:""}<button class="btn" data-act="pick" data-slot="${st.slot}" style="margin-top:10px">選擇影片</button>${loaded.length?`<div style="margin-top:12px">這堂已載入：${loaded.map(x=>`<button class="link" style="color:#e6e4df" data-act="slot" data-slot="${x.id}">${x.name}・${x.kind}版</button>`).join("　")}</div>`:""}</div></div>`;})()}
@@ -570,18 +577,16 @@ function vSong(){
     <div style="margin-top:8px"><input type="range" class="scrub" id="scrub" min="0" step="0.01" value="0" aria-label="播放位置"><div class="timeline">${tl}</div>
       <div class="row between" style="margin-top:2px"><span class="num note" id="tnow">0:00</span><span class="note">${info.sync?"":"講解版：自由播放，不套用段落"}</span></div></div>
     <div class="quick">
-      <button data-act="prev" aria-label="上一段">⏮</button>
       <button class="play" data-act="play" id="playBtn">▶︎ 播放</button>
-      <button data-act="next" aria-label="下一段">⏭</button>
       <button data-act="speedcyc" aria-label="切換速度"><span class="num">${st.speed}×</span></button>
       <button class="${st.mirror?"on":""}" data-act="tg" data-k="mirror">鏡射</button>
       <button class="${st.loop?"on":""}" data-act="loopcur" aria-label="循環目前這段">循環</button>
-      ${info.sync?`<button data-act="cut" ${V&&V.src?"":"disabled"} aria-label="在這裡切開">＋切開</button>`:""}
+      ${mode==="edit"&&info.sync?`<button data-act="cut" ${V&&V.src?"":"disabled"} aria-label="在這裡切開">＋切開</button>`:""}
       <button data-act="focus" aria-label="${st.focus?"縮小":"放大全螢幕"}">${st.focus?"縮小":"⛶ 放大"}</button>
     </div>
   </section>
   <section class="panel stack" style="gap:10px">
-    <details class="more" ${st.more?"open":""} id="moreBox"><summary>更多控制：慢速細調、數拍、自測、正背面切換、A-B 循環 ▾</summary>
+    <details class="more" ${st.more?"open":""} id="moreBox"><summary>練習小工具：慢速、數拍、倒數、自測、逐格 ▾</summary>
     <div class="stack" style="gap:10px;margin-top:10px">
     <div class="speeds">${[.25,.5,.75,1].map(v=>`<button class="${st.speed===v?"on":""}" data-act="speed" data-v="${v}">${v}×</button>`).join("")}</div>
     <div class="toggles">
@@ -590,18 +595,18 @@ function vSong(){
       <button class="btn sm ${st.test?"on":""}" data-act="tg" data-k="test">自測模式</button>
       <button class="btn sm ghost" data-act="back">−2 秒</button>
     </div>
-    <div class="slots">${SLOTS.map(x=>`<button class="slot${urls[x.id]?" has":""}${x.id===st.slot?" on":""}" data-act="slot" data-slot="${x.id}"><b>${x.name}</b>${x.kind}</button>`).join("")}</div>
     <div class="row" style="gap:6px;justify-content:flex-end"><button class="btn sm ghost" data-act="frame" data-d="-1" aria-label="上一格">◀ 格</button><button class="btn sm ghost" data-act="frame" data-d="1" aria-label="下一格">格 ▶</button></div>
     </div></details>
   </section>
 
-  ${guideCard(s,secs)}
+  ${mode==="edit"?guideCard(s,secs):(!SLOTS.some(x=>urls[x.id])&&!secs.length?`<section class="panel"><p class="sub" style="margin:0">這一堂還沒有影片和段落。切到右上角「整理」，照步驟選影片、切段落。</p></section>`:"")}
   ${st.queue?`<section class="panel stack"><div class="row between"><h2>練習中</h2><button class="btn sm danger" data-act="stopq">停止</button></div><div class="note" id="qrep"></div>
     <div class="queue" id="queue">${st.queue.map((q,i)=>`<div class="${i===st.qi?"now":""}"><span>${esc(q.label)}</span><span class="num">${fmt(q.a)}–${fmt(q.b)} ×${q.reps}</span></div>`).join("")}</div></section>`:""}
-  <div class="seg">${[["qv","速覽"],["pr","練習"],["beat","拍子"],["vid","影片"],["les","課堂"]].map(([k,t])=>`<button class="${st.tab===k?"on":""}" data-act="tab" data-t="${k}">${t}</button>`).join("")}</div>
+  ${mode==="practice"?`<section class="panel stack">${vPlay(s,secs)}</section><section class="panel stack"><h2>練習方式</h2>${vPractice(s,secs)}</section>`
+  :`<div class="seg">${[["qv","段落"],["perf","表現"],["set","設定"]].map(([k,t])=>`<button class="${etab===k?"on":""}" data-act="tab" data-t="${k}">${t}</button>`).join("")}</div>
   <section class="panel stack">
-    ${({qv:vQuick,pr:vPractice,beat:vBeat,vid:vVideos,les:vLessons})[st.tab](s,secs)}
-  </section>`;
+    ${({qv:vQuick,perf:vPerf,set:vSet})[etab](s,secs)}
+  </section>`}`;
 }
 function abCard(){
   const L=curLesson()||{},loops=(L.loops||[]).slice().sort((a,b)=>a.a-b.a);
@@ -621,7 +626,7 @@ function abCard(){
 function guideCard(s,secs){
   if(st.guideOff)return "";
   const hasV=SLOTS.some(x=>urls[x.id]),hasCue=secs.some(x=>(x.cue||"").trim());
-  const steps=[[hasV,"選這一堂的影片","按影片框裡的「選擇影片」，正面或背面都可以"],[!!s.bpm,"設定拍子（可略過）","到下面「拍子」按「自動抓 BPM」，之後就能自動切段、數拍"],[secs.length>0,"切開影片","播放時，在每個動作開始的地方按「＋切開」；影片會一段一段接下去。也可以在「速覽」按「依拍子自動切段」"],[hasCue,"寫口訣、標熟練度","在「速覽」每段按「編輯」寫口訣；圓圈點一下換 不會／卡卡／會了"]];
+  const steps=[[hasV,"選這一堂的影片","按影片框裡的「選擇影片」，正面或背面都可以"],[!!s.bpm,"設定拍子（可略過）","到「設定 → 拍子」按「自動抓 BPM」，之後就能自動切段、數拍"],[secs.length>0,"切開影片","播放時，在每個動作開始的地方按「＋切開」；影片會一段一段接下去。也可以在「段落」按「依拍子自動切段」"],[hasCue,"寫口訣、標熟練度","在「段落」每段按「編輯」寫口訣；圓圈點一下換 不會／卡卡／會了"]];
   if(steps.every(x=>x[0]))return "";
   return `<section class="panel stack" style="gap:8px"><div class="row between"><h2>第 ${lessonNo(st.lesson)} 堂・怎麼開始</h2><button class="link" data-act="guideoff">先收起</button></div>
     <ol class="guide">${steps.map(([d,t,h])=>`<li class="${d?"done":""}"><b>${t}</b><span>${h}</span></li>`).join("")}</ol></section>`;
@@ -650,7 +655,7 @@ function vQuick(s,secs){
   ${st.selMode?`<div class="selbar"><span>${st.sel&&st.sel.length?`已選 ${st.sel.length} 段`:"點選要連起來的段落"}</span><button class="btn sm solid" data-act="selloop" ${st.sel&&st.sel.length?"":"disabled"}>重複播放這幾段</button></div>`:""}
   <div class="row between"><span class="legend"><span><i></i>不會</span><span><i class="y"></i>卡卡</span><span><i class="g"></i>會了</span></span>
     <label class="row note" style="gap:4px"><input type="checkbox" id="follow" ${st.follow?"checked":""}> 播放時自動捲動</label></div>
-  ${!s.bpm?`<p class="note" style="margin:0">先到「拍子」設定 BPM，切段時會自動對齊 8 拍，播放時也會數拍。</p>`:""}
+  ${!s.bpm?`<p class="note" style="margin:0">先到「設定 → 拍子」設定 BPM，切段時會自動對齊 8 拍，播放時也會數拍。</p>`:""}
   ${secs.length?`<div class="qv">${secs.map((x,i)=>`
     <div class="qrow${st.selMode&&(st.sel||[]).includes(x.id)?" sel":""}${st.loop&&Math.abs(st.A-x.start)<.01&&Math.abs(st.B-x.end)<.01?" looping":""}" data-act="rowtap" data-id="${esc(x.id)}">
       <span class="t">${st.selMode?`<span class="ck">${(st.sel||[]).includes(x.id)?"✓":""}</span>`:fmt(x.start)}</span>
@@ -658,6 +663,28 @@ function vQuick(s,secs){
       <span class="row" style="gap:6px;flex-wrap:nowrap"><button class="st ${x.status||"r"}" data-act="cyc" data-id="${esc(x.id)}" aria-label="切換熟練度"></button><button class="btn sm ghost" data-act="edit" data-id="${esc(x.id)}">${st.open===x.id?"收起":"編輯"}</button></span>
     </div>${st.open===x.id?vEdit(s,x,secs[i-1],secs[i+1]):""}`).join("")}</div>`
   :`<p class="sub" style="margin:0">還沒有段落。播放影片，在第一個動作開始時按「＋ 在這裡切開」。</p>`}`;
+}
+function vPlay(s,secs){
+  const att=[s.attitude&&"態度："+s.attitude,s.face&&"表情："+s.face,s.eyes&&"眼神："+s.eyes].filter(Boolean);
+  return `<div class="row between"><h2>段落</h2><span class="legend"><span><i></i>不會</span><span><i class="y"></i>卡卡</span><span><i class="g"></i>會了</span></span></div>
+  ${att.length?`<div class="perfline">${att.map(x=>`<span>${esc(x)}</span>`).join("")}</div>`:""}
+  <p class="note" style="margin:0">點一段就循環那一段；圓點點一下換熟練度。</p>
+  ${secs.length?`<div class="qv">${secs.map(x=>`<div class="qrow${st.loop&&Math.abs(st.A-x.start)<.01&&Math.abs(st.B-x.end)<.01?" looping":""}" data-act="rowtap" data-id="${esc(x.id)}">
+    <span class="t">${fmt(x.start)}</span><span class="c"><b>${esc(x.cue||x.name)}</b>${x.perf?`<em>${esc(x.perf)}</em>`:x.story?`<em>${esc(x.story)}</em>`:""}<span>${esc(x.name)}</span></span>
+    <button class="st ${x.status||"r"}" data-act="cyc" data-id="${esc(x.id)}" aria-label="切換熟練度"></button></div>`).join("")}</div>`
+  :`<p class="sub" style="margin:0">還沒有段落。切到右上角「整理」切段。</p>`}`;
+}
+function vPerf(s,secs){
+  const F=[["attitude","整首歌的態度","這首歌我是誰？例如：自信、慵懶、挑釁"],["face","表情","例如：嘴角微笑、副歌放開笑"],["hands","手勢","例如：手指收乾淨、手腕帶動"],["eyes","眼神","例如：看鏡頭、往斜下看再抬起"]];
+  return `<p class="sub" style="margin:0">動作記熟之後，跳得好不好看就在這裡。練的時候會顯示在段落上方。</p>
+  ${F.map(([k,t,ph])=>`<label class="lab"><span>${t}</span><textarea class="line grow" rows="2" id="pf-${k}" data-sf="${k}" placeholder="${ph}">${esc(s[k]||"")}</textarea></label>`).join("")}
+  ${secs.length?`<div class="stack" style="gap:8px;border-top:1px solid var(--line);padding-top:12px"><span class="eyebrow">每一段的表情・手勢提醒</span>
+    ${secs.map(x=>`<label class="lab"><span>${esc(x.cue||x.name)}</span><input class="line" id="sp-${esc(x.id)}" data-f="perf" data-id="${esc(x.id)}" value="${esc(x.perf||"")}" placeholder="例如：這段甩髮後看鏡頭"></label>`).join("")}</div>`:""}`;
+}
+function vSet(s,secs){
+  return `<details class="setsec" open><summary>影片</summary><div class="stack" style="gap:10px;margin-top:10px">${vVideos(s)}</div></details>
+  <details class="setsec"><summary>拍子</summary><div class="stack" style="gap:10px;margin-top:10px">${vBeat(s)}</div></details>
+  <details class="setsec"><summary>歌曲和課堂</summary><div class="stack" style="gap:10px;margin-top:10px">${vLessons(s)}</div></details>`;
 }
 function vEdit(s,x,prev,next){
   const L=(s.lessons||[]);
@@ -672,6 +699,7 @@ function vEdit(s,x,prev,next){
       <button class="btn sm" data-act="loopSec" data-id="${esc(x.id)}">循環這段</button>
     </div>
     <label class="lab"><span>口訣（快速版，用・分隔）</span><input class="line" data-f="cue" data-id="${esc(x.id)}" id="e-cue-${esc(x.id)}" value="${esc(x.cue||"")}" placeholder="踩・踩・轉・甩髮"></label>
+    <label class="lab"><span>表情・手勢提醒</span><input class="line" data-f="perf" data-id="${esc(x.id)}" id="e-perf-${esc(x.id)}" value="${esc(x.perf||"")}" placeholder="例如：這段甩髮後看鏡頭"></label>
     <div class="stpick">${[["r","不會"],["y","卡卡"],["g","會了"]].map(([k,t])=>`<button class="${k}${(x.status||"r")===k?" on":""}" data-act="setst" data-v="${k}" data-id="${esc(x.id)}">${t}</button>`).join("")}</div>
     <div class="stack" style="gap:6px"><div class="row between"><span class="eyebrow">小故事</span>${sample?`<button class="btn sm" data-act="story" data-id="${esc(x.id)}" ${st.busy?"disabled":""}>${st.busy==="story"+x.id?"寫故事中…":"幫我故事化"}</button>`:""}</div>
       <textarea class="line" rows="2" data-f="story" data-id="${esc(x.id)}" id="e-story-${esc(x.id)}" placeholder="把口訣串成一個畫面，結尾留一句接到下一段">${esc(x.story||"")}</textarea></div>
@@ -690,7 +718,7 @@ function vEdit(s,x,prev,next){
 function vPractice(s,secs){
   const g=secs.filter(x=>x.status==="g").length;
   return `
-  <p class="sub" style="margin:0">${secs.length?`${secs.length} 段：會了 ${g}・卡卡 ${secs.filter(x=>x.status==="y").length}・不會 ${secs.length-g-secs.filter(x=>x.status==="y").length}`:"先在「速覽」切好段落，這裡就能排練習。"}</p>
+  <p class="sub" style="margin:0">${secs.length?`${secs.length} 段：會了 ${g}・卡卡 ${secs.filter(x=>x.status==="y").length}・不會 ${secs.length-g-secs.filter(x=>x.status==="y").length}`:"先到「整理」切好段落，這裡就能排練習。"}</p>
   <label class="lab" style="max-width:180px"><span>每組重複遍數</span><input class="line num" id="reps" inputmode="numeric" value="${s.reps||3}"></label>
   <div class="stack" style="gap:8px">
     <button class="btn rose" data-act="q" data-k="review" ${secs.length?"":"disabled"}>上課前 5 分鐘複習</button>
@@ -815,12 +843,15 @@ document.addEventListener("click",async e=>{
   const b=e.target.closest("[data-act]");if(!b)return;const a=b.dataset.act;
   if(b.closest(".qrow")&&a!=="seek"&&b.closest(".qrow")!==b)e.stopPropagation();
   const s=st.song?getSong(st.song):null;
-  if(a==="fab-song"){const el=$("#nTitle");if(el){el.scrollIntoView({block:"center",behavior:"smooth"});el.focus();}return;}
+  if(a==="fab-song"){st.addOpen=true;render();const el=$("#nTitle");if(el){el.scrollIntoView({block:"center",behavior:"smooth"});el.focus();}return;}
+  if(a==="add-close"){st.addOpen=false;render();return;}
+  if(a==="mode"){st.mode=b.dataset.v;st.open=null;if(st.mode==="practice")st.selMode=false;render();return;}
+  if(a==="slotpick"){st.slotPick=!st.slotPick;render();return;}
   if(a==="home"){if(V)V.pause();st.focus=false;document.body.classList.remove("focus");st.view="home";st.queue=null;render();window.scrollTo(0,0);}
   else if(a==="open"){openSong(b.dataset.id,"qv");}
   else if(a==="add-song"){const t=$("#nTitle").value.trim();if(!t){$("#nTitle").focus();toast("先輸入歌名");return;}
     const id="song_"+uid();write(id,{type:"song",title:t,artist:$("#nArtist").value.trim(),studio:$("#nStudio").value.trim(),teacher:$("#nTeacher").value.trim(),bpm:0,lessons:[{id:"l"+uid(),date:today(),note:"",anchor:0,offsets:{},files:{}}],reps:3,updated:new Date().toISOString()});
-    openSong(id,"vid");}
+    st.addOpen=false;st.mode="edit";openSong(id,"set");}
   else if(a==="pick"){st.pickSlot=b.dataset.slot;$("#filePick").value="";$("#filePick").click();}
   else if(a==="forget"){const sl=b.dataset.slot;if(urls[sl])URL.revokeObjectURL(urls[sl]);delete urls[sl];delete fileNames[sl];IDB.del(st.song+"/"+st.lesson+"/"+sl);if(lessonNo(st.lesson)===1)IDB.del(st.song+"/"+sl);patchLesson(L=>{if(L.files)delete L.files[sl];});if(st.slot===sl&&V){V.pause();V.removeAttribute("src");}render();}
   else if(a==="slot"){const sl=b.dataset.slot;if(!urls[sl]){st.pickSlot=sl;$("#filePick").value="";$("#filePick").click();return;}switchSlot(sl);}

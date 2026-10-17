@@ -240,7 +240,7 @@ a.panel.extra{display:flex;align-items:center;justify-content:space-between;text
 nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(250,249,246,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:0 8px env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(4,1fr);z-index:6}
 nav.tabs button{border:0;background:transparent;height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;color:var(--ink-3)}
 nav.tabs b{display:block;height:22px}nav.tabs b svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-nav.tabs span{font-size:12px;font-weight:500;margin-top:2px}
+nav.tabs span{font-size:12px;font-weight:500;margin-top:2px}nav.tabs small{font-size:9.5px;color:var(--ink-3);letter-spacing:.02em;margin-top:1px;white-space:nowrap}
 nav.tabs button.on{color:var(--ink)}
 nav.tabs button.on b{color:var(--moss-deep)}
 nav.tabs button.on span{font-weight:700}
@@ -320,10 +320,10 @@ input[type=range]{accent-color:var(--moss-deep)}
 
 <button class="fab" id="fab" aria-label="新增" hidden>＋</button>
 <nav class="tabs" id="tabs">
-  <button data-tab="today"><b><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></b><span>今日</span></button>
-  <button data-tab="plan"><b><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></b><span>課表</span></button>
-  <button data-tab="move"><b><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.2"/><path d="M12 8v6M7 10l5-1 5 1M9 21l3-7 3 7"/></svg></b><span>人偶</span></button>
-  <button data-tab="body"><b><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6"/></svg></b><span>身體</span></button>
+  <button data-tab="today"><b><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></b><span>今日</span><small>今天練什麼</small></button>
+  <button data-tab="plan"><b><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></b><span>課表</span><small>這週排什麼</small></button>
+  <button data-tab="move"><b><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.2"/><path d="M12 8v6M7 10l5-1 5 1M9 21l3-7 3 7"/></svg></b><span>人偶</span><small>動作怎麼做</small></button>
+  <button data-tab="body"><b><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6"/></svg></b><span>身體</span><small>身體變得怎樣</small></button>
 </nav>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
