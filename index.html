@@ -1317,6 +1317,8 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden&&T.running
 let shown=todayStr();setInterval(()=>{if(todayStr()!==shown){shown=todayStr();draft=null;safeRender();}},60000);
 
 if(!(window.claude&&window.claude.use)){const sy=$("#sync");if(sy)sy.hidden=true;}
+// #lesson=now：直接打開「目前在上」的那一堂瑜伽卡片；#lesson=1 打開第 1 堂（給鬧鐘捷徑用）
+(()=>{const m=location.hash.match(/lesson=(\d+|now)/);if(!m)return;tab="yoga";try{const c=curCourse(myYoga());let i=m[1]==="now"?c.lessons.findIndex(l=>l.status==="doing"):(+m[1]-1);if(i<0)i=c.lessons.findIndex(l=>l.status!=="done");yCard=Math.max(0,Math.min(i<0?0:i,c.lessons.length-1));}catch(e){}})();
 render();connect();
 })();
 </script>
