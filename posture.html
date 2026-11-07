@@ -360,6 +360,109 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .main.solo{grid-template-columns:1fr}
 .main.solo .pgrid{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
 .main.solo .stage svg{max-height:calc(100vh - 150px)}
+.rx{background:var(--panel);border-radius:18px;padding:14px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.rxhead{display:flex;gap:16px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap}
+.rxhead .ey{font-size:.68rem;letter-spacing:.2em;color:var(--chain)}
+.rxhead h2{font-family:var(--display);margin:0;font-size:1.25rem}
+.rxhead p{margin:0;font-size:.76rem;color:var(--mute);max-width:430px;line-height:1.5}
+.rxcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rxc{background:var(--bg);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.rxt b{font-family:var(--display);font-size:1.15rem;margin-right:8px}
+.rxt span{font-size:.76rem;color:var(--mute)}
+.rxl{font-size:.76rem}
+.rxl em{font-style:normal;font-size:.66rem;color:#fff;border-radius:99px;padding:1px 7px;margin-right:4px}
+.rxl em.t{background:#d0583f}.rxl em.w{background:var(--s4)}
+.rxrow{display:flex;gap:6px;align-items:center}
+.rxi{flex:1;min-width:0;display:flex;align-items:center;gap:8px;border:0;background:var(--t);border-radius:10px;padding:6px 8px;font:inherit;color:var(--ink);text-align:left;cursor:pointer}
+.rxi .st,.ck2 .st{flex:none;font-family:var(--display);font-weight:700;color:var(--c);width:1.4em;text-align:center}
+.rxi .nm{font-size:.86rem}
+.rxi small{color:var(--mute);font-size:.7rem;margin-left:4px}
+.swp{flex:none;border:1px solid var(--line);background:var(--panel);border-radius:99px;font:inherit;font-size:.72rem;padding:4px 10px;color:var(--mute);cursor:pointer}
+.swp:hover{color:var(--chain);border-color:var(--chain)}
+.rxday{font-size:.78rem;line-height:1.5;border-top:1px dashed var(--line);padding-top:6px}
+.rxday span{font-size:.66rem;background:var(--s5);color:#fff;border-radius:99px;padding:1px 7px;margin-right:6px}
+.plans{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:10px}
+.plan{border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.plan.base{border-color:var(--chain);background:color-mix(in srgb,var(--chain) 5%,transparent)}
+.pt b{font-family:var(--display);font-size:1.05rem;margin-right:6px}
+.pt span{font-size:.74rem;color:var(--chain)}
+.plan>small{font-size:.7rem;color:var(--mute);margin-bottom:2px}
+.ck2{display:flex;align-items:center;gap:6px;font-size:.82rem;padding:3px 0;cursor:pointer}
+.ck2 input{position:absolute;opacity:0;pointer-events:none}
+.ck2 .box{flex:none;width:18px;height:18px;border-radius:5px;border:1.5px solid var(--mute);display:grid;place-items:center}
+.ck2.on .box{background:var(--chain);border-color:var(--chain)}
+.ck2.on .box::after{content:"✓";color:#fff;font-size:.7rem}
+.ck2.on{color:var(--mute);text-decoration:line-through}
+.ck2:focus-within .box{outline:2px solid var(--chain);outline-offset:2px}
+.cks{color:var(--mute);font-size:.7rem;margin-left:2px}
+.pc{margin-top:auto;font-size:.72rem;color:var(--mute);text-align:right;font-variant-numeric:tabular-nums}
+.swapbar{background:var(--ink);color:var(--bg);border-radius:12px;padding:8px 12px;font-size:.84rem;display:flex;align-items:center;gap:8px;margin:6px 0}
+.swapbar b{color:var(--c);filter:brightness(1.5);font-family:var(--display)}
+.swapbar button{margin-left:auto;border:1px solid #6b625a;background:none;color:var(--bg);border-radius:99px;padding:3px 12px;font:inherit;font-size:.78rem;cursor:pointer}
+.cell.pickcol{outline:2px dashed var(--c);outline-offset:2px;border-radius:12px}
+@media (max-width:900px){.rxcards,.plans{grid-template-columns:1fr}}
+#fig.rxmode #dots,#fig.rxmode #chain{display:none}
+.hot{cursor:pointer}
+.hot .hp{fill:#ff6a4d;opacity:.25;animation:hz 1.1s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+.hot .hc{fill:#fff;stroke:#e0533b;stroke-width:6}
+.hot.on .hc{fill:#e0533b}
+.hot .ht{font-size:30px;font-weight:700;fill:#4a3426;text-anchor:end;dominant-baseline:central;paint-order:stroke;stroke:rgba(255,248,240,.95);stroke-width:8px}
+.hot.on .ht{fill:#c24e36}
+.rx{gap:12px}
+.rxtabs{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.rxtab{border:1.5px solid var(--line);background:var(--bg);border-radius:14px;padding:8px 16px;font:inherit;font-family:var(--display);font-size:1.15rem;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:flex-start}
+.rxtab small{font-family:var(--body);font-size:.68rem;color:var(--mute)}
+.rxtab.on{border-color:var(--chain);background:color-mix(in srgb,var(--chain) 8%,var(--bg))}
+.rxhint{font-size:.72rem;color:var(--mute);margin-left:auto}
+.why{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:.9rem}
+.why span.t,.why span.w{font-size:.7rem;color:#fff;border-radius:99px;padding:2px 8px}
+.why .t{background:#d0583f}.why .w{background:var(--s4);margin-left:10px}
+.why .arr{color:var(--mute);font-size:.8rem}
+.tiles{display:flex;align-items:stretch;gap:6px}
+.tarr{align-self:center;font-size:1.8rem;color:var(--line)}
+.tile{flex:1;min-width:0;background:var(--t);border-radius:16px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative}
+.tpic{width:100%;aspect-ratio:1.25;border:0;border-radius:12px;background:var(--panel);display:grid;place-items:center;overflow:hidden;cursor:pointer;padding:6px}
+.tpic img{max-width:88%;max-height:100%;object-fit:contain}
+.tpic .hand,.pbig .hand{font-family:var(--display);font-size:1.4rem;color:var(--c);letter-spacing:.2em}
+.tst{font-family:var(--display);font-size:1.3rem;font-weight:700;color:var(--c);line-height:1}
+.tnm{font-size:.95rem;font-weight:600;text-align:center}
+.tile .swp{position:absolute;top:14px;right:14px;padding:2px 8px;font-size:.68rem}
+.dayt{font-size:.84rem;background:var(--bg);border-radius:12px;padding:8px 12px}
+.dayt span{font-size:.68rem;background:var(--s5);color:#fff;border-radius:99px;padding:1px 8px;margin-right:8px}
+.gobar{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:10px;margin-top:auto}
+.go{position:relative;overflow:hidden;border:0;border-radius:16px;background:var(--ink);color:var(--bg);padding:12px 14px 14px;text-align:left;cursor:pointer;font:inherit;display:flex;flex-direction:column;gap:2px}
+.go.base{background:var(--chain)}
+.go b{font-family:var(--display);font-size:1.25rem}
+.go span{font-size:.78rem;opacity:.85}
+.go em{font-style:normal;font-size:.8rem;margin-top:6px}
+.go i{position:absolute;left:0;bottom:0;height:5px;background:#9fd18b}
+.go.done{background:var(--s2)}
+.player{background:var(--panel);width:min(520px,100%);max-height:96vh;overflow:auto;border-radius:24px;padding:16px 20px 20px;display:flex;flex-direction:column;align-items:center;gap:6px;margin:auto;text-align:center}
+#scrim:has(.player){align-items:center}
+.ptop{width:100%;display:flex;align-items:center;gap:10px;font-size:.8rem;color:var(--mute)}
+.dots{flex:1;display:flex;gap:4px;justify-content:center}
+.dots i{width:22px;height:5px;border-radius:3px;background:var(--line)}
+.dots i.d{background:var(--s2)}.dots i.c{background:var(--chain)}
+.px{border:0;background:none;font-size:1.6rem;color:var(--mute);cursor:pointer;line-height:1}
+.pbig{width:100%;max-width:300px;aspect-ratio:1.3;background:var(--t);border-radius:18px;display:grid;place-items:center;overflow:hidden}
+.pbig img{max-width:80%;max-height:90%;object-fit:contain}
+.pst{font-family:var(--display);font-size:1.6rem;color:var(--c);font-weight:700;line-height:1;margin-top:4px}
+.player h2{font-family:var(--display);margin:0;font-size:1.4rem}
+.player h2 small{display:block;font-family:var(--body);font-size:.8rem;color:var(--mute);font-weight:400}
+.phow{margin:4px 0 0;font-size:.92rem;line-height:1.7;white-space:pre-line;text-align:left}
+.pwarn{margin:0;font-size:.82rem;color:var(--chain);text-align:left}
+.ptime{position:relative;width:86px;height:86px}
+.ptime svg{width:100%;height:100%;transform:rotate(-90deg)}
+.rbg{fill:none;stroke:var(--line);stroke-width:6}
+.rfg{fill:none;stroke:var(--c);stroke-width:6;stroke-dasharray:213.6;stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.ptime b{position:absolute;inset:0;display:grid;place-items:center;font-size:1.5rem;font-variant-numeric:tabular-nums}
+.pbtns{display:flex;gap:8px;width:100%}
+.pbtns .btn{flex:1;background:var(--chain)}
+.pbtns .btn.ghost{background:none;color:var(--ink)}
+.pbtns .btn:disabled{opacity:.35}
+.player.fin{padding:30px}
+.pdone{width:70px;height:70px;border-radius:50%;background:var(--s2);color:#fff;display:grid;place-items:center;font-size:2rem}
+.player.fin .btn{background:var(--chain);min-width:140px}
 </style>
 <div class="wrap">
 <header>
@@ -367,7 +470,7 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
     <h1>體態桌</h1>
     <div class="sub">睡前做 <b>鬆 → 伸 → 醒</b>，重訓日加上 <b>練</b>。紅色虛線是你的代償鏈：骨盆前傾一路傳到肩頸。</div>
   </div>
-  <div class="hr"><div class="seg" role="tablist"><button id="tGoal" role="tab">目標</button><button id="tPup" role="tab">木偶</button><button id="tTable" role="tab">部位桌</button></div><button class="flowbtn" id="openFlow">我的流程 <i id="cnt">0</i></button></div>
+  <div class="hr"><div class="seg" role="tablist"><button id="tRx" role="tab">處方</button><button id="tGoal" role="tab">目標</button><button id="tPup" role="tab">木偶</button><button id="tTable" role="tab">部位桌</button></div><button class="flowbtn" id="openFlow">我的流程 <i id="cnt">0</i></button></div>
 </header>
 <div class="main">
   <aside class="figbox">
@@ -378,9 +481,11 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
     </svg>
     <div class="legend">點紅點跳到那一列・虛線圈是背面</div>
   </aside>
+  <section class="rx" id="rx" hidden></section>
   <section class="goals" id="goals" hidden></section>
   <section class="pup" id="pup" hidden></section>
   <section class="table" id="table">
+    <div class="swapbar" id="swapbar" hidden></div>
     <div class="tfilter" id="tfilter"></div>
     <div class="thead">
       <div class="th">部位　由上往下</div>
@@ -534,7 +639,7 @@ function pick(pi,scroll){
 document.addEventListener("click",e=>{
   const d=e.target.closest(".dot");if(d){pick(+d.dataset.p,true);return}
   const pt=e.target.closest(".part");if(pt){pick(+pt.dataset.p,false);return}
-  const c=e.target.closest(".chip");if(c){openItem(c.dataset.k);return}
+  const c=e.target.closest(".chip");if(c){if(swap&&trySwap(c.dataset.k))return;openItem(c.dataset.k);return}
 });
 function item(k){const [pid,si,ii]=k.split("|");const p=PARTS.find(x=>x.id===pid);return {p,si:+si,it:p.s[si][ii],pi:PARTS.indexOf(p)}}
 function openItem(k){
@@ -568,6 +673,87 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#scrim").hidden=
 {const nk=PARTS.find(p=>p.id==="neck");nk.s[1].push({n:"斜角肌伸展",sub:"徒手",img:null,how:"坐好，一手壓住同側鎖骨，頭往另一側斜後方倒，停 30 秒。"});nk.s[2].unshift({n:"收下巴",sub:"徒手",img:null,how:"仰躺，後腦勺輕輕往地板壓、下巴往後收（像做雙下巴），停 5 秒。10 下。"});
  const pc=PARTS.find(p=>p.id==="pec");pc.s[1].push({n:"門框開胸",sub:"徒手",img:null,how:"手肘彎 90 度靠在門框，身體往前走一步，感覺胸前拉開。左右各 30 秒。"});}
 render();pick(0,false);
+// ===== 處方 =====
+const RXDEF=[
+ {id:"waist",t:"腰",s:"久坐後站起來最痛",tight:"髂腰肌",weak:"臀大肌",parts:["psoas","abs","lowback"],def:["psoas|0|1","psoas|1|0","psoas|2|0"],day:"坐 45～60 分鐘就起來；站起來先夾一下屁股、骨盆往後捲再走"},
+ {id:"neck",t:"肩頸",s:"斜方肌、肩鎖關節、鎖骨",tight:"上斜方肌、胸小肌",weak:"下斜方肌",parts:["neck","pec","tspine"],def:["pec|0|0","pec|1|1","neck|2|1"],day:"發現肩膀靠近耳朵，就吐一口氣讓它掉下來"}
+];
+const BREATH="abs|2|0";
+let swap=null;
+function rxGet(card,st){const r=(notes.rx||{})[card.id]||{};return r[st]||card.def[st];}
+function itemOf(k){try{const o=item(k);return o.it?o:null}catch(e){return null}}
+function today(){const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();}
+function doneSet(){const d=notes.done||{};return d.day===today()?(d.keys||[]):[];}
+let rxSel="neck";
+const SECS=[60,60,40,40];
+function rxPlans(){const W=RXDEF[0],N=RXDEF[1],g=(c,s)=>rxGet(c,s);return [
+   {t:"保底",m:4,d:"累也做",keys:[BREATH,g(N,0),g(W,1)]},
+   {t:"睡前",m:10,d:"完整版",keys:[BREATH,g(N,0),g(W,0),g(N,1),g(W,1),g(N,2),g(W,2)]},
+   {t:"重訓日",m:5,d:"課前熱身",keys:[g(W,0),g(N,0),g(W,2),g(N,2)]}];}
+function pic(o,big){return o.it.img&&THUMBS[o.it.img]?`<img src="${THUMBS[o.it.img]}" alt="">`:`<span class="hand">${o.it.lab||"徒手"}</span>`;}
+function rxHot(on){
+  const svg=$("#fig");let g=svg.querySelector("#rxhot");
+  const lg=document.querySelector(".legend");if(lg)lg.textContent=on?"點紅色光點，看那個痛怎麼處理":"點紅點跳到那一列・虛線圈是背面";
+  if(!on){if(g)g.remove();svg.classList.remove("rxmode");return}
+  svg.classList.add("rxmode");
+  if(!g){g=document.createElementNS("http://www.w3.org/2000/svg","g");g.id="rxhot";svg.appendChild(g);}
+  g.innerHTML=[["neck",522,560,"肩頸"],["waist",470,800,"腰"]].map(([id,x,y,t])=>`<g class="hot ${rxSel===id?"on":""}" data-hot="${id}"><circle class="hp" cx="${x}" cy="${y}" r="46"/><circle class="hc" cx="${x}" cy="${y}" r="20"/><text x="${x-58}" y="${y}" class="ht">${t}</text></g>`).join("");
+}
+function renderRx(){
+  const c=RXDEF.find(x=>x.id===rxSel),done=doneSet(),plans=rxPlans();
+  $("#rx").innerHTML=`<div class="rxtabs">${RXDEF.map(x=>`<button class="rxtab ${x.id===rxSel?"on":""}" data-hot="${x.id}">${x.t}<small>${x.s}</small></button>`).join("")}<span class="rxhint">點照片上的光點也可以切換</span></div>
+   <div class="why"><span class="t">太緊</span>${c.tight}<span class="arr">→ 鬆開</span><span class="w">沒力</span>${c.weak}<span class="arr">→ 叫醒</span></div>
+   <div class="tiles">${[0,1,2].map(st=>{const o=itemOf(rxGet(c,st));return `${st?'<span class="tarr">›</span>':""}<div class="tile ${ST[st].c}"><button class="tpic" data-rk="${rxGet(c,st)}">${pic(o)}</button><div class="tst">${ST[st].k}</div><div class="tnm">${o.it.n}</div><button class="swp" data-swap="${c.id}|${st}">換</button></div>`}).join("")}</div>
+   <div class="dayt"><span>白天</span>${c.day}</div>
+   <div class="gobar">${plans.map((p,pi)=>{const n=p.keys.filter(k=>done.includes(pi+"|"+k)).length,all=n===p.keys.length;return `<button class="go ${pi===0?"base":""} ${all?"done":""}" data-go="${pi}"><b>${p.t}</b><span>${all?"今天完成 ✓":`${p.m} 分鐘・${p.keys.length} 個`}</span><i style="width:${n/p.keys.length*100}%"></i><em>▶ 跟著做</em></button>`}).join("")}</div>`;
+  rxHot(true);
+}
+// 跟著做
+let PL=null,tick=null;
+function playOpen(pi){PL={pi,i:0,keys:rxPlans()[pi].keys,t:0,run:false};playDraw();}
+function playDraw(){
+  clearInterval(tick);const sc=$("#scrim");sc.hidden=false;
+  const p=rxPlans()[PL.pi];
+  if(PL.i>=PL.keys.length){
+    sc.innerHTML=`<div class="player fin"><div class="pdone">✓</div><h2>${p.t}完成！</h2><p>身體收到下班訊號了。</p><button class="btn" data-pl="close">好</button></div>`;
+    const keys=doneSet().slice();PL.keys.forEach(k=>{const id=PL.pi+"|"+k;if(!keys.includes(id))keys.push(id)});notes.done={day:today(),keys};persist();
+    sc.onclick=ev=>{if(ev.target.dataset.pl==="close"||ev.target===sc){sc.hidden=true;renderRx();}};return;}
+  const k=PL.keys[PL.i],o=itemOf(k),secs=k===BREATH?60:SECS[o.si];if(!PL.t)PL.t=secs;
+  sc.innerHTML=`<div class="player ${ST[o.si].c}" role="dialog" aria-modal="true">
+    <div class="ptop"><span>${p.t}</span><div class="dots">${PL.keys.map((_,i)=>`<i class="${i<PL.i?"d":i===PL.i?"c":""}"></i>`).join("")}</div><button class="px" data-pl="close" aria-label="關閉">×</button></div>
+    <div class="pbig">${pic(o,1)}</div>
+    <div class="pst">${ST[o.si].k}</div><h2>${o.it.n}${o.it.sub&&o.it.sub!=="徒手"?`<small>${o.it.sub}</small>`:""}</h2>
+    <p class="phow">${o.it.how}</p>${o.it.warn?`<p class="pwarn">${o.it.warn}</p>`:""}
+    <div class="ptime"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" class="rbg"/><circle cx="40" cy="40" r="34" class="rfg" style="stroke-dashoffset:${213.6*(1-PL.t/secs)}"/></svg><b id="ptv">${PL.t}</b></div>
+    <div class="pbtns"><button class="btn ghost" data-pl="prev" ${PL.i?"":"disabled"}>上一個</button><button class="btn" data-pl="run">${PL.run?"暫停":"開始計時"}</button><button class="btn ghost" data-pl="next">${PL.i===PL.keys.length-1?"完成":"下一個"}</button></div></div>`;
+  sc.onclick=ev=>{const a=ev.target.closest("[data-pl]");if(!a)return;const d=a.dataset.pl;
+    if(d==="close"){clearInterval(tick);PL=null;sc.hidden=true;renderRx();return}
+    if(d==="next"){PL.i++;PL.t=0;PL.run=false;playDraw();return}
+    if(d==="prev"){PL.i--;PL.t=0;PL.run=false;playDraw();return}
+    if(d==="run"){PL.run=!PL.run;playDraw();}};
+  if(PL.run)tick=setInterval(()=>{PL.t--;if(PL.t<=0){PL.i++;PL.t=0;PL.run=PL.i<PL.keys.length;playDraw();return}
+    $("#ptv").textContent=PL.t;sc.querySelector(".rfg").style.strokeDashoffset=213.6*(1-PL.t/secs);},1000);
+}
+function startSwap(cardId,st){
+  const c=RXDEF.find(x=>x.id===cardId);swap={card:cardId,st:+st};
+  view("table");tgoal=null;renderFilter();render();
+  const pid=itemOf(rxGet(c,st)).p.id;
+  document.querySelectorAll(".row").forEach(r=>r.classList.toggle("dim",!c.parts.includes(PARTS[+r.dataset.p].id)));
+  document.querySelectorAll(".cell").forEach(cl=>cl.classList.toggle("pickcol",cl.classList.contains(ST[st].c)));
+  $("#swapbar").hidden=false;$("#swapbar").innerHTML=`正在幫「${c.t}」換一個<b class="${ST[st].c}">${ST[st].k}</b>：點亮起來那一欄的任何動作<button id="swapX">取消</button>`;
+  pick(PI(pid),true);
+}
+function trySwap(k){const o=itemOf(k);if(!o||o.si!==swap.st)return false;
+  notes.rx=notes.rx||{};notes.rx[swap.card]={...(notes.rx[swap.card]||{}),[swap.st]:k};persist();swap=null;$("#swapbar").hidden=true;view("rx");return true;}
+document.addEventListener("click",e=>{
+  const ht=e.target.closest("[data-hot]");if(ht){rxSel=ht.dataset.hot;if($("#rx").hidden)view("rx");else renderRx();return}
+  const go=e.target.closest("[data-go]");if(go){playOpen(+go.dataset.go);return}
+  const s=e.target.closest("[data-swap]");if(s){const [c,st]=s.dataset.swap.split("|");startSwap(c,st);return}
+  const r=e.target.closest("[data-rk]");if(r){openItem(r.dataset.rk);return}
+  if(e.target.id==="swapX"){swap=null;$("#swapbar").hidden=true;view("rx");}
+});
+document.addEventListener("change",e=>{const d=e.target.dataset.done;if(d===undefined)return;
+  let keys=doneSet().slice();keys=e.target.checked?[...keys,d]:keys.filter(x=>x!==d);notes.done={day:today(),keys};persist();renderRx();});
 // ===== 提線木偶（用健身房照片）=====
 const PON={len:false,str:false,ctl:false,rec:false};let pupBuilt=false;
 const PTXT={len:["長度","鬆＋伸","紅色的線鬆開"],str:["力量","醒＋練","虛線變實線，撐得住"],ctl:["控制","三腳架、懸掛線","頭頂的線提起來"],rec:["恢復","睡眠、呼吸","身體從戒備變放心"]};
@@ -747,7 +933,9 @@ function openLever(k){
 }
 function lightParts(list){document.querySelectorAll(".dot").forEach(e=>e.classList.toggle("on",list.includes(+e.dataset.p)));}
 function view(v){
-  $("#goals").hidden=v!=="goal";$("#table").hidden=v!=="table";$("#pup").hidden=v!=="pup";
+  $("#goals").hidden=v!=="goal";$("#table").hidden=v!=="table";$("#pup").hidden=v!=="pup";$("#rx").hidden=v!=="rx";$("#tRx").classList.toggle("on",v==="rx");
+  if(v!=="table"&&swap){swap=null;$("#swapbar").hidden=true;}
+  if(v==="rx")renderRx();else rxHot(false);
   $("#tGoal").classList.toggle("on",v==="goal");$("#tTable").classList.toggle("on",v==="table");$("#tPup").classList.toggle("on",v==="pup");
   document.querySelector(".main").classList.toggle("solo",v==="pup");document.querySelector(".figbox").hidden=v==="pup";
   if(v==="pup")pupInit();
@@ -755,7 +943,7 @@ function view(v){
   if(v==="goal")renderGoals();
   if(v==="table"){renderFilter();render();if(tgoal){const G=GOALS.find(x=>x.id===tgoal);lightParts(G.parts.map(PI));const f=PARTS.findIndex(p=>p.id===G.parts[G.parts.length-1]);}}
 }
-$("#tGoal").onclick=()=>view("goal");$("#tPup").onclick=()=>view("pup");$("#tTable").onclick=()=>view("table");
+$("#tRx").onclick=()=>view("rx");$("#tGoal").onclick=()=>view("goal");$("#tPup").onclick=()=>view("pup");$("#tTable").onclick=()=>view("table");
 document.addEventListener("input",e=>{const gi=e.target.dataset.gi;if(gi!==undefined){notes[gi]=e.target.value;persist()}});
 document.addEventListener("click",e=>{
   if(e.target.id==="scene"){openScene();return}
@@ -770,7 +958,7 @@ document.addEventListener("click",e=>{
   const pn=e.target.closest(".pn");if(pn){view("table");pick(+pn.dataset.p,true)}
 },true);
 const _pick=pick;pick=function(pi,scroll){_pick(pi,scroll&&!$("#table").hidden);};
-let v0="goal";try{v0=localStorage.getItem("bedview")||"goal"}catch(e){}
+let v0="rx";
 view(v0);pick(0,false);
 
 if(INAPP){
