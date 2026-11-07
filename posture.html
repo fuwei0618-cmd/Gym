@@ -178,6 +178,44 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .ntab .nk{color:var(--c);font-weight:700}
 @media (max-width:900px){.act{grid-template-columns:1fr 1fr}}
 @media (max-width:640px){.fp{grid-template-columns:1fr}}
+.gtop{font-size:.82rem;color:var(--mute);line-height:1.6;background:var(--bg);border-radius:12px;padding:8px 12px}
+.gtop .ey{font-size:.68rem;letter-spacing:.2em;color:var(--chain);margin-right:8px}
+.gtop b{color:var(--ink)} .c-l1{color:var(--s1)!important}.c-l2{color:var(--s4)!important}.c-l3{color:var(--s5)!important}.c-l4{color:var(--s2)!important}
+.gwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:center}
+.compass svg{width:100%;height:auto;max-height:430px;display:block;margin:0 auto}
+.compass .q{fill:var(--t);opacity:.75}
+.compass .rg{fill:none;stroke:var(--panel);stroke-width:3}
+.compass .rg2{fill:none;stroke:color-mix(in srgb,var(--ink) 30%,transparent);stroke-width:1;stroke-dasharray:2 4}
+.compass .rg.r0{fill:color-mix(in srgb,var(--panel) 35%,transparent)}
+.compass .rlg rect{fill:var(--ink)}
+.compass .rl{font-size:12.5px;font-weight:700;fill:var(--bg);text-anchor:middle;dominant-baseline:central;letter-spacing:.08em;font-family:var(--display)}
+.compass .rl .rn{fill:#f0a796}
+.compass .core{font-family:var(--display);font-size:13px;fill:var(--chain);text-anchor:middle;dominant-baseline:central}
+.compass .ql{font-family:var(--display);font-size:14px;font-weight:700;fill:var(--c);text-anchor:middle;dominant-baseline:central;cursor:pointer;paint-order:stroke;stroke:var(--panel);stroke-width:4px}
+.gd{cursor:pointer}
+.gd circle{fill:var(--panel);stroke:var(--ink);stroke-width:1.6;transition:r .3s}
+.gd.now circle{stroke:var(--chain);stroke-width:2.2}
+.gd.on circle{fill:var(--chain);stroke:var(--chain)}
+.gd text{font-size:12px;fill:var(--ink);dominant-baseline:central;paint-order:stroke;stroke:var(--panel);stroke-width:3.5px;font-weight:600}
+.gd.on text{fill:var(--chain)}
+.mixer{background:#2c2723;color:#efe6da;border-radius:16px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:10px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.mtitle .mring{font-size:.7rem;letter-spacing:.15em;color:#c9b8a5}
+.mtitle h2{font-family:var(--display);margin:2px 0 0;font-size:1.3rem;display:flex;align-items:center;gap:8px}
+.mtitle p{margin:0;font-size:.72rem;color:#a3958a}
+.nowtag{font-family:var(--body);font-size:.66rem;background:var(--chain);color:#fff;border-radius:99px;padding:1px 8px;letter-spacing:.05em}
+.faders{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.fd{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.fl{border:0;background:none;font-family:var(--display);font-size:1rem;font-weight:700;color:var(--c);cursor:pointer;padding:0;filter:brightness(1.35)}
+.tr{position:relative;width:10px;height:150px;border-radius:6px;background:#1c1916;box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
+.tr i{position:absolute;left:0;right:0;bottom:0;border-radius:6px;background:var(--c);filter:brightness(1.25);transition:height .55s cubic-bezier(.3,1.3,.5,1)}
+.tr b{position:absolute;left:50%;width:34px;height:18px;margin-left:-17px;border-radius:5px;background:linear-gradient(#f3ece3,#c9bfb2);box-shadow:0 2px 4px rgba(0,0,0,.5);transition:bottom .55s cubic-bezier(.3,1.3,.5,1)}
+.tr b::after{content:"";position:absolute;left:6px;right:6px;top:8px;height:2px;background:#6b5f55}
+.fv{font-size:.8rem;font-variant-numeric:tabular-nums;color:#efe6da}
+.fd small{font-size:.66rem;color:#bfb1a3;text-align:center;line-height:1.35;min-height:2.7em}
+.macts{display:flex;justify-content:flex-end}
+.mbtn{border:1px solid #5a5048;background:none;color:#efe6da;border-radius:99px;padding:6px 14px;font:inherit;font-size:.8rem;cursor:pointer}
+@media (max-width:640px){.gwrap{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.tr i,.tr b{transition:none}}
 </style>
 <div class="wrap">
 <header>
@@ -392,41 +430,55 @@ const LEV=[
  {k:"rec",n:"恢復",c:"l4",d:"讓改變留下來",cols:"睡眠＋呼吸＋飲食",prin:"身體在休息時才改變。睡得好、呼吸往下沉，緊的地方才放得掉。小腹平主要看體脂和骨盆位置：體脂由飲食決定，練腹肌不會讓那一塊局部變瘦。",
   need:[["放鬆神經","睡前流程、360° 呼吸、熱敷","關燈躺著做呼吸就好"],["體脂","飲食（之後再整理）","—"]]}
 ];
+const RINGS=[{n:"舒服",d:"身體不扯後腿",v:"先放"},{n:"好用",d:"想做什麼都做得到",v:"再用對"},{n:"好看",d:"別人看得到的",v:"最後撐住"}];
 const GOALS=[
- {id:"soft",t:"柔軟",s:"一字馬",lv:{len:["●","髖、腿後側拉長"],ctl:["○","吐氣放鬆再往下"],rec:["○","洗完澡趁熱做"]},parts:["psoas","leg","lowback"],test:"一字馬離地幾公分（前、側各記）",ph:"例：前 20／側 35"},
- {id:"hh",t:"跳 HH",s:"穩、會轉、腳不痛",lv:{ctl:["●","三腳架、懸掛軸線"],str:["●","臀、足踝、核心"],len:["○","髖、胸椎打開"]},parts:["foot","leg","psoas","tspine"],test:"穿跟鞋單腳站穩幾秒",ph:"例：左 8 秒／右 12 秒"},
- {id:"pain",t:"不腰痠背痛",s:"肩頸不再痛",lv:{len:["●","肩頸、胸前、髂腰肌"],str:["●","上背、臀、腹"],ctl:["○","不用腰和肩代償"]},parts:["neck","pec","tspine","lowback","abs"],test:"肩頸、下背痠痛各打 0～10 分",ph:"例：肩頸 7／腰 4"},
- {id:"vital",t:"活力、靈活",s:"身體輕盈",lv:{ctl:["●","每天動一動關節"],rec:["●","睡飽"],str:["○","有力才輕盈"]},parts:["tspine","psoas","foot"],test:"早上起床的精神 0～10 分",ph:"例：6 分"},
- {id:"sleep",t:"好睡",s:"",lv:{rec:["●","睡前流程、呼吸"],len:["○","鬆肩頸、腹部"]},parts:["neck","abs"],test:"幾點睡、半夜醒幾次",ph:"例：1:30 睡、醒 1 次"},
- {id:"posture",t:"體態很棒",s:"站著就漂亮",lv:{ctl:["●","三腳架、懸掛軸線"],len:["●","鬆開代償鏈"],str:["●","撐住正位"]},parts:["foot","leg","psoas","abs","lowback","tspine","pec","neck"],test:"靠牆站：腰後塞得進拳頭嗎？後腦勺碰得到牆嗎？",ph:"例：塞得進拳頭、頭碰不到"},
- {id:"abs",t:"小腹平、腹肌",s:"",lv:{rec:["●","飲食決定體脂"],str:["●","深層核心→腹肌"],ctl:["○","骨盆回正、腹內壓"]},parts:["abs","psoas"],test:"每月在肚臍高度量一次腰圍",ph:"例：78 公分"}
+ {id:"pain",r:0,t:"肩頸腰不痛",mix:{len:80,str:50,ctl:50,rec:70},kw:{len:"鬆開肩頸、胸前、髂腰肌",str:"上背、臀、腹撐住",ctl:"不用腰和肩代償",rec:"熱敷、睡好"},parts:["neck","pec","tspine","lowback","abs","psoas"],test:"肩頸、腰的痠痛各打 0～10 分",ph:"例：肩頸 7／腰 4",now:1},
+ {id:"loose",r:0,t:"隨時鬆弛",mix:{len:60,str:15,ctl:60,rec:95},kw:{len:"一天好幾次小小的鬆",ctl:"呼吸往下沉、肋骨收",rec:"給神經下班的訊號"},parts:["neck","abs"],test:"今天發現自己繃著的次數",ph:"例：5 次",now:1},
+ {id:"sleep",r:0,t:"好睡",mix:{len:40,str:5,ctl:30,rec:100},kw:{len:"睡前鬆肩頸、腹部",ctl:"360° 呼吸",rec:"睡前流程、關燈放鬆"},parts:["neck","abs"],test:"幾點睡、半夜醒幾次",ph:"例：1:30 睡、醒 1 次",now:1},
+ {id:"split",r:1,t:"一字馬",mix:{len:100,str:30,ctl:60,rec:40},kw:{len:"髖、腿後側、內側拉開",str:"拉開的範圍要撐得住",ctl:"吐氣放鬆再往下",rec:"洗完澡趁熱做"},parts:["psoas","leg","lowback"],test:"一字馬離地幾公分（前、側各記）",ph:"例：前 20／側 35"},
+ {id:"agile",r:1,t:"靈活",mix:{len:60,str:40,ctl:80,rec:50},kw:{len:"關節每天走全範圍",str:"有力才輕盈",ctl:"每天動一動",rec:"睡飽"},parts:["tspine","psoas","foot"],test:"早上起床的精神 0～10 分（指標）",ph:"例：6 分"},
+ {id:"hh",r:1,t:"跳 HH",mix:{len:40,str:75,ctl:95,rec:30},kw:{len:"髖、胸椎打開",str:"臀、足踝、核心",ctl:"三腳架、懸掛軸線"},parts:["foot","leg","psoas","tspine"],test:"穿跟鞋單腳站穩幾秒",ph:"例：左 8 秒／右 12 秒"},
+ {id:"posture",r:2,t:"體態很棒",mix:{len:60,str:70,ctl:90,rec:30},kw:{len:"鬆開代償鏈",str:"撐住正位",ctl:"三腳架、懸掛軸線"},parts:["foot","leg","psoas","abs","lowback","tspine","pec","neck"],test:"靠牆站：腰後塞得進拳頭嗎？後腦勺碰得到牆嗎？",ph:"例：塞得進拳頭、頭碰不到"},
+ {id:"flat",r:2,t:"小腹平",mix:{len:20,str:60,ctl:50,rec:90},kw:{str:"深層核心",ctl:"骨盆回正、腹內壓",rec:"飲食決定體脂"},parts:["abs","psoas"],test:"每月在肚臍高度量一次腰圍",ph:"例：78 公分"},
+ {id:"abs",r:2,t:"腹肌",mix:{len:10,str:95,ctl:40,rec:60},kw:{str:"腹肌加阻力練",ctl:"先會用深層核心",rec:"體脂夠低才看得見"},parts:["abs"],test:"先平再說：腰圍到目標後再記",ph:"例：還沒開始"}
 ];
 const PI=id=>PARTS.findIndex(p=>p.id===id);
-let curGoal=null;
+const ANG={len:0,str:90,ctl:180,rec:270};
+let curGoal="pain";
+const GANG={pain:335,loose:235,sleep:280,split:8,agile:200,hh:148,posture:122,flat:245,abs:100};
+function gpos(g){const C=200,R=[52,112,162][g.r],a=GANG[g.id]*Math.PI/180;return [C+R*Math.cos(a),C+R*Math.sin(a),a];}
 function renderGoals(){
-  const mins=flow.length*2;
-  $("#goals").innerHTML=`<div class="fp"><div><div class="ey">第一性原理</div>
-     <h2>身體只有四個開關</h2><p>每個目標都是這四個開關的組合；每個工具、體式、器械，都只是在幫其中一個開關。看懂開關，沒有那個工具也找得到替代。</p></div>
-     <div class="levs">${LEV.map(l=>`<button class="lev ${l.c}" data-lv="${l.k}"><b>${l.n}</b><span>${l.d}</span></button>`).join("")}</div></div>
-   <div class="mxw"><div class="mx">
-     <div class="mh">我的目標　● 主要　○ 輔助</div>${LEV.map(l=>`<button class="mh ${l.c}" data-lv="${l.k}">${l.n}</button>`).join("")}<div class="mh">部位</div>
-     ${GOALS.map(g=>`<button class="gt ${curGoal===g.id?"on":""}" data-goal="${g.id}"><b>${g.t}</b>${g.s?`<small>${g.s}</small>`:""}</button>
-       ${LEV.map(l=>{const v=g.lv[l.k];return `<div class="mc ${l.c} ${v?(v[0]==="●"?"pri":"sub"):""} ${curGoal===g.id?"on":""}" data-goal="${g.id}">${v?`<i>${v[0]}</i>${v[1]}`:""}</div>`}).join("")}
-       <div class="mp ${curGoal===g.id?"on":""}" data-goal="${g.id}">${g.parts.map(id=>`<button class="pn" data-p="${PI(id)}" title="${PARTS[PI(id)].n}">${PI(id)+1}</button>`).join("")}</div>`).join("")}
-   </div></div>
+  const g=GOALS.find(x=>x.id===curGoal);const mins=flow.length*2;
+  const quad=LEV.map(l=>{const a0=(ANG[l.k]-45)*Math.PI/180,a1=(ANG[l.k]+45)*Math.PI/180,R=186;
+    return `<path class="q ${l.c}" d="M200 200 L${200+R*Math.cos(a0)} ${200+R*Math.sin(a0)} A${R} ${R} 0 0 1 ${200+R*Math.cos(a1)} ${200+R*Math.sin(a1)}Z"/>`}).join("");
+  const qlab=LEV.map(l=>{const a=ANG[l.k]*Math.PI/180,R=176;return `<text class="ql ${l.c}" x="${200+R*Math.cos(a)}" y="${200+R*Math.sin(a)}" data-lv="${l.k}">${l.n}</text>`}).join("");
+  const rings=[87,137,186].map((r,i)=>`<circle class="rg r${i}" cx="200" cy="200" r="${r}"/><circle class="rg2" cx="200" cy="200" r="${r}"/>`).join("");
+  const rlab=RINGS.map((rg,i)=>{const r=[70,122,172][i],a=52*Math.PI/180,x=200+r*Math.cos(a),y=200+r*Math.sin(a),w=58;return `<g class="rlg"><rect x="${x-w/2}" y="${y-11}" width="${w}" height="22" rx="11"/><text class="rl" x="${x}" y="${y}"><tspan class="rn">${"①②③"[i]}</tspan> ${rg.n}</text></g>`}).join("");
+  const dots=GOALS.map(x=>{const [px,py,a]=gpos(x);const right=Math.cos(a)>-0.2;return `<g class="gd ${x.id===curGoal?"on":""} ${x.now?"now":""}" data-gsel="${x.id}"><circle cx="${px}" cy="${py}" r="${x.id===curGoal?9:6.5}"/><text x="${px+(right?11:-11)}" y="${py}" style="text-anchor:${right?"start":"end"}">${x.t}</text></g>`}).join("");
+  $("#goals").innerHTML=`<div class="gtop"><div><span class="ey">第一性原理</span>身體只有四個開關：<b class="c-l1">長度</b>、<b class="c-l2">力量</b>、<b class="c-l3">控制</b>、<b class="c-l4">恢復</b>。目標是由內到外的漣漪，<b>由放到練</b>。</div></div>
+   <div class="gwrap">
+    <div class="compass"><svg viewBox="0 0 400 400" role="img" aria-label="漣漪羅盤">${quad}${rings}${rlab}<text class="core" x="200" y="196">享受</text><text class="core" x="200" y="214">人生</text>${dots}${qlab}</svg></div>
+    <div class="mixer">
+      <div class="mtitle"><span class="mring">${"①②③"[g.r]} ${RINGS[g.r].n}・${RINGS[g.r].v}</span><h2>${g.t}${g.now?`<span class="nowtag">現在主線</span>`:""}</h2><p>這個目標的配方</p></div>
+      <div class="faders">${LEV.map(l=>{const v=g.mix[l.k];return `<div class="fd ${l.c}"><button class="fl" data-lv="${l.k}">${l.n}</button><div class="tr"><i style="height:${v}%"></i><b style="bottom:calc(${v}% - 9px)"></b></div><span class="fv">${v}</span><small>${g.kw[l.k]||"—"}</small></div>`}).join("")}</div>
+      <div class="macts"><button class="mbtn" data-goal="${g.id}">怎麼做、自我檢查 ›</button></div>
+    </div>
+   </div>
    <div class="gl">堅持到底的規則<small>忙的時候退回保底，不要歸零；做到保底就算成功</small></div>
    <div class="act">
-     <div><b>保底 5 分</b>每天，累也做：360° 呼吸 1 分＋最緊的地方鬆 2 分＋伸 2 分。</div>
-     <div><b>睡前 ${Math.max(10,mins)} 分</b>「我的流程」睡前版，${flow.length} 項。<button id="gFlow">打開 ›</button></div>
-     <div><b>重訓日</b>課前鬆 5 分、醒當熱身；練的動作對準要救的部位。<button id="gFlow2">打開 ›</button></div>
+     <div><b>保底 3 分</b>躺上床就做：360° 呼吸＋鬆一下最痛的地方。</div>
+     <div><b>有空</b>做「我的流程」睡前版，${flow.length} 項，約 ${Math.max(10,mins)} 分。<button id="gFlow">打開 ›</button></div>
+     <div><b>重訓日</b>課前鬆 5 分、醒當熱身。<button id="gFlow2">打開 ›</button></div>
      <div><b>HH 日</b>課前醒足踝和臀，課後鬆小腿、足底。</div>
    </div>`;
+  lightParts(g.parts.map(PI));
 }
 function openGoal(id){
-  const g=GOALS.find(x=>x.id===id);curGoal=id;renderGoals();lightParts(g.parts.map(PI));
+  const g=GOALS.find(x=>x.id===id);
   const sc=$("#scrim");sc.hidden=false;
-  sc.innerHTML=`<div class="sheet" role="dialog" aria-modal="true"><h2>${g.t}${g.s?`<small class="gs">　${g.s}</small>`:""}</h2>
-    <div class="glv">${LEV.filter(l=>g.lv[l.k]).sort((a,b)=>(g.lv[a.k][0]==="●"?0:1)-(g.lv[b.k][0]==="●"?0:1)).map(l=>`<div class="${l.c}"><span class="lt">${g.lv[l.k][0]==="●"?"主要":"輔助"}・${l.n}</span>${g.lv[l.k][1]}</div>`).join("")}</div>
+  const rows=LEV.filter(l=>g.kw[l.k]).sort((a,b)=>g.mix[b.k]-g.mix[a.k]);
+  sc.innerHTML=`<div class="sheet" role="dialog" aria-modal="true"><div class="meta">${"①②③"[g.r]} ${RINGS[g.r].n}</div><h2>${g.t}</h2>
+    <div class="glv">${rows.map(l=>`<div class="${l.c}"><span class="lt">${g.mix[l.k]>=60?"主要":"輔助"}・${l.n}</span>${g.kw[l.k]}</div>`).join("")}</div>
     <p class="meta" style="margin-top:12px">對應部位（點了跳到部位桌）</p>
     <div class="gparts">${g.parts.map(pid=>{const pi=PI(pid);return `<button class="pn2" data-p="${pi}"><i>${pi+1}</i>${PARTS[pi].n}</button>`}).join("")}</div>
     <div class="warn" style="background:var(--bg)"><b style="color:var(--ink)">自我檢查</b>　${g.test}
@@ -441,7 +493,7 @@ function openLever(k){
     <p class="how">${l.prin}</p>
     <div class="ntab"><div class="nh">需要的作用</div><div class="nh">你有的</div><div class="nh">沒有時用</div>
     ${l.need.map(r=>`<div class="nk">${r[0]}</div><div>${r[1]}</div><div>${r[2]}</div>`).join("")}</div>
-    <p class="meta" style="margin-top:10px">${GOALS.filter(g=>g.lv[k]&&g.lv[k][0]==="●").map(g=>g.t).join("、")} 主要靠這個開關</p>
+    <p class="meta" style="margin-top:10px">${GOALS.filter(g=>g.mix[k]>=80).map(g=>g.t).join("、")} 最靠這個開關</p>
     <div class="acts"><button class="btn ghost" data-a="x" style="flex:1">關閉</button></div></div>`;
   sc.onclick=ev=>{if(ev.target===sc||ev.target.dataset.a==="x")sc.hidden=true};
 }
@@ -458,11 +510,12 @@ document.addEventListener("click",e=>{
   if(e.target.id==="gFlow"){fmode="night";openFlow()}
   if(e.target.id==="gFlow2"){fmode="gym";openFlow()}
   if(e.target.id==="gTable")view("table");
+  const gs=e.target.closest("[data-gsel]");if(gs){curGoal=gs.dataset.gsel;renderGoals();return}
   const gl=e.target.closest("[data-goal]");if(gl&&!e.target.closest(".pn")){openGoal(gl.dataset.goal);return}
   const lv=e.target.closest("[data-lv]");if(lv){openLever(lv.dataset.lv);return}
   const pn=e.target.closest(".pn");if(pn){view("table");pick(+pn.dataset.p,true)}
 },true);
-const _pick=pick;pick=function(pi,scroll){_pick(pi,scroll&&!$("#table").hidden);if(!$("#goals").hidden){const id=PARTS[pi].id;document.querySelectorAll(".mp").forEach(m=>m.classList.toggle("hit",GOALS.find(g=>g.id===m.dataset.goal).parts.includes(id)))}};
+const _pick=pick;pick=function(pi,scroll){_pick(pi,scroll&&!$("#table").hidden);};
 let v0="goal";try{v0=localStorage.getItem("bedview")||"goal"}catch(e){}
 view(v0);pick(0,false);
 
