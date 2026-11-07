@@ -258,7 +258,7 @@ textarea.grow{resize:none;overflow:hidden;line-height:1.55}
 .chipbtn{border:1px solid var(--line);background:transparent;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;color:var(--ink-2)}.chipbtn.on{background:var(--ink);color:#faf9f6;border-color:var(--ink)}
 .ycourse{display:block;width:100%;text-align:left;border:0;font:inherit;color:inherit;cursor:pointer}
 a.panel.extra{display:flex;align-items:center;justify-content:space-between;text-decoration:none;color:inherit}a.panel.extra .go{font-size:22px;color:var(--ink-3)}
-nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(250,249,246,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:0 8px env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(4,1fr);z-index:6}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(250,249,246,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:0 8px env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(5,1fr);z-index:6}
 nav.tabs button{border:0;background:transparent;height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;color:var(--ink-3)}
 nav.tabs b{display:block;height:22px}nav.tabs b svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 nav.tabs span{font-size:12px;font-weight:500;margin-top:2px}nav.tabs small{font-size:9.5px;color:var(--ink-3);letter-spacing:.02em;margin-top:1px;white-space:nowrap}
@@ -320,6 +320,7 @@ nav.tabs button.on span{font-weight:700}
 .confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--clay)}
 input[type=range]{accent-color:var(--moss-deep)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.pgframe{position:fixed;left:0;top:0;width:100%;border:0;z-index:5;background:#ebe7df;display:block}
 </style>
 
 <div class="wrap">
@@ -345,6 +346,7 @@ input[type=range]{accent-color:var(--moss-deep)}
   <button data-tab="plan"><b><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></b><span>課表</span><small>這週排什麼</small></button>
   <button data-tab="move"><b><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.2"/><path d="M12 8v6M7 10l5-1 5 1M9 21l3-7 3 7"/></svg></b><span>人偶</span><small>動作怎麼做</small></button>
   <button data-tab="body"><b><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6"/></svg></b><span>身體</span><small>身體變得怎樣</small></button>
+  <button data-tab="posture"><b><svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><circle cx="12" cy="8" r="1.8"/><path d="M12 10.5v5M9.5 12.5h5M10.5 19l1.5-3.5 1.5 3.5"/></svg></b><span>體態</span><small>鬆伸醒練</small></button>
 </nav>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -579,7 +581,7 @@ function vYoga(){
 }
 
 /* ---------- views ---------- */
-let tab=(location.hash.match(/tab=(today|log|plan|yoga|body|move|timer)/)||[])[1]||"today", planDay=new Date().getDay(), logConfirm=null, bodyConfirm=null;
+let tab=(location.hash.match(/tab=(today|log|plan|yoga|body|move|timer|posture)/)||[])[1]||"today", planDay=new Date().getDay(), logConfirm=null, bodyConfirm=null;
 const ties='';
 const subSeg=()=>tab==="timer"?`<button class="link back" data-tab="today">← 今日</button>`:"";
 
@@ -1234,17 +1236,28 @@ function vFigure(){
   return seg+stage+body;
 }
 
+/* ---------- 體態桌（posture.html，跟 App 一起同步） ---------- */
+function vPosture(){return `<iframe id="pgFrame" class="pgframe" src="posture.html" title="體態桌"></iframe>`;}
+function pgSize(){const f=$("#pgFrame");if(f)f.style.height=Math.max(200,window.innerHeight-$("#tabs").offsetHeight)+"px";}
+window.addEventListener("resize",pgSize);
+window.addEventListener("message",e=>{
+  if(e.origin!==location.origin||!e.data||!e.data.pg)return;
+  if(e.data.pg==="get"&&e.source)e.source.postMessage({pg:"state",data:docs.get("pgtable")||null},location.origin);
+  else if(e.data.pg==="set"&&e.data.data)writeSoon("pgtable",{type:"pgtable",flow:e.data.data.flow||[],notes:e.data.data.notes||{}});
+});
 /* ---------- render ---------- */
 let pendingRender=false;
 function render(){
   pendingRender=false;
   document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab||(b.dataset.tab==="today"&&tab==="timer")||(b.dataset.tab==="body"&&tab==="log")||(b.dataset.tab==="plan"&&tab==="yoga")));
   const _rv=document.getElementById("yriver"),_rs=_rv?_rv.scrollLeft:0,_fl=[...document.querySelectorAll(".ypc.flip")].map(x=>x.dataset.yflip);
-  main.innerHTML=({today:vToday,log:vBody,plan:vPlan,body:vBody,move:vFigure,timer:vTimer,yoga:vYoga})[tab]();
+  if(tab==="posture"&&main.querySelector("#pgFrame")){pgSize();{const f=$("#pgFrame"),d=docs.get("pgtable");if(d&&f.contentWindow)f.contentWindow.postMessage({pg:"state",data:d},location.origin);}if(S&&S.stop)S.stop();$("#fab").hidden=true;return;}
+  main.innerHTML=({today:vToday,log:vBody,plan:vPlan,body:vBody,move:vFigure,timer:vTimer,yoga:vYoga,posture:vPosture})[tab]();
   {const rv=document.getElementById("yriver");if(rv){rv.scrollLeft=_rs;_fl.forEach(k=>{const el=rv.querySelector(`[data-yflip="${k}"]`);if(el)el.classList.add("flip");});}document.body.style.overflow=document.querySelector(".ycard")?"hidden":"";}
   main.querySelectorAll("textarea.grow").forEach(t=>{t.style.height="auto";t.style.height=t.scrollHeight+"px";});
   if(tab==="move"&&$("#stageSlot")){const st=buildStage();$("#stageSlot").appendChild(st.el);if(st.start)st.start();stageApply();}
   else if(S&&S.stop)S.stop();
+  if(tab==="posture"){pgSize();document.body.style.overflow="hidden";}
   paintT();
   const fb=$("#fab"),fa={today:"fab-ex",plan:"plan-add",yoga:yNew?"":"y-new",body:"fab-body",log:"fab-body"}[tab]||"";fb.hidden=!fa;fb.dataset.act=fa;
 }
