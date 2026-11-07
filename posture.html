@@ -216,6 +216,44 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .mbtn{border:1px solid #5a5048;background:none;color:#efe6da;border-radius:99px;padding:6px 14px;font:inherit;font-size:.8rem;cursor:pointer}
 @media (max-width:640px){.gwrap{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.tr i,.tr b{transition:none}}
+.levrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.lv2{border:0;border-radius:10px;background:var(--t);padding:7px 9px;text-align:left;cursor:pointer;font:inherit;color:var(--ink);display:flex;flex-direction:column;gap:1px;min-width:0}
+.lv2 b{font-family:var(--display);color:var(--c);font-size:1rem}
+.lv2 span{font-size:.74rem;line-height:1.35}
+.lv2 em{font-style:normal;font-size:.66rem;color:var(--mute)}
+.lv2:hover,.lv2:focus-visible{outline:2px solid var(--c);outline-offset:-2px}
+.cbox{display:flex;flex-direction:column;gap:6px;min-width:0}
+.compass svg{max-height:330px}
+.rleg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.rleg div{font-size:.7rem;line-height:1.35;color:var(--mute);background:var(--bg);border-radius:9px;padding:5px 7px}
+.rleg b{display:block;font-family:var(--display);font-size:.88rem;color:var(--ink)}
+.rleg i{font-style:normal;color:var(--chain);margin-left:4px}
+.mixer{gap:8px}
+.tr{height:120px}
+.mmap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.72rem;color:#bfb1a3;border-top:1px solid #4a423b;padding-top:8px}
+.mcols{display:flex;gap:4px}
+.mcols i{font-style:normal;font-family:var(--display);font-size:.85rem;width:24px;height:24px;border-radius:6px;display:grid;place-items:center;background:var(--c);color:#fff}
+.mcols i.mid{opacity:.55}.mcols i.lo{opacity:.18}
+.mparts{display:flex;gap:3px;flex-wrap:wrap}
+.mparts .pn{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid #f0a796;color:#f0a796;font-size:.66rem;font-weight:700;background:none;padding:0;cursor:pointer}
+.macts{gap:6px;flex-wrap:wrap}
+.mbtn.pri{background:#efe6da;color:#2c2723;border-color:#efe6da}
+.order{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.1fr;gap:6px}
+.order div{background:var(--bg);border-radius:10px;padding:7px 10px;font-size:.76rem;line-height:1.45;min-width:0}
+.order b{display:block;font-family:var(--display);font-size:.88rem}
+.order .o1{background:color-mix(in srgb,var(--chain) 10%,var(--bg))}
+.order .o1 b{color:var(--chain)}
+.order button{border:0;background:none;color:var(--chain);font:inherit;font-size:.76rem;cursor:pointer;padding:0}
+.goals{gap:10px;padding:12px}
+.tfilter{display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:6px 0 4px;font-size:.74rem}
+.tfl{color:var(--mute);margin-right:4px}
+.tfr{color:var(--chain);margin:0 2px 0 6px;font-weight:700}
+.tfc{border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:3px 9px;font:inherit;font-size:.74rem;color:var(--ink);cursor:pointer}
+.tfc.now{border-color:color-mix(in srgb,var(--chain) 50%,var(--line))}
+.tfc.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.row.dim{opacity:.28}
+.cell{transition:opacity .25s}
+@media (max-width:900px){.levrow{grid-template-columns:1fr 1fr}.order{grid-template-columns:1fr 1fr}}
 </style>
 <div class="wrap">
 <header>
@@ -236,6 +274,7 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
   </aside>
   <section class="goals" id="goals" hidden></section>
   <section class="table" id="table">
+    <div class="tfilter" id="tfilter"></div>
     <div class="thead">
       <div class="th">部位　由上往下</div>
       <div class="th s1"><b>鬆</b>按摩、放鬆</div>
@@ -349,7 +388,8 @@ PARTS.forEach(p=>{p.s[3]=(LIAN[p.id]||p.s[3]||[]).map(it=>it.sub==="徒手"?it:{
 {const lb=PARTS.find(p=>p.id==="lowback");lb.s[2]=[{n:"鳥狗式",sub:"徒手",img:null,how:"四足跪姿，吐氣時對側手腳慢慢伸直，腰背保持平、不晃。左右各 8 次。",warn:"腰往下塌或骨盆歪就把腿放低。"}];}
 // ===== 儲存：在健身房 App 裡就跟 App 一起同步，單獨打開就存在這台裝置 =====
 const INAPP=window.parent!==window;
-let flow=[],notes={},loaded=false,fmode="night";
+let flow=[],notes={},loaded=false,fmode="night",tgoal=null;
+const colW=g=>[(g.mix.len+g.mix.rec)/2,g.mix.len,(g.mix.ctl+g.mix.str)/2,g.mix.str];
 const SAMPLE=["psoas|0|0","pec|0|0","psoas|1|0","abs|2|0","abs|2|1","psoas|2|0"];
 function persist(){
   if(INAPP&&!loaded)return;
@@ -364,9 +404,11 @@ const key=(p,s,i)=>p+"|"+s+"|"+i;
 const $=s=>document.querySelector(s);
 const ph=(it,big)=>it.lab&&!it.img?it.lab:it.img&&THUMBS[it.img]?`<img src="${THUMBS[it.img]}" alt="">`:(it.sub==="徒手"||!it.img&&/徒手|呼吸|式|弓箭步/.test(it.n)?"徒手":"工具");
 function render(){
-  $("#rows").innerHTML=PARTS.map((p,pi)=>[p,pi]).reverse().map(([p,pi])=>`<div class="row" id="r-${p.id}" data-p="${pi}">
+  const TG=tgoal?GOALS.find(x=>x.id===tgoal):null,CW=TG?colW(TG):null,op=w=>w>=60?1:w>=30?.55:.25;
+  document.querySelectorAll(".thead .th").forEach((th,i)=>{th.style.opacity=CW&&i>0?op(CW[i-1]):1});
+  $("#rows").innerHTML=PARTS.map((p,pi)=>[p,pi]).reverse().map(([p,pi])=>`<div class="row ${TG&&!TG.parts.includes(p.id)?"dim":""}" id="r-${p.id}" data-p="${pi}">
    <div class="part" data-p="${pi}"><span class="n">${pi+1}</span><h3>${p.n}</h3><p>${p.why}</p></div>
-   ${p.s.map((list,si)=>`<div class="cell ${ST[si].c}"><span class="lane">${ST[si].k}</span>${list.length?list.map((it,ii)=>{const k=key(p.id,si,ii);return `<button class="chip ${flow.includes(k)?"in":""}" data-k="${k}">
+   ${p.s.map((list,si)=>`<div class="cell ${ST[si].c}" style="opacity:${CW?op(CW[si]):1}"><span class="lane">${ST[si].k}</span>${list.length?list.map((it,ii)=>{const k=key(p.id,si,ii);return `<button class="chip ${flow.includes(k)?"in":""}" data-k="${k}">
      <span class="ph ${it.img?"":"hand"}">${ph(it)}</span><span class="nm">${it.n}${it.mark?`<span class="tag">${it.mark}</span>`:""}${it.sub&&it.sub!=="徒手"?`<small>${it.sub}</small>`:""}</span><span class="ck"></span></button>`}).join(""):`<div class="empty">${si===3?"—":"之後放床上動作"}</div>`}</div>`).join("")}
   </div>`).join("");
   // 人像點
@@ -447,29 +489,37 @@ const ANG={len:0,str:90,ctl:180,rec:270};
 let curGoal="pain";
 const GANG={pain:335,loose:235,sleep:280,split:8,agile:200,hh:148,posture:122,flat:245,abs:100};
 function gpos(g){const C=200,R=[52,112,162][g.r],a=GANG[g.id]*Math.PI/180;return [C+R*Math.cos(a),C+R*Math.sin(a),a];}
+const LEVCOL={len:"鬆・伸",str:"醒・練",ctl:"醒＋三個意念",rec:"鬆＋呼吸＋睡眠"};
+function renderFilter(){
+  const el=$("#tfilter");if(!el)return;
+  el.innerHTML=`<span class="tfl">用目標看</span><button class="tfc ${!tgoal?"on":""}" data-tg="">全部</button>${RINGS.map((r,ri)=>`<span class="tfr">${"①②③"[ri]}</span>${GOALS.filter(g=>g.r===ri).map(g=>`<button class="tfc ${tgoal===g.id?"on":""} ${g.now?"now":""}" data-tg="${g.id}">${g.t}</button>`).join("")}`).join("")}`;
+}
 function renderGoals(){
-  const g=GOALS.find(x=>x.id===curGoal);const mins=flow.length*2;
+  const g=GOALS.find(x=>x.id===curGoal);const cw=colW(g);
   const quad=LEV.map(l=>{const a0=(ANG[l.k]-45)*Math.PI/180,a1=(ANG[l.k]+45)*Math.PI/180,R=186;
     return `<path class="q ${l.c}" d="M200 200 L${200+R*Math.cos(a0)} ${200+R*Math.sin(a0)} A${R} ${R} 0 0 1 ${200+R*Math.cos(a1)} ${200+R*Math.sin(a1)}Z"/>`}).join("");
   const qlab=LEV.map(l=>{const a=ANG[l.k]*Math.PI/180,R=176;return `<text class="ql ${l.c}" x="${200+R*Math.cos(a)}" y="${200+R*Math.sin(a)}" data-lv="${l.k}">${l.n}</text>`}).join("");
   const rings=[87,137,186].map((r,i)=>`<circle class="rg r${i}" cx="200" cy="200" r="${r}"/><circle class="rg2" cx="200" cy="200" r="${r}"/>`).join("");
   const rlab=RINGS.map((rg,i)=>{const r=[70,122,172][i],a=52*Math.PI/180,x=200+r*Math.cos(a),y=200+r*Math.sin(a),w=58;return `<g class="rlg"><rect x="${x-w/2}" y="${y-11}" width="${w}" height="22" rx="11"/><text class="rl" x="${x}" y="${y}"><tspan class="rn">${"①②③"[i]}</tspan> ${rg.n}</text></g>`}).join("");
   const dots=GOALS.map(x=>{const [px,py,a]=gpos(x);const right=Math.cos(a)>-0.2;return `<g class="gd ${x.id===curGoal?"on":""} ${x.now?"now":""}" data-gsel="${x.id}"><circle cx="${px}" cy="${py}" r="${x.id===curGoal?9:6.5}"/><text x="${px+(right?11:-11)}" y="${py}" style="text-anchor:${right?"start":"end"}">${x.t}</text></g>`}).join("");
-  $("#goals").innerHTML=`<div class="gtop"><div><span class="ey">第一性原理</span>身體只有四個開關：<b class="c-l1">長度</b>、<b class="c-l2">力量</b>、<b class="c-l3">控制</b>、<b class="c-l4">恢復</b>。目標是由內到外的漣漪，<b>由放到練</b>。</div></div>
+  $("#goals").innerHTML=`<div class="levrow">${LEV.map(l=>`<button class="lv2 ${l.c}" data-lv="${l.k}"><b>${l.n}</b><span>${l.d}</span><em>部位桌：${LEVCOL[l.k]}</em></button>`).join("")}</div>
    <div class="gwrap">
-    <div class="compass"><svg viewBox="0 0 400 400" role="img" aria-label="漣漪羅盤">${quad}${rings}${rlab}<text class="core" x="200" y="196">享受</text><text class="core" x="200" y="214">人生</text>${dots}${qlab}</svg></div>
+    <div class="cbox"><div class="compass"><svg viewBox="0 0 400 400" role="img" aria-label="漣漪羅盤">${quad}${rings}${rlab}<text class="core" x="200" y="196">享受</text><text class="core" x="200" y="214">人生</text>${dots}${qlab}</svg></div>
+     <div class="rleg">${RINGS.map((r,i)=>`<div><b>${"①②③"[i]} ${r.n}</b>${r.d}<i>${r.v}</i></div>`).join("")}</div></div>
     <div class="mixer">
-      <div class="mtitle"><span class="mring">${"①②③"[g.r]} ${RINGS[g.r].n}・${RINGS[g.r].v}</span><h2>${g.t}${g.now?`<span class="nowtag">現在主線</span>`:""}</h2><p>這個目標的配方</p></div>
+      <div class="mtitle"><span class="mring">${"①②③"[g.r]} ${RINGS[g.r].n}・${RINGS[g.r].v}</span><h2>${g.t}${g.now?`<span class="nowtag">現在主線</span>`:""}</h2></div>
       <div class="faders">${LEV.map(l=>{const v=g.mix[l.k];return `<div class="fd ${l.c}"><button class="fl" data-lv="${l.k}">${l.n}</button><div class="tr"><i style="height:${v}%"></i><b style="bottom:calc(${v}% - 9px)"></b></div><span class="fv">${v}</span><small>${g.kw[l.k]||"—"}</small></div>`}).join("")}</div>
-      <div class="macts"><button class="mbtn" data-goal="${g.id}">怎麼做、自我檢查 ›</button></div>
+      <div class="mmap"><span>對應部位桌</span>
+        <div class="mcols">${ST.map((s,si)=>`<i class="${s.c} ${cw[si]>=60?"hi":cw[si]>=30?"mid":"lo"}">${s.k}</i>`).join("")}</div>
+        <div class="mparts">${g.parts.map(id=>`<button class="pn" data-p="${PI(id)}" title="${PARTS[PI(id)].n}">${PI(id)+1}</button>`).join("")}</div></div>
+      <div class="macts"><button class="mbtn" data-goal="${g.id}">怎麼做、自我檢查</button><button class="mbtn pri" data-tgo="${g.id}">用這個目標看部位桌 ›</button></div>
     </div>
    </div>
-   <div class="gl">堅持到底的規則<small>忙的時候退回保底，不要歸零；做到保底就算成功</small></div>
-   <div class="act">
-     <div><b>保底 3 分</b>躺上床就做：360° 呼吸＋鬆一下最痛的地方。</div>
-     <div><b>有空</b>做「我的流程」睡前版，${flow.length} 項，約 ${Math.max(10,mins)} 分。<button id="gFlow">打開 ›</button></div>
-     <div><b>重訓日</b>課前鬆 5 分、醒當熱身。<button id="gFlow2">打開 ›</button></div>
-     <div><b>HH 日</b>課前醒足踝和臀，課後鬆小腿、足底。</div>
+   <div class="order">
+     <div class="o1"><b>現在</b>① 三件一起做：肩頸腰不痛、隨時鬆弛、好睡。動作重疊，一套流程打三個。</div>
+     <div><b>穩了再加</b>② 每週 1～2 次加一字馬和 HH 的準備。</div>
+     <div><b>最後</b>③ 腹肌、小腹靠重訓和飲食，排在後面。</div>
+     <div><b>保底 3 分</b>躺上床：360° 呼吸＋鬆最痛的地方。<button id="gFlow">我的流程 ›</button></div>
    </div>`;
   lightParts(g.parts.map(PI));
 }
@@ -503,6 +553,7 @@ function view(v){
   $("#tGoal").classList.toggle("on",v==="goal");$("#tTable").classList.toggle("on",v==="table");
   try{localStorage.setItem("bedview",v)}catch(e){}
   if(v==="goal")renderGoals();
+  if(v==="table"){renderFilter();render();if(tgoal){const G=GOALS.find(x=>x.id===tgoal);lightParts(G.parts.map(PI));const f=PARTS.findIndex(p=>p.id===G.parts[G.parts.length-1]);}}
 }
 $("#tGoal").onclick=()=>view("goal");$("#tTable").onclick=()=>view("table");
 document.addEventListener("input",e=>{const gi=e.target.dataset.gi;if(gi!==undefined){notes[gi]=e.target.value;persist()}});
@@ -510,6 +561,8 @@ document.addEventListener("click",e=>{
   if(e.target.id==="gFlow"){fmode="night";openFlow()}
   if(e.target.id==="gFlow2"){fmode="gym";openFlow()}
   if(e.target.id==="gTable")view("table");
+  const tgo=e.target.closest("[data-tgo]");if(tgo){tgoal=tgo.dataset.tgo;view("table");return}
+  const tg=e.target.closest("[data-tg]");if(tg){tgoal=tg.dataset.tg||null;renderFilter();render();if(tgoal){const G=GOALS.find(x=>x.id===tgoal);lightParts(G.parts.map(PI))}return}
   const gs=e.target.closest("[data-gsel]");if(gs){curGoal=gs.dataset.gsel;renderGoals();return}
   const gl=e.target.closest("[data-goal]");if(gl&&!e.target.closest(".pn")){openGoal(gl.dataset.goal);return}
   const lv=e.target.closest("[data-lv]");if(lv){openLever(lv.dataset.lv);return}
