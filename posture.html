@@ -7,17 +7,17 @@
 :root{
   --bg:#ebe7df; --panel:#f6f3ed; --line:#d8d1c5; --ink:#2f2a25; --mute:#7c7268;
   --chain:#cf4f3a; --soft:#e05f49;
-  --s1:#b5835a; --s1t:#f1e3d4; --s2:#5f7d55; --s2t:#e1eadb; --s3:#56709a; --s3t:#e0e7f1; --s4:#8b5468; --s4t:#f0e1e7;
+  --s1:#b5835a; --s1t:#f1e3d4; --s2:#5f7d55; --s2t:#e1eadb; --s3:#56709a; --s3t:#e0e7f1; --s4:#8b5468; --s4t:#f0e1e7; --s5:#94741f; --s5t:#f1e8cf;
   --skin1:#e9dccd; --skin2:#f4ebe1; --skinl:#7a6452; --hair:#5b4a3e;
   --display:"Noto Serif TC","Songti TC",serif; --body:-apple-system,"PingFang TC","Noto Sans TC",sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#1f1c19; --panel:#2a2622; --line:#3d3731; --ink:#ece5db; --mute:#a59a8e;
-  --s1t:#3a2e23; --s2t:#28331f; --s3t:#232c3a; --s1:#d4a179; --s2:#93b386; --s3:#8ea6cc; --s4:#cf98ad; --s4t:#3a2730;
+  --s1t:#3a2e23; --s2t:#28331f; --s3t:#232c3a; --s1:#d4a179; --s2:#93b386; --s3:#8ea6cc; --s4:#cf98ad; --s4t:#3a2730; --s5:#d8b860; --s5t:#3a3219;
   --skin1:#5a4c40; --skin2:#6b5b4d; --skinl:#c8b4a0; --hair:#2e2520; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#1f1c19; --panel:#2a2622; --line:#3d3731; --ink:#ece5db; --mute:#a59a8e;
-  --s1t:#3a2e23; --s2t:#28331f; --s3t:#232c3a; --s1:#d4a179; --s2:#93b386; --s3:#8ea6cc; --s4:#cf98ad; --s4t:#3a2730;
+  --s1t:#3a2e23; --s2t:#28331f; --s3t:#232c3a; --s1:#d4a179; --s2:#93b386; --s3:#8ea6cc; --s4:#cf98ad; --s4t:#3a2730; --s5:#d8b860; --s5t:#3a3219;
   --skin1:#5a4c40; --skin2:#6b5b4d; --skinl:#c8b4a0; --hair:#2e2520; color-scheme:dark}
 [hidden]{display:none!important}
 html,body{background:var(--bg);color:var(--ink);font-family:var(--body)}
@@ -135,6 +135,49 @@ h1{font-family:var(--display);font-weight:700;font-size:1.45rem;margin:0;letter-
 @media (max-width:640px){.ggrid{grid-template-columns:1fr}}
 .drawer .seg.fm{display:inline-flex;margin:8px 0 6px;background:var(--bg)}
 html.inapp .wrap{padding-block-start:54px}
+.l1{--c:var(--s1);--t:var(--s1t)} .l2{--c:var(--s4);--t:var(--s4t)} .l3{--c:var(--s5);--t:var(--s5t)} .l4{--c:var(--s2);--t:var(--s2t)}
+.fp{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px;align-items:center;background:var(--bg);border-radius:14px;padding:12px 14px}
+.fp .ey{font-size:.7rem;letter-spacing:.2em;color:var(--chain)}
+.fp h2{font-family:var(--display);font-size:1.25rem;margin:2px 0 4px}
+.fp p{margin:0;font-size:.78rem;color:var(--mute);line-height:1.55}
+.levs{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.lev{border:0;border-radius:10px;background:var(--t);padding:7px 10px;text-align:left;cursor:pointer;font:inherit;color:var(--ink)}
+.lev b{font-family:var(--display);color:var(--c);font-size:1rem;margin-right:6px}
+.lev span{font-size:.74rem;color:var(--mute)}
+.lev:hover,.lev:focus-visible{outline:2px solid var(--c);outline-offset:-2px}
+.mxw{overflow-x:auto}
+.mx{display:grid;grid-template-columns:120px repeat(4,minmax(86px,1fr)) minmax(92px,auto);gap:4px;min-width:600px}
+.mh{font-size:.74rem;color:var(--mute);padding:2px 4px;border:0;background:none;font-family:inherit;text-align:left}
+button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:pointer;letter-spacing:.1em}
+.gt{border:0;background:none;text-align:left;font:inherit;color:var(--ink);cursor:pointer;padding:6px 4px;border-radius:8px;line-height:1.2}
+.gt b{font-family:var(--display);font-size:.95rem;display:block}
+.gt small{font-size:.68rem;color:var(--mute)}
+.mc{border-radius:8px;font-size:.74rem;line-height:1.3;padding:6px 7px;cursor:pointer;min-height:34px;color:var(--mute)}
+.mc i{font-style:normal;color:var(--c);margin-right:3px}
+.mc.pri{background:var(--t);color:var(--ink)}
+.mc.sub{border:1px dashed color-mix(in srgb,var(--c) 55%,transparent)}
+.gt.on,.mc.on,.mp.on{box-shadow:inset 0 0 0 1.5px var(--chain)}
+.gt.on{background:color-mix(in srgb,var(--chain) 7%,transparent)}
+.mp{display:flex;flex-wrap:wrap;gap:3px;align-content:center;padding:4px;border-radius:8px;cursor:pointer}
+.mp.hit{background:color-mix(in srgb,var(--chain) 9%,transparent)}
+.mp .pn{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--chain);color:var(--chain);font-size:.68rem;font-weight:700;cursor:pointer;background:none;padding:0}
+.act{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.act div{min-width:0}
+.sheet h2 .gs{font-family:var(--body);font-size:.85rem;color:var(--mute)}
+.glv{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.glv div{background:var(--t);border-radius:10px;padding:8px 10px;font-size:.9rem}
+.glv .lt{display:block;font-size:.72rem;color:var(--c);font-weight:700;margin-bottom:2px}
+.gparts{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.pn2{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:5px 10px 5px 5px;font:inherit;font-size:.82rem;color:var(--ink);cursor:pointer;display:flex;gap:6px;align-items:center}
+.pn2 i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--chain);color:#fff;display:grid;place-items:center;font-size:.7rem;font-weight:700}
+.rec{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:.8rem;color:var(--mute)}
+.rec input{flex:1;min-width:0;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:7px 9px;font:inherit}
+.ntab{display:grid;grid-template-columns:80px minmax(0,1fr) minmax(0,1.2fr);gap:0;margin-top:12px;font-size:.84rem;line-height:1.5;border-top:1px solid var(--line)}
+.ntab>div{padding:7px 6px;border-bottom:1px solid var(--line)}
+.ntab .nh{font-size:.72rem;color:var(--mute)}
+.ntab .nk{color:var(--c);font-weight:700}
+@media (max-width:900px){.act{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.fp{grid-template-columns:1fr}}
 </style>
 <div class="wrap">
 <header>
@@ -173,6 +216,33 @@ const THUMBS={"leg": "data:image/webp;base64,UklGRqogAABXRUJQVlA4WAoAAAAQAAAAnwA
 const ST=[{k:"鬆",c:"s1"},{k:"伸",c:"s2"},{k:"醒",c:"s3"},{k:"練",c:"s4"}];
 // 部位：由下往上（代償鏈順序）。x,y 為人像上的點
 const PARTS=[
+ {id:"foot",n:"足底・腳踝",why:"地基。三腳架站不穩，膝蓋、骨盆一路往上歪；穿跟鞋更吃腳踝",x:524,y:1372,lx:160,side:"l",
+  s:[[
+   {n:"筋膜球",sub:"滾足底",img:"ball",how:"站著或坐著，把球踩在腳底，從腳跟滾到腳趾根部，痠點停一下。每腳 1 分鐘。"},
+   {n:"腿部按摩器",sub:"小腿",img:"leg",how:"套在小腿，放鬆小腿後側。跳完 HH 很適合。"},
+   {n:"八輪環抱滾輪",sub:"小腿",img:"ring",how:"環抱小腿上下滾，內側、外側都滾到。"}
+  ],[
+   {n:"拉筋板",sub:"小腿、阿基里斯腱",img:"slant",how:"站上拉筋板，身體站直、膝蓋伸直，停 1～2 分鐘；再微彎膝停 1 分鐘拉更下面。"},
+   {n:"推牆小腿伸展",sub:"徒手",img:null,how:"雙手推牆，後腳伸直、腳跟踩地，身體往前靠。左右各 30 秒。"}
+  ],[
+   {n:"縮足運動",sub:"徒手",img:null,how:"坐著或站著，腳趾放鬆不抓地，把足弓往上拱、讓腳變短一點。10 下。"},
+   {n:"三腳架單腳站",sub:"徒手",img:null,how:"大拇趾球、小拇趾球、腳跟三點平均踩地，單腳站 30 秒。刷牙時就能做。"}
+  ],[
+   {n:"提踵",sub:"徒手或負重",img:null,how:"站在台階邊，慢慢踮到最高、再慢慢放到比台階低。3 組 15 下。HH 前很適合。",warn:"腳踝不要往外倒，壓力在大拇趾球。"}
+  ]]},
+ {id:"leg",n:"腿・膝內扣",why:"臀側沒力、大腿內外側太緊，膝蓋往內倒（X 型腿），站姿和舞姿都會歪",x:514,y:1135,lx:160,side:"r",
+  s:[[
+   {n:"筋膜球",sub:"大腿內側",img:"ball",how:"趴著，把球壓在大腿內側，慢慢滾找痠點。每邊 1 分鐘。"},
+   {n:"狼牙棒滾軸",sub:"大腿外側",img:"stick",how:"坐著，滾大腿外側（從膝蓋上方到髖部下方）。"}
+  ],[
+   {n:"青蛙趴",sub:"徒手",img:null,how:"趴著，膝蓋往兩側打開、腳掌朝外，屁股慢慢往後坐，停 1 分鐘。一字馬的基礎。",warn:"膝蓋有壓迫痛就墊毛巾、縮小角度。"},
+   {n:"4 字伸展",sub:"梨狀肌",img:null,how:"仰躺，一腳腳踝放在另一腳膝蓋上，抱著下面那條腿往胸口拉。左右各 30 秒。"}
+  ],[
+   {n:"蚌殼式",sub:"彈力帶",img:"band",how:"側躺屈膝，彈力帶套在膝蓋上，腳跟併攏，上面的膝蓋往上打開再慢慢放。左右各 15 下。"}
+  ],[
+   {n:"髖外展機",sub:"健身房",img:null,how:"坐好、背貼椅背，用臀外側把腿往外推開，慢慢收回。3 組 15 下。"},
+   {n:"單腳臀橋",sub:"徒手",img:null,how:"仰躺，一腳伸直抬高，另一腳踩地把屁股推高，骨盆保持水平。左右各 10 下。"}
+  ]]},
  {id:"psoas",n:"髂腰肌・骨盆前傾",why:"久坐縮短，把骨盆往前拉，是整條鏈的起點",x:566,y:862,lx:340,side:"r",
   s:[[
    {n:"雙凸點鬆解器",sub:"俯臥",img:null,mark:"待確認",how:"趴著，把凸點放在肚臍和髂前上棘（骨盆前面突出的骨頭）之間，再稍微往鼠蹊方向下移一點。\n深呼吸停 1～2 分鐘，可以微微彎膝、或左右轉動大腿。",warn:"避開肚臍正下方與下腹正中央。出現電麻感或很強的脈搏跳動感就移開。全程不要憋氣。"},
@@ -237,7 +307,7 @@ const LIAN={
         {n:"羅馬尼亞硬舉",sub:"健身房",img:null,how:"膝蓋微彎固定，屁股往後推、身體前傾，槓貼著腿往下到大腿後側有拉感，再用屁股把身體帶回來。3 組 10 下。",warn:"背保持平直，不要彎腰去撿。"},
         {n:"保加利亞分腿蹲",sub:"健身房",img:null,how:"後腳放在凳上，前腳往下蹲，骨盆保持正，前腳屁股出力站起。左右各 10 下。"}]
 };
-PARTS.forEach(p=>{p.s[3]=(LIAN[p.id]||[]).map(it=>it.sub==="徒手"?it:{...it,lab:"重訓"})});
+PARTS.forEach(p=>{p.s[3]=(LIAN[p.id]||p.s[3]||[]).map(it=>it.sub==="徒手"?it:{...it,lab:"重訓"})});
 {const lb=PARTS.find(p=>p.id==="lowback");lb.s[2]=[{n:"鳥狗式",sub:"徒手",img:null,how:"四足跪姿，吐氣時對側手腳慢慢伸直，腰背保持平、不晃。左右各 8 次。",warn:"腰往下塌或骨盆歪就把腿放低。"}];}
 // ===== 儲存：在健身房 App 裡就跟 App 一起同步，單獨打開就存在這台裝置 =====
 const INAPP=window.parent!==window;
@@ -307,28 +377,75 @@ function openFlow(){
 $("#openFlow").onclick=openFlow;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#scrim").hidden=true;$("#flowScrim").hidden=true}});
 // 範例：預先放一組（第一次開啟）
+// 補充：肩頸、胸前
+{const nk=PARTS.find(p=>p.id==="neck");nk.s[1].push({n:"斜角肌伸展",sub:"徒手",img:null,how:"坐好，一手壓住同側鎖骨，頭往另一側斜後方倒，停 30 秒。"});nk.s[2].unshift({n:"收下巴",sub:"徒手",img:null,how:"仰躺，後腦勺輕輕往地板壓、下巴往後收（像做雙下巴），停 5 秒。10 下。"});
+ const pc=PARTS.find(p=>p.id==="pec");pc.s[1].push({n:"門框開胸",sub:"徒手",img:null,how:"手肘彎 90 度靠在門框，身體往前走一步，感覺胸前拉開。左右各 30 秒。"});}
 render();pick(0,false);
 // ===== 目標視角 =====
-const GOALS=[
- {t:"肩頸放下來",parts:[5],why:"肩頸是最後接手的地方，下面鬆開了它才放得下。",test:"肩頸痠緊程度打 0～10 分，睡前記一次。",ph:"例：11/7　6 分"},
- {t:"上背打開",parts:[4,3],why:"胸小肌鬆開、胸椎動起來，肩膀才回得去。",test:"靠牆站，腳跟、屁股、上背貼牆，後腦勺不抬下巴就能碰到牆嗎？",ph:"例：差兩指碰不到"},
- {t:"肚子收得住",parts:[1],why:"腹部撐得住，下背就不用替它出力，肚子也不會往前凸。",test:"躺著吐氣到底，摸肋骨下緣能不能往下收；每月在肚臍高度量一次腰圍。",ph:"例：腰圍 78"},
- {t:"骨盆回正",parts:[0,2],why:"整條鏈的起點。髂腰肌放鬆、屁股醒來，骨盆就不再往前倒。",test:"靠牆站，腰後空隙剛好塞進一個手掌；塞得進拳頭就是前傾。",ph:"例：塞得進拳頭",start:true}
+const LEV=[
+ {k:"len",n:"長度",c:"l1",d:"太緊的放鬆、拉長",cols:"部位桌的「鬆＋伸」",prin:"肌肉太緊，會把骨頭拉歪。鬆：對肌肉施壓、加熱，讓它放下戒備。伸：把肌肉兩端拉遠，停在微痠的地方慢慢吐氣 30 秒以上。",
+  need:[["壓得到","筋膜球（點）、滾筒（面）、按摩器（揉）","網球、襪子包兩顆網球、冰過的寶特瓶、擀麵棍、自己的手肘"],["加熱","加熱披肩","熱毛巾、洗完澡趁熱做"],["勾得到","彈力帶","毛巾、皮帶、圍巾"],["撐得住","瑜伽磚、瑜伽輪","厚書、枕頭、捲起來的棉被、床緣"],["固定一端","門框、牆","任何穩的家具"]]},
+ {k:"str",n:"力量",c:"l2",d:"太弱的練強",cols:"部位桌的「醒＋練」",prin:"沒力的肌肉，會讓別的肌肉代償。先醒：輕、慢，找到那塊肌肉有感覺。再練：加阻力，每週加一點點。",
+  need:[["阻力","啞鈴、機器、彈力帶、美腿夾","自己的體重、水瓶、背包裝書、放慢往下的速度、改成單邊做"],["支撐","羅馬椅、上斜凳","床緣、沙發、樓梯"]]},
+ {k:"ctl",n:"控制",c:"l3",d:"讓身體用對",cols:"三個意念＋回饋",prin:"大腦要知道身體在哪，才會用對肌肉。三個意念：足底三腳架、懸掛軸線（天空—頭頂—腳底—地心）、肋骨往下收。再用回饋確認有沒有做對。",
+  need:[["回饋","鏡子、牆","手機錄影、手放在肚子或肋骨上感覺"],["隨時練","不需要工具","等紅燈做三腳架、走路想懸掛線、刷牙單腳站"]]},
+ {k:"rec",n:"恢復",c:"l4",d:"讓改變留下來",cols:"睡眠＋呼吸＋飲食",prin:"身體在休息時才改變。睡得好、呼吸往下沉，緊的地方才放得掉。小腹平主要看體脂和骨盆位置：體脂由飲食決定，練腹肌不會讓那一塊局部變瘦。",
+  need:[["放鬆神經","睡前流程、360° 呼吸、熱敷","關燈躺著做呼吸就好"],["體脂","飲食（之後再整理）","—"]]}
 ];
+const GOALS=[
+ {id:"soft",t:"柔軟",s:"一字馬",lv:{len:["●","髖、腿後側拉長"],ctl:["○","吐氣放鬆再往下"],rec:["○","洗完澡趁熱做"]},parts:["psoas","leg","lowback"],test:"一字馬離地幾公分（前、側各記）",ph:"例：前 20／側 35"},
+ {id:"hh",t:"跳 HH",s:"穩、會轉、腳不痛",lv:{ctl:["●","三腳架、懸掛軸線"],str:["●","臀、足踝、核心"],len:["○","髖、胸椎打開"]},parts:["foot","leg","psoas","tspine"],test:"穿跟鞋單腳站穩幾秒",ph:"例：左 8 秒／右 12 秒"},
+ {id:"pain",t:"不腰痠背痛",s:"肩頸不再痛",lv:{len:["●","肩頸、胸前、髂腰肌"],str:["●","上背、臀、腹"],ctl:["○","不用腰和肩代償"]},parts:["neck","pec","tspine","lowback","abs"],test:"肩頸、下背痠痛各打 0～10 分",ph:"例：肩頸 7／腰 4"},
+ {id:"vital",t:"活力、靈活",s:"身體輕盈",lv:{ctl:["●","每天動一動關節"],rec:["●","睡飽"],str:["○","有力才輕盈"]},parts:["tspine","psoas","foot"],test:"早上起床的精神 0～10 分",ph:"例：6 分"},
+ {id:"sleep",t:"好睡",s:"",lv:{rec:["●","睡前流程、呼吸"],len:["○","鬆肩頸、腹部"]},parts:["neck","abs"],test:"幾點睡、半夜醒幾次",ph:"例：1:30 睡、醒 1 次"},
+ {id:"posture",t:"體態很棒",s:"站著就漂亮",lv:{ctl:["●","三腳架、懸掛軸線"],len:["●","鬆開代償鏈"],str:["●","撐住正位"]},parts:["foot","leg","psoas","abs","lowback","tspine","pec","neck"],test:"靠牆站：腰後塞得進拳頭嗎？後腦勺碰得到牆嗎？",ph:"例：塞得進拳頭、頭碰不到"},
+ {id:"abs",t:"小腹平、腹肌",s:"",lv:{rec:["●","飲食決定體脂"],str:["●","深層核心→腹肌"],ctl:["○","骨盆回正、腹內壓"]},parts:["abs","psoas"],test:"每月在肚臍高度量一次腰圍",ph:"例：78 公分"}
+];
+const PI=id=>PARTS.findIndex(p=>p.id===id);
+let curGoal=null;
 function renderGoals(){
   const mins=flow.length*2;
-  $("#goals").innerHTML=`<div class="ult"><div class="ey">終極目標<span class="draft">草稿・等你改</span></div>
-   <h2>肚子消下去、肩頸不再卡，站起來像被一條線往上提</h2>
-   <p>腳底三腳架站穩，前面打開肩和髖、後面張開翅膀。不再用腰和肩膀代償，自然就是你要的體態。</p></div>
-   <div class="gl">拆成四個小目標<small>由上往下排；從「骨盆回正」開始做</small></div>
-   <div class="ggrid">${GOALS.map((g,gi)=>`<div class="g" data-g="${gi}"><h3>${g.t}${g.parts.map(pi=>`<button class="pn" data-p="${pi}" title="${PARTS[pi].n}">${pi+1}</button>`).join("")}${g.start?`<span class="st">起點</span>`:""}</h3>
-     <p class="why">${g.why}</p><p><b style="color:var(--chain);font-weight:600">自我檢查</b>　${g.test}</p>
-     <label for="gn${gi}">最近一次<input id="gn${gi}" data-gi="${gi}" placeholder="${g.ph}" value="${(notes[gi]||"").replace(/"/g,"&quot;")}"></label></div>`).join("")}</div>
-   <div class="gl">每天、每週做的事</div>
-   <div class="act"><div><b>每天睡前</b>做「我的流程」：${flow.length} 項，約 ${mins} 分鐘。<button id="gFlow">打開流程 ›</button></div>
-   <div><b>重訓日</b>先鬆、再醒，最後做「練」那一欄，對準你要救的部位。<button id="gFlow2">看重訓日流程 ›</button></div>
-   <div><b>每週一次</b>做上面四個自我檢查，寫進「最近一次」。<button id="gTable">去部位桌 ›</button></div></div>`;
+  $("#goals").innerHTML=`<div class="fp"><div><div class="ey">第一性原理</div>
+     <h2>身體只有四個開關</h2><p>每個目標都是這四個開關的組合；每個工具、體式、器械，都只是在幫其中一個開關。看懂開關，沒有那個工具也找得到替代。</p></div>
+     <div class="levs">${LEV.map(l=>`<button class="lev ${l.c}" data-lv="${l.k}"><b>${l.n}</b><span>${l.d}</span></button>`).join("")}</div></div>
+   <div class="mxw"><div class="mx">
+     <div class="mh">我的目標　● 主要　○ 輔助</div>${LEV.map(l=>`<button class="mh ${l.c}" data-lv="${l.k}">${l.n}</button>`).join("")}<div class="mh">部位</div>
+     ${GOALS.map(g=>`<button class="gt ${curGoal===g.id?"on":""}" data-goal="${g.id}"><b>${g.t}</b>${g.s?`<small>${g.s}</small>`:""}</button>
+       ${LEV.map(l=>{const v=g.lv[l.k];return `<div class="mc ${l.c} ${v?(v[0]==="●"?"pri":"sub"):""} ${curGoal===g.id?"on":""}" data-goal="${g.id}">${v?`<i>${v[0]}</i>${v[1]}`:""}</div>`}).join("")}
+       <div class="mp ${curGoal===g.id?"on":""}" data-goal="${g.id}">${g.parts.map(id=>`<button class="pn" data-p="${PI(id)}" title="${PARTS[PI(id)].n}">${PI(id)+1}</button>`).join("")}</div>`).join("")}
+   </div></div>
+   <div class="gl">堅持到底的規則<small>忙的時候退回保底，不要歸零；做到保底就算成功</small></div>
+   <div class="act">
+     <div><b>保底 5 分</b>每天，累也做：360° 呼吸 1 分＋最緊的地方鬆 2 分＋伸 2 分。</div>
+     <div><b>睡前 ${Math.max(10,mins)} 分</b>「我的流程」睡前版，${flow.length} 項。<button id="gFlow">打開 ›</button></div>
+     <div><b>重訓日</b>課前鬆 5 分、醒當熱身；練的動作對準要救的部位。<button id="gFlow2">打開 ›</button></div>
+     <div><b>HH 日</b>課前醒足踝和臀，課後鬆小腿、足底。</div>
+   </div>`;
 }
+function openGoal(id){
+  const g=GOALS.find(x=>x.id===id);curGoal=id;renderGoals();lightParts(g.parts.map(PI));
+  const sc=$("#scrim");sc.hidden=false;
+  sc.innerHTML=`<div class="sheet" role="dialog" aria-modal="true"><h2>${g.t}${g.s?`<small class="gs">　${g.s}</small>`:""}</h2>
+    <div class="glv">${LEV.filter(l=>g.lv[l.k]).sort((a,b)=>(g.lv[a.k][0]==="●"?0:1)-(g.lv[b.k][0]==="●"?0:1)).map(l=>`<div class="${l.c}"><span class="lt">${g.lv[l.k][0]==="●"?"主要":"輔助"}・${l.n}</span>${g.lv[l.k][1]}</div>`).join("")}</div>
+    <p class="meta" style="margin-top:12px">對應部位（點了跳到部位桌）</p>
+    <div class="gparts">${g.parts.map(pid=>{const pi=PI(pid);return `<button class="pn2" data-p="${pi}"><i>${pi+1}</i>${PARTS[pi].n}</button>`}).join("")}</div>
+    <div class="warn" style="background:var(--bg)"><b style="color:var(--ink)">自我檢查</b>　${g.test}
+      <label class="rec" for="gn_${g.id}">最近一次<input id="gn_${g.id}" data-gi="g_${g.id}" placeholder="${g.ph}" value="${(notes["g_"+g.id]||"").replace(/"/g,"&quot;")}"></label></div>
+    <div class="acts"><button class="btn ghost" data-a="x" style="flex:1">關閉</button></div></div>`;
+  sc.onclick=ev=>{if(ev.target===sc||ev.target.dataset.a==="x"){sc.hidden=true;return}
+    const p=ev.target.closest(".pn2");if(p){sc.hidden=true;view("table");pick(+p.dataset.p,true)}};
+}
+function openLever(k){
+  const l=LEV.find(x=>x.k===k);const sc=$("#scrim");sc.hidden=false;
+  sc.innerHTML=`<div class="sheet ${l.c}" role="dialog" aria-modal="true"><div class="meta"><span>${l.cols}</span></div><h2>${l.n}：${l.d}</h2>
+    <p class="how">${l.prin}</p>
+    <div class="ntab"><div class="nh">需要的作用</div><div class="nh">你有的</div><div class="nh">沒有時用</div>
+    ${l.need.map(r=>`<div class="nk">${r[0]}</div><div>${r[1]}</div><div>${r[2]}</div>`).join("")}</div>
+    <p class="meta" style="margin-top:10px">${GOALS.filter(g=>g.lv[k]&&g.lv[k][0]==="●").map(g=>g.t).join("、")} 主要靠這個開關</p>
+    <div class="acts"><button class="btn ghost" data-a="x" style="flex:1">關閉</button></div></div>`;
+  sc.onclick=ev=>{if(ev.target===sc||ev.target.dataset.a==="x")sc.hidden=true};
+}
+function lightParts(list){document.querySelectorAll(".dot").forEach(e=>e.classList.toggle("on",list.includes(+e.dataset.p)));}
 function view(v){
   $("#goals").hidden=v!=="goal";$("#table").hidden=v!=="table";
   $("#tGoal").classList.toggle("on",v==="goal");$("#tTable").classList.toggle("on",v==="table");
@@ -341,9 +458,11 @@ document.addEventListener("click",e=>{
   if(e.target.id==="gFlow"){fmode="night";openFlow()}
   if(e.target.id==="gFlow2"){fmode="gym";openFlow()}
   if(e.target.id==="gTable")view("table");
+  const gl=e.target.closest("[data-goal]");if(gl&&!e.target.closest(".pn")){openGoal(gl.dataset.goal);return}
+  const lv=e.target.closest("[data-lv]");if(lv){openLever(lv.dataset.lv);return}
   const pn=e.target.closest(".pn");if(pn){view("table");pick(+pn.dataset.p,true)}
 },true);
-const _pick=pick;pick=function(pi,scroll){_pick(pi,scroll&&!$("#table").hidden);document.querySelectorAll(".g").forEach(g=>g.classList.toggle("on",GOALS[g.dataset.g].parts.includes(pi)))};
+const _pick=pick;pick=function(pi,scroll){_pick(pi,scroll&&!$("#table").hidden);if(!$("#goals").hidden){const id=PARTS[pi].id;document.querySelectorAll(".mp").forEach(m=>m.classList.toggle("hit",GOALS.find(g=>g.id===m.dataset.goal).parts.includes(id)))}};
 let v0="goal";try{v0=localStorage.getItem("bedview")||"goal"}catch(e){}
 view(v0);pick(0,false);
 
