@@ -285,6 +285,82 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .scl b{color:var(--c);margin-right:6px;font-family:var(--display)}
 .scl em{display:block;font-style:normal;font-size:.72rem;color:var(--mute)}
 @media (max-width:560px){.scl{grid-template-columns:1fr}}
+.pup{background:var(--panel);border-radius:18px;padding:12px;min-width:0}
+.pgrid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:14px;align-items:start}
+.stage{position:relative;border-radius:16px;overflow:hidden}
+.stage svg{width:100%;height:auto;display:block;max-height:calc(100vh - 190px)}
+.pground{stroke:#a08b76;stroke-width:2}
+.pghost{stroke:var(--s2);stroke-width:2;stroke-dasharray:4 6;opacity:.6}
+.pghostt{font-size:10px;fill:var(--s2)}
+.opt{font-size:11px;fill:#6b5a4a}
+.night .opt{fill:#d9cfc2}
+.pstr{fill:none;stroke:#7c6a5a;stroke-width:1;opacity:.75}
+.pstr.main{stroke:var(--s5);opacity:1}
+.band{fill:none;stroke-linecap:round;transition:all .5s}
+.band.t{stroke:#d0583f}
+.band.w{stroke:var(--s4)}
+.plab{font-size:12px;font-weight:700;paint-order:stroke;stroke:#f4efe7;stroke-width:3.5px}
+.night .plab{stroke:#3a4458}
+.l1t{fill:#c24e36}.l2t{fill:#8b5468}.l3t{fill:#94741f}
+.night .l1t{fill:#ff9b85}.night .l2t{fill:#e7a9c0}.night .l3t{fill:#e8c56a}
+.zz{font-size:13px;fill:#d9cfc2;font-style:italic}
+#puppet .pj{animation:trem .18s infinite alternate}
+@keyframes trem{from{transform:translateX(calc(var(--amp) * -1))}to{transform:translateX(var(--amp))}}
+#puppet rect,#puppet circle,#puppet line,#puppet path{transition:all .5s}
+.pmsg{position:absolute;left:10px;right:10px;bottom:10px;background:rgba(255,255,255,.88);color:#2f2a25;border-radius:12px;padding:8px 12px;font-size:.84rem;line-height:1.5}
+.pmsg b{color:var(--chain)}
+.pside{display:flex;flex-direction:column;gap:10px;min-width:0}
+.ptitle .ey{font-size:.68rem;letter-spacing:.2em;color:var(--chain)}
+.ptitle h2{font-family:var(--display);margin:2px 0;font-size:1.4rem}
+.ptitle p{margin:0;font-size:.82rem;color:var(--mute);line-height:1.55}
+.pre{display:flex;flex-wrap:wrap;gap:6px}
+.pre button{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:6px 12px;font:inherit;font-size:.8rem;color:var(--ink);cursor:pointer}
+.pre button:hover{border-color:var(--chain)}
+.fl2{font-family:var(--display);font-size:1rem;font-weight:700;color:var(--c);filter:brightness(1.35)}
+.ptr{height:170px;cursor:ns-resize;touch-action:none;width:14px}
+.ptr i,.ptr b{transition:none}
+.pscore{display:flex;align-items:center;gap:10px;font-size:.85rem}
+.pscore span{color:var(--mute)}
+.pbar{flex:1;height:10px;border-radius:6px;background:var(--bg);overflow:hidden}
+.pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--s1),var(--s2));transition:width .4s}
+.pscore b{font-variant-numeric:tabular-nums;min-width:3em;text-align:right}
+@media (max-width:900px){.pgrid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){#puppet .pj{animation:none}}
+.axis{stroke:var(--s2);stroke-width:3;stroke-dasharray:8 10;opacity:0;transition:opacity .4s}
+.axis.on{opacity:.9}
+#pupsvg .pstr{fill:none;stroke:#f3e6c8;stroke-width:4;transition:all .5s}
+#pupsvg .pstr.on{stroke:#e2b641;stroke-width:5}
+.tl{fill:none;stroke:#e0533b;stroke-width:9;stroke-linecap:round;transition:all .5s}
+#tight.off .tl{stroke:#9fbf8f;stroke-width:3;stroke-dasharray:8 8}
+.wl{fill:none;stroke:#d06a92;stroke-width:6;stroke-dasharray:12 10;stroke-linecap:round;transition:all .5s}
+#weak.on .wl{stroke:#8b5468;stroke-width:8;stroke-dasharray:0}
+.hz{fill:#ff5a3c;opacity:.35;animation:hz 1.1s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+#heat.calm .hz{fill:#7fb0a0;opacity:.18;animation:none}
+@keyframes hz{from{opacity:.18;transform:scale(.85)}to{opacity:.45;transform:scale(1.1)}}
+#pupsvg .plab{font-size:26px;font-weight:700;paint-order:stroke;stroke:rgba(255,250,244,.92);stroke-width:7px}
+#pupsvg .opt{font-size:24px;fill:#fff;paint-order:stroke;stroke:rgba(60,45,35,.6);stroke-width:5px}
+.l4t{fill:#4f7d6b}
+#bar{transition:transform .5s}
+.mylines{display:flex;flex-direction:column;gap:6px}
+.mylines div{background:var(--bg);border-radius:10px;padding:7px 10px;font-size:.8rem;color:var(--mute);line-height:1.5}
+.mylines b{font-family:var(--display);color:var(--ink);font-size:.95rem;margin-right:8px}
+.mylines span{display:block;color:var(--ink)}
+.mylines em{font-style:normal;font-size:.7rem;color:#fff;border-radius:99px;padding:1px 7px;margin-right:4px}
+.mylines em.t{background:#d0583f}.mylines em.w{background:var(--s4)}
+.psw{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sw{border:1.5px solid var(--line);background:var(--panel);border-radius:14px;padding:10px 12px;text-align:left;cursor:pointer;font:inherit;color:var(--ink);display:grid;grid-template-columns:auto 1fr;column-gap:8px;row-gap:1px;align-items:center;transition:all .25s}
+.sw .dot{grid-row:span 3;width:30px;height:18px;border-radius:99px;background:var(--line);position:relative;transition:background .25s}
+.sw .dot::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left .25s}
+.sw.on{border-color:var(--c);background:var(--t)}
+.sw.on .dot{background:var(--c)}.sw.on .dot::after{left:14px}
+.sw b{font-family:var(--display);font-size:1.05rem;color:var(--c)}
+.sw small{font-size:.72rem;color:var(--mute)}
+.sw i{font-style:normal;font-size:.74rem}
+.preset{border:0;background:var(--ink);color:var(--bg);border-radius:99px;padding:9px;font:inherit;font-size:.85rem;cursor:pointer}
+.main.solo{grid-template-columns:1fr}
+.main.solo .pgrid{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.main.solo .stage{width:100%;max-width:calc((100vh - 150px) * 0.4167);justify-self:center}
+.main.solo .stage svg{max-height:calc(100vh - 150px)}
 </style>
 <div class="wrap">
 <header>
@@ -292,7 +368,7 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
     <h1>體態桌</h1>
     <div class="sub">睡前做 <b>鬆 → 伸 → 醒</b>，重訓日加上 <b>練</b>。紅色虛線是你的代償鏈：骨盆前傾一路傳到肩頸。</div>
   </div>
-  <div class="hr"><div class="seg" role="tablist"><button id="tGoal" role="tab">目標</button><button id="tTable" role="tab">部位桌</button></div><button class="flowbtn" id="openFlow">我的流程 <i id="cnt">0</i></button></div>
+  <div class="hr"><div class="seg" role="tablist"><button id="tGoal" role="tab">目標</button><button id="tPup" role="tab">木偶</button><button id="tTable" role="tab">部位桌</button></div><button class="flowbtn" id="openFlow">我的流程 <i id="cnt">0</i></button></div>
 </header>
 <div class="main">
   <aside class="figbox">
@@ -304,6 +380,7 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
     <div class="legend">點紅點跳到那一列・虛線圈是背面</div>
   </aside>
   <section class="goals" id="goals" hidden></section>
+  <section class="pup" id="pup" hidden></section>
   <section class="table" id="table">
     <div class="tfilter" id="tfilter"></div>
     <div class="thead">
@@ -492,6 +569,66 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#scrim").hidden=
 {const nk=PARTS.find(p=>p.id==="neck");nk.s[1].push({n:"斜角肌伸展",sub:"徒手",img:null,how:"坐好，一手壓住同側鎖骨，頭往另一側斜後方倒，停 30 秒。"});nk.s[2].unshift({n:"收下巴",sub:"徒手",img:null,how:"仰躺，後腦勺輕輕往地板壓、下巴往後收（像做雙下巴），停 5 秒。10 下。"});
  const pc=PARTS.find(p=>p.id==="pec");pc.s[1].push({n:"門框開胸",sub:"徒手",img:null,how:"手肘彎 90 度靠在門框，身體往前走一步，感覺胸前拉開。左右各 30 秒。"});}
 render();pick(0,false);
+// ===== 提線木偶（用健身房照片）=====
+const PON={len:false,str:false,ctl:false,rec:false};let pupBuilt=false;
+const PTXT={len:["長度","鬆＋伸","紅色的線鬆開"],str:["力量","醒＋練","虛線變實線，撐得住"],ctl:["控制","三腳架、懸掛線","頭頂的線提起來"],rec:["恢復","睡眠、呼吸","身體從戒備變放心"]};
+function pupInit(){
+  if(!pupBuilt){pupBuilt=true;
+  const img=document.querySelector("#fig image").getAttribute("href");
+  $("#pup").innerHTML=`<div class="pgrid">
+   <div class="stage" id="stage"><svg viewBox="300 215 500 1200" id="pupsvg" role="img" aria-label="提線木偶">
+    <image href="${img}" x="0" y="0" width="1024" height="1536"/>
+    <rect id="night" x="0" y="0" width="1024" height="1536" fill="#1d2433" opacity="0"/>
+    <g id="moon" opacity="0"><circle cx="720" cy="300" r="34" fill="#f1d27a"/><circle cx="736" cy="288" r="31" fill="#2f3647"/></g>
+    <line x1="520" y1="240" x2="520" y2="1400" class="axis" id="axis"/>
+    <g id="bar"><rect x="430" y="236" width="180" height="14" rx="7" fill="#6b4f3a"/><rect x="514" y="222" width="14" height="46" rx="6" fill="#6b4f3a"/><text x="620" y="250" class="opt">操偶師＝大腦</text></g>
+    <path id="sMain" class="pstr"/>
+    <g id="heat"><circle cx="522" cy="548" r="34" class="hz"/><circle cx="470" cy="790" r="38" class="hz"/></g>
+    <g id="tight">
+     <path d="M498 520 Q525 545 550 578" class="tl"/><path d="M562 592 Q604 615 590 662" class="tl"/><path d="M574 792 Q596 846 562 906" class="tl"/>
+    </g>
+    <g id="weak">
+     <path id="w1" class="wl"/><path id="w2" class="wl"/>
+    </g>
+    <g id="labs"></g>
+   </svg>
+   <div class="pmsg" id="pmsg"></div></div>
+   <div class="pside">
+    <div class="ptitle"><span class="ey">第一性原理</span><h2>你身上的線</h2><p>痛，是因為有的線太緊、有的線沒力，大腦也還在戒備。點下面四個開關，一個一個打開。</p></div>
+    <div class="mylines">
+     <div><b>腰</b>久坐後站起來最痛<span><em class="t">太緊</em>髂腰肌　<em class="w">沒力</em>臀大肌</span></div>
+     <div><b>肩頸</b>斜方肌、肩鎖關節、鎖骨<span><em class="t">太緊</em>上斜方肌、胸小肌　<em class="w">沒力</em>下斜方肌</span></div>
+    </div>
+    <div class="psw">${LEV.map(l=>`<button class="sw ${l.c}" data-sw="${l.k}"><span class="dot"></span><b>${PTXT[l.k][0]}</b><small>${PTXT[l.k][1]}</small><i>${PTXT[l.k][2]}</i></button>`).join("")}</div>
+    <div class="pscore"><span>站直程度</span><div class="pbar"><i id="pbar"></i></div><b id="pscore"></b></div>
+    <button class="preset" id="pAll">四個一起打開</button>
+   </div></div>`;
+  $("#pup").addEventListener("click",e=>{const s=e.target.closest("[data-sw]");if(s){PON[s.dataset.sw]=!PON[s.dataset.sw];pupDraw()}
+    if(e.target.id==="pAll"){const all=Object.values(PON).every(Boolean);for(const k in PON)PON[k]=!all;pupDraw()}});
+  }
+  pupDraw();
+}
+function pupDraw(){
+  const{len,str,ctl,rec}=PON;
+  document.querySelectorAll(".sw").forEach(b=>b.classList.toggle("on",PON[b.dataset.sw]));
+  $("#tight").classList.toggle("off",len);
+  const bulge=str?0:46;
+  $("#w1").setAttribute("d",`M462 610 Q${446-bulge} 672 470 738`);$("#w2").setAttribute("d",`M452 862 Q${434-bulge} 926 470 992`);
+  $("#weak").classList.toggle("on",str);
+  const sl=ctl?0:40;$("#sMain").setAttribute("d",`M520 250 Q${520+sl} 320 ${ctl?520:534} 386`);$("#sMain").classList.toggle("on",ctl);
+  $("#bar").setAttribute("transform",`translate(0 ${ctl?-10:12})`);$("#axis").classList.toggle("on",ctl);
+  $("#heat").classList.toggle("calm",rec);$("#night").setAttribute("opacity",rec?.28:0);$("#moon").setAttribute("opacity",rec?1:0);
+  $("#labs").innerHTML=`<text x="604" y="560" class="plab l1t">${len?"鬆開了":"太緊"}</text><text x="604" y="850" class="plab l1t">${len?"鬆開了":"太緊"}</text>
+    <text x="${410-bulge}" y="680" class="plab l2t" style="text-anchor:end">${str?"撐住了":"沒力"}</text><text x="${400-bulge}" y="930" class="plab l2t" style="text-anchor:end">${str?"撐住了":"沒力"}</text>
+    <text x="${ctl?530:560}" y="330" class="plab l3t">${ctl?"提起來了":"懸掛線鬆掉"}</text>
+    <text x="566" y="500" class="plab l4t">${rec?"放心了":"戒備中"}</text>`;
+  const n=[len,str,ctl,rec].filter(Boolean).length,score=[12,35,58,80,100][n];
+  $("#pscore").textContent=score+"%";$("#pbar").style.width=score+"%";
+  $("#pAll").textContent=n===4?"全部關掉，回到現在的我":"四個一起打開";
+  const miss=LEV.filter(l=>!PON[l.k]);
+  const why={len:"太緊的線還在把你往前拉",str:"沒力的線撐不住，鬆開後又會被拉回去",ctl:"大腦還沒把你提直，白天的姿勢會一直拉歪",rec:"身體還在戒備，線一直繃著放不掉"};
+  $("#pmsg").innerHTML=n===4?"<b>站直了！</b>四個一起打開，痛才不會一直回來。":n===0?"<b>現在的你：</b>前面太緊、後面沒力、懸掛線鬆掉、身體在戒備。":`<b>好一點了，但還差：</b>${miss.map(l=>`${l.n}（${why[l.k]}）`).join("；")}`;
+}
 // ===== 目標視角 =====
 const LEV=[
  {k:"len",n:"長度",c:"l1",d:"太緊的放鬆、拉長",cols:"部位桌的「鬆＋伸」",prin:"肌肉太緊，會把骨頭拉歪。鬆：對肌肉施壓、加熱，讓它放下戒備。伸：把肌肉兩端拉遠，停在微痠的地方慢慢吐氣 30 秒以上。",
@@ -611,13 +748,15 @@ function openLever(k){
 }
 function lightParts(list){document.querySelectorAll(".dot").forEach(e=>e.classList.toggle("on",list.includes(+e.dataset.p)));}
 function view(v){
-  $("#goals").hidden=v!=="goal";$("#table").hidden=v!=="table";
-  $("#tGoal").classList.toggle("on",v==="goal");$("#tTable").classList.toggle("on",v==="table");
+  $("#goals").hidden=v!=="goal";$("#table").hidden=v!=="table";$("#pup").hidden=v!=="pup";
+  $("#tGoal").classList.toggle("on",v==="goal");$("#tTable").classList.toggle("on",v==="table");$("#tPup").classList.toggle("on",v==="pup");
+  document.querySelector(".main").classList.toggle("solo",v==="pup");document.querySelector(".figbox").hidden=v==="pup";
+  if(v==="pup")pupInit();
   try{localStorage.setItem("bedview",v)}catch(e){}
   if(v==="goal")renderGoals();
   if(v==="table"){renderFilter();render();if(tgoal){const G=GOALS.find(x=>x.id===tgoal);lightParts(G.parts.map(PI));const f=PARTS.findIndex(p=>p.id===G.parts[G.parts.length-1]);}}
 }
-$("#tGoal").onclick=()=>view("goal");$("#tTable").onclick=()=>view("table");
+$("#tGoal").onclick=()=>view("goal");$("#tPup").onclick=()=>view("pup");$("#tTable").onclick=()=>view("table");
 document.addEventListener("input",e=>{const gi=e.target.dataset.gi;if(gi!==undefined){notes[gi]=e.target.value;persist()}});
 document.addEventListener("click",e=>{
   if(e.target.id==="scene"){openScene();return}
