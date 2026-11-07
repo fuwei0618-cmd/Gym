@@ -254,6 +254,37 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .row.dim{opacity:.28}
 .cell{transition:opacity .25s}
 @media (max-width:900px){.levrow{grid-template-columns:1fr 1fr}.order{grid-template-columns:1fr 1fr}}
+.gl2{display:flex;justify-content:space-between;align-items:baseline;font-size:.8rem;color:var(--mute)}
+.gl2 b{font-size:.68rem;letter-spacing:.2em;color:var(--chain);margin-right:8px;font-weight:600}
+.scbtn{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:4px 12px;font:inherit;font-size:.78rem;color:var(--chain);cursor:pointer}
+.rleg .rw{display:block;margin-top:3px;color:var(--ink);font-size:.68rem;line-height:1.4}
+.rleg b i{font-family:var(--body);font-size:.66rem}
+.order em{font-style:normal;color:var(--chain);font-weight:600}
+.wb{font-size:.68rem;color:#f0a796}
+.sheet.wide{width:min(680px,100%)}
+.scene{width:100%;height:auto;display:block;margin-top:10px}
+.scene .sky{fill:color-mix(in srgb,var(--s2) 10%,var(--bg))}
+.scene .sky2{fill:color-mix(in srgb,var(--s2) 10%,var(--bg))}
+.scene .moon{fill:#e8c56a}
+.scene .zz{font-size:13px;fill:var(--mute);font-style:italic}
+.scene .ground{stroke:var(--skinl);stroke-width:2}
+.scene .ghost{stroke:var(--s2);stroke-width:3;stroke-dasharray:5 6;opacity:.7}
+.scene .gtxt{font-size:11px;fill:var(--s2)}
+.scene .mast{stroke:var(--ink);stroke-width:7;stroke-linecap:round}
+.scene .rope{fill:none;stroke-linecap:round}
+.scene .tight{stroke:var(--s1);stroke-width:4.5}
+.scene .weak{stroke:var(--s4);stroke-width:2;stroke-dasharray:4 5}
+.scene .stake{fill:var(--skinl)}
+.scene .knot{fill:var(--chain)}
+.scene .badge circle{fill:var(--c)}
+.scene .badge text{fill:#fff;font-size:13px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+.scene .cap{font-size:11px;fill:var(--mute);text-anchor:middle}
+.scl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.scl div{background:var(--t);border-radius:10px;padding:8px 10px;font-size:.84rem;line-height:1.5}
+.scl i{font-style:normal;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--c);color:#fff;font-size:.72rem;font-weight:700;margin-right:6px}
+.scl b{color:var(--c);margin-right:6px;font-family:var(--display)}
+.scl em{display:block;font-style:normal;font-size:.72rem;color:var(--mute)}
+@media (max-width:560px){.scl{grid-template-columns:1fr}}
 </style>
 <div class="wrap">
 <header>
@@ -404,7 +435,7 @@ const key=(p,s,i)=>p+"|"+s+"|"+i;
 const $=s=>document.querySelector(s);
 const ph=(it,big)=>it.lab&&!it.img?it.lab:it.img&&THUMBS[it.img]?`<img src="${THUMBS[it.img]}" alt="">`:(it.sub==="徒手"||!it.img&&/徒手|呼吸|式|弓箭步/.test(it.n)?"徒手":"工具");
 function render(){
-  const TG=tgoal?GOALS.find(x=>x.id===tgoal):null,CW=TG?colW(TG):null,op=w=>w>=60?1:w>=30?.55:.25;
+  const TG=tgoal?GOALS.find(x=>x.id===tgoal):null,CW=TG?colW(TG):null,op=w=>w>=60?1:w>=40?.8:w>=20?.45:.22;
   document.querySelectorAll(".thead .th").forEach((th,i)=>{th.style.opacity=CW&&i>0?op(CW[i-1]):1});
   $("#rows").innerHTML=PARTS.map((p,pi)=>[p,pi]).reverse().map(([p,pi])=>`<div class="row ${TG&&!TG.parts.includes(p.id)?"dim":""}" id="r-${p.id}" data-p="${pi}">
    <div class="part" data-p="${pi}"><span class="n">${pi+1}</span><h3>${p.n}</h3><p>${p.why}</p></div>
@@ -472,10 +503,10 @@ const LEV=[
  {k:"rec",n:"恢復",c:"l4",d:"讓改變留下來",cols:"睡眠＋呼吸＋飲食",prin:"身體在休息時才改變。睡得好、呼吸往下沉，緊的地方才放得掉。小腹平主要看體脂和骨盆位置：體脂由飲食決定，練腹肌不會讓那一塊局部變瘦。",
   need:[["放鬆神經","睡前流程、360° 呼吸、熱敷","關燈躺著做呼吸就好"],["體脂","飲食（之後再整理）","—"]]}
 ];
-const RINGS=[{n:"舒服",d:"身體不扯後腿",v:"先放"},{n:"好用",d:"想做什麼都做得到",v:"再用對"},{n:"好看",d:"別人看得到的",v:"最後撐住"}];
+const RINGS=[{n:"舒服",d:"身體不扯後腿",v:"先放",w:"根源：身體一直在「戒備」。痛、緊、睡不好，常是同一個根源的三個樣子。"},{n:"好用",d:"想做什麼都做得到",v:"再用對",w:"活動範圍 × 控制 × 力量"},{n:"好看",d:"別人看得到的",v:"最後撐住",w:"骨架排列 × 體脂 × 肌肉"}];
 const GOALS=[
  {id:"pain",r:0,t:"肩頸腰不痛",mix:{len:80,str:50,ctl:50,rec:70},kw:{len:"鬆開肩頸、胸前、髂腰肌",str:"上背、臀、腹撐住",ctl:"不用腰和肩代償",rec:"熱敷、睡好"},parts:["neck","pec","tspine","lowback","abs","psoas"],test:"肩頸、腰的痠痛各打 0～10 分",ph:"例：肩頸 7／腰 4",now:1},
- {id:"loose",r:0,t:"隨時鬆弛",mix:{len:60,str:15,ctl:60,rec:95},kw:{len:"一天好幾次小小的鬆",ctl:"呼吸往下沉、肋骨收",rec:"給神經下班的訊號"},parts:["neck","abs"],test:"今天發現自己繃著的次數",ph:"例：5 次",now:1},
+ {id:"loose",r:0,t:"隨時鬆弛",mix:{len:60,str:15,ctl:60,rec:95},kw:{len:"一天好幾次小小的鬆",str:"撐得住就不用一直繃",ctl:"呼吸往下沉、肋骨收",rec:"給神經下班的訊號"},parts:["neck","pec","tspine","abs"],whole:1,test:"今天發現自己繃著的次數",ph:"例：5 次",now:1},
  {id:"sleep",r:0,t:"好睡",mix:{len:40,str:5,ctl:30,rec:100},kw:{len:"睡前鬆肩頸、腹部",ctl:"360° 呼吸",rec:"睡前流程、關燈放鬆"},parts:["neck","abs"],test:"幾點睡、半夜醒幾次",ph:"例：1:30 睡、醒 1 次",now:1},
  {id:"split",r:1,t:"一字馬",mix:{len:100,str:30,ctl:60,rec:40},kw:{len:"髖、腿後側、內側拉開",str:"拉開的範圍要撐得住",ctl:"吐氣放鬆再往下",rec:"洗完澡趁熱做"},parts:["psoas","leg","lowback"],test:"一字馬離地幾公分（前、側各記）",ph:"例：前 20／側 35"},
  {id:"agile",r:1,t:"靈活",mix:{len:60,str:40,ctl:80,rec:50},kw:{len:"關節每天走全範圍",str:"有力才輕盈",ctl:"每天動一動",rec:"睡飽"},parts:["tspine","psoas","foot"],test:"早上起床的精神 0～10 分（指標）",ph:"例：6 分"},
@@ -502,21 +533,21 @@ function renderGoals(){
   const rings=[87,137,186].map((r,i)=>`<circle class="rg r${i}" cx="200" cy="200" r="${r}"/><circle class="rg2" cx="200" cy="200" r="${r}"/>`).join("");
   const rlab=RINGS.map((rg,i)=>{const r=[70,122,172][i],a=52*Math.PI/180,x=200+r*Math.cos(a),y=200+r*Math.sin(a),w=58;return `<g class="rlg"><rect x="${x-w/2}" y="${y-11}" width="${w}" height="22" rx="11"/><text class="rl" x="${x}" y="${y}"><tspan class="rn">${"①②③"[i]}</tspan> ${rg.n}</text></g>`}).join("");
   const dots=GOALS.map(x=>{const [px,py,a]=gpos(x);const right=Math.cos(a)>-0.2;return `<g class="gd ${x.id===curGoal?"on":""} ${x.now?"now":""}" data-gsel="${x.id}"><circle cx="${px}" cy="${py}" r="${x.id===curGoal?9:6.5}"/><text x="${px+(right?11:-11)}" y="${py}" style="text-anchor:${right?"start":"end"}">${x.t}</text></g>`}).join("");
-  $("#goals").innerHTML=`<div class="levrow">${LEV.map(l=>`<button class="lv2 ${l.c}" data-lv="${l.k}"><b>${l.n}</b><span>${l.d}</span><em>部位桌：${LEVCOL[l.k]}</em></button>`).join("")}</div>
+  $("#goals").innerHTML=`<div class="gl2"><span><b>第一性原理</b>身體只有四個開關</span><button class="scbtn" id="scene">看情境圖 ›</button></div><div class="levrow">${LEV.map(l=>`<button class="lv2 ${l.c}" data-lv="${l.k}"><b>${l.n}</b><span>${l.d}</span><em>部位桌：${LEVCOL[l.k]}</em></button>`).join("")}</div>
    <div class="gwrap">
     <div class="cbox"><div class="compass"><svg viewBox="0 0 400 400" role="img" aria-label="漣漪羅盤">${quad}${rings}${rlab}<text class="core" x="200" y="196">享受</text><text class="core" x="200" y="214">人生</text>${dots}${qlab}</svg></div>
-     <div class="rleg">${RINGS.map((r,i)=>`<div><b>${"①②③"[i]} ${r.n}</b>${r.d}<i>${r.v}</i></div>`).join("")}</div></div>
+     <div class="rleg">${RINGS.map((r,i)=>`<div><b>${"①②③"[i]} ${r.n}<i>${r.v}</i></b>${r.d}<span class="rw">${r.w}</span></div>`).join("")}</div></div>
     <div class="mixer">
       <div class="mtitle"><span class="mring">${"①②③"[g.r]} ${RINGS[g.r].n}・${RINGS[g.r].v}</span><h2>${g.t}${g.now?`<span class="nowtag">現在主線</span>`:""}</h2></div>
       <div class="faders">${LEV.map(l=>{const v=g.mix[l.k];return `<div class="fd ${l.c}"><button class="fl" data-lv="${l.k}">${l.n}</button><div class="tr"><i style="height:${v}%"></i><b style="bottom:calc(${v}% - 9px)"></b></div><span class="fv">${v}</span><small>${g.kw[l.k]||"—"}</small></div>`}).join("")}</div>
       <div class="mmap"><span>對應部位桌</span>
-        <div class="mcols">${ST.map((s,si)=>`<i class="${s.c} ${cw[si]>=60?"hi":cw[si]>=30?"mid":"lo"}">${s.k}</i>`).join("")}</div>
-        <div class="mparts">${g.parts.map(id=>`<button class="pn" data-p="${PI(id)}" title="${PARTS[PI(id)].n}">${PI(id)+1}</button>`).join("")}</div></div>
+        <div class="mcols">${ST.map((s,si)=>`<i class="${s.c} ${cw[si]>=60?"hi":cw[si]>=40?"mid":"lo"}">${s.k}</i>`).join("")}</div>
+        ${g.whole?`<span class="wb">全身＋呼吸為主</span>`:""}<div class="mparts">${g.parts.map(id=>`<button class="pn" data-p="${PI(id)}" title="${PARTS[PI(id)].n}">${PI(id)+1}</button>`).join("")}</div></div>
       <div class="macts"><button class="mbtn" data-goal="${g.id}">怎麼做、自我檢查</button><button class="mbtn pri" data-tgo="${g.id}">用這個目標看部位桌 ›</button></div>
     </div>
    </div>
    <div class="order">
-     <div class="o1"><b>現在</b>① 三件一起做：肩頸腰不痛、隨時鬆弛、好睡。動作重疊，一套流程打三個。</div>
+     <div class="o1"><b>現在：① 三件一起做</b>睡前<em>鬆＋伸＋呼吸</em>；每天 2～3 個<em>醒</em>（收下巴、夾肩胛、橋式）；白天隨時<em>控制</em>；重訓課負責<em>練</em>。</div>
      <div><b>穩了再加</b>② 每週 1～2 次加一字馬和 HH 的準備。</div>
      <div><b>最後</b>③ 腹肌、小腹靠重訓和飲食，排在後面。</div>
      <div><b>保底 3 分</b>躺上床：360° 呼吸＋鬆最痛的地方。<button id="gFlow">我的流程 ›</button></div>
@@ -536,6 +567,37 @@ function openGoal(id){
     <div class="acts"><button class="btn ghost" data-a="x" style="flex:1">關閉</button></div></div>`;
   sc.onclick=ev=>{if(ev.target===sc||ev.target.dataset.a==="x"){sc.hidden=true;return}
     const p=ev.target.closest(".pn2");if(p){sc.hidden=true;view("table");pick(+p.dataset.p,true)}};
+}
+function openScene(){
+  const sc=$("#scrim");sc.hidden=false;
+  sc.innerHTML=`<div class="sheet wide" role="dialog" aria-modal="true"><div class="meta">第一性原理</div><h2>身體是一頂帳篷</h2>
+   <svg class="scene" viewBox="0 0 560 300" role="img" aria-label="帳篷桅杆的情境圖">
+    <rect x="0" y="0" width="560" height="300" rx="14" class="sky"/>
+    <circle cx="482" cy="58" r="22" class="moon"/><circle cx="492" cy="50" r="20" class="sky2"/>
+    <text x="440" y="100" class="zz">z z</text>
+    <line x1="0" y1="262" x2="560" y2="262" class="ground"/>
+    <line x1="280" y1="262" x2="280" y2="52" class="ghost"/>
+    <text x="288" y="44" class="gtxt">正位</text>
+    <path d="M280 262 L232 60" class="mast"/>
+    <path d="M232 60 L96 262" class="rope tight"/>
+    <path d="M232 60 Q360 210 470 262" class="rope weak"/>
+    <rect x="88" y="256" width="16" height="10" class="stake"/><rect x="462" y="256" width="16" height="10" class="stake"/>
+    <circle cx="232" cy="60" r="7" class="knot"/>
+    <g class="badge l1"><circle cx="138" cy="160" r="15"/><text x="138" y="160">1</text></g>
+    <g class="badge l2"><circle cx="398" cy="196" r="15"/><text x="398" y="196">2</text></g>
+    <g class="badge l3"><circle cx="196" cy="40" r="15"/><text x="196" y="40">3</text></g>
+    <g class="badge l4"><circle cx="440" cy="40" r="15"/><text x="440" y="40">4</text></g>
+    <text x="300" y="290" class="cap">桅杆＝骨架　繩子＝肌肉</text>
+   </svg>
+   <p class="how" style="margin-top:8px">桅杆歪掉，通常不是桅杆的錯，是兩邊的繩子不平衡：一邊太緊把它拉過去，另一邊沒力拉不回來。四個開關要一起調，桅杆才會站直。</p>
+   <div class="scl">
+    <div class="l1"><i>1</i><b>長度</b>這條繩太緊 → 放鬆、拉長。<em>部位桌：鬆・伸</em></div>
+    <div class="l2"><i>2</i><b>力量</b>這條繩沒力、鬆垮 → 練強。<em>部位桌：醒・練</em></div>
+    <div class="l3"><i>3</i><b>控制</b>大腦是營主，決定怎麼拉繩：足底三腳架、懸掛軸線、肋骨往下收。<em>白天隨時</em></div>
+    <div class="l4"><i>4</i><b>恢復</b>晚上收工，繩子才恢復彈性：睡眠、呼吸、飲食。<em>睡前流程</em></div>
+   </div>
+   <div class="acts"><button class="btn ghost" data-a="x" style="flex:1">關閉</button></div></div>`;
+  sc.onclick=ev=>{if(ev.target===sc||ev.target.dataset.a==="x")sc.hidden=true};
 }
 function openLever(k){
   const l=LEV.find(x=>x.k===k);const sc=$("#scrim");sc.hidden=false;
@@ -558,6 +620,7 @@ function view(v){
 $("#tGoal").onclick=()=>view("goal");$("#tTable").onclick=()=>view("table");
 document.addEventListener("input",e=>{const gi=e.target.dataset.gi;if(gi!==undefined){notes[gi]=e.target.value;persist()}});
 document.addEventListener("click",e=>{
+  if(e.target.id==="scene"){openScene();return}
   if(e.target.id==="gFlow"){fmode="night";openFlow()}
   if(e.target.id==="gFlow2"){fmode="gym";openFlow()}
   if(e.target.id==="gTable")view("table");
