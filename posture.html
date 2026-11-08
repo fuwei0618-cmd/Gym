@@ -519,6 +519,18 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .tk.new{box-shadow:inset 0 0 0 2px var(--s5)}
 .tk .why{font-size:.6rem;background:var(--s5);color:#fff;border-radius:99px;padding:0 6px}
 @media (max-width:700px){.route{grid-template-columns:1fr 1fr}}
+.stn{min-height:168px;justify-content:flex-start;border-width:2px}
+.stn.must{border:2px solid var(--chain)}
+.stn.done{border-style:solid}
+.stn .sn{margin-top:auto}
+.its{grid-template-columns:1fr;gap:6px}
+.its .tk{flex-direction:row;justify-content:flex-start;align-items:center;gap:8px;height:58px;padding:6px 8px;text-align:left;width:100%;box-sizing:border-box}
+.its .ti{flex:none;width:46px;height:46px;border-radius:10px}
+.its .ti img{max-height:40px!important;max-width:40px!important}
+.its .ti .hand{font-size:.6rem;letter-spacing:.05em}
+.its .tn{flex:1;min-width:0;font-size:.8rem}
+.its .tk .why{position:absolute;top:-6px;right:6px}
+.its .tk.add .ti{font-size:1.1rem}
 </style>
 <div class="wrap">
 <header>
@@ -787,7 +799,7 @@ function renderRx(){
   const S=stations(),C=conds(),done=doneSet();
   $("#rx").innerHTML=`<div class="q"><b>今天怎麼了？</b>${CONDS.map(([k,t])=>`<button class="cond ${C.includes(k)?"on":""}" data-cond="${k}">${t}</button>`).join("")}</div>
    <div class="route">${S.map((s,i)=>`<div class="col ${s.skip?"skip":""}"><button class="stn ${s.must?"must":""} ${stDone(s)?"done":""}" data-stn="${s.id}">
-     <span class="sc">${stDone(s)?"✓":i+1}</span><b>${s.t}</b><em>${s.skip?"今天跳過":s.tag}</em><small>${s.skip?"":s.d}</small>${s.keys.length&&!s.skip?`<span class="sn">${s.keys.length} 個</span>`:""}</button>
+     <span class="sc">${stDone(s)?"✓":i+1}</span><b>${s.t}</b><em>${s.skip?"今天跳過":s.tag}</em><small>${s.skip?"":s.d}</small><span class="sn">${s.keys.length&&!s.skip?s.keys.length+" 個":"&nbsp;"}</span></button>
      <div class="its">${s.keys.map(k=>{const o=itemOf(k),c=(s.src||{})[k];return `<button class="tk ${c?"new":""}" data-rk="${k}"><span class="ti ${ST[o.si].c}">${pic(o)}</span><span class="tn">${o.it.n}${o.it.sub&&o.it.sub!=="徒手"?`<small>${o.it.sub}</small>`:""}</span>${c?`<small class="why">${c}</small>`:""}</button>`}).join("")}${s.id==="mach"?`<div class="tk add"><span class="ti">鹽</span><span class="tn">鹽袋</span><small>待買</small></div>`:""}${s.id==="bath"?`<div class="tk add"><span class="ti">♨</span><span class="tn">熱水沖肩頸、腰</span></div>`:""}</div></div>`).join("")}</div>
    <div class="pains">${RXDEF.map(c=>`<button class="pain" data-pain="${c.id}"><b>${c.t}</b><span><em class="t">太緊</em>${c.tight}</span><span><em class="w">沒力</em>${c.weak}</span><i>看動作、換動作 ›</i></button>`).join("")}</div>`;
   rxHot(true);
