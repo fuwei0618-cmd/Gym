@@ -320,7 +320,9 @@ nav.tabs button.on span{font-weight:700}
 .confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--clay)}
 input[type=range]{accent-color:var(--moss-deep)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-.pgframe{position:fixed;left:0;top:0;width:100%;border:0;z-index:5;background:#ebe7df;display:block}
+.pgframe{display:block;width:100%;border:0;background:#ebe7df}
+html.pgmode .wrap,html.pgmode .fab,html.pgmode .rest{display:none!important}
+html.pgmode body{overflow:hidden}
 </style>
 
 <div class="wrap">
@@ -1237,8 +1239,8 @@ function vFigure(){
 }
 
 /* ---------- 體態桌（posture.html，跟 App 一起同步） ---------- */
-function vPosture(){return `<iframe id="pgFrame" class="pgframe" src="posture.html" title="體態桌"></iframe>`;}
-function pgSize(){const f=$("#pgFrame");if(f)f.style.height=Math.max(200,window.innerHeight-$("#tabs").offsetHeight)+"px";}
+function vPosture(){return "";}
+function pgSize(){const f=$("#pgFrame");if(f)f.style.height=Math.max(200,window.innerHeight-$("#tabs").offsetHeight-f.getBoundingClientRect().top)+"px";}
 window.addEventListener("resize",pgSize);
 window.addEventListener("message",e=>{
   if(e.origin!==location.origin||!e.data||!e.data.pg)return;
@@ -1251,13 +1253,14 @@ function render(){
   pendingRender=false;
   document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab||(b.dataset.tab==="today"&&tab==="timer")||(b.dataset.tab==="body"&&tab==="log")||(b.dataset.tab==="plan"&&tab==="yoga")));
   const _rv=document.getElementById("yriver"),_rs=_rv?_rv.scrollLeft:0,_fl=[...document.querySelectorAll(".ypc.flip")].map(x=>x.dataset.yflip);
-  if(tab==="posture"&&main.querySelector("#pgFrame")){pgSize();{const f=$("#pgFrame"),d=docs.get("pgtable");if(d&&f.contentWindow)f.contentWindow.postMessage({pg:"state",data:d},location.origin);}if(S&&S.stop)S.stop();$("#fab").hidden=true;return;}
+  document.documentElement.classList.toggle("pgmode",tab==="posture");
+  {let f=$("#pgFrame");if(tab==="posture"){if(!f){f=document.createElement("iframe");f.id="pgFrame";f.className="pgframe";f.title="體態桌";f.src="posture.html?v=1794109887";document.body.insertBefore(f,$("#tabs"));}else{const d=docs.get("pgtable");if(d&&f.contentWindow)f.contentWindow.postMessage({pg:"state",data:d},location.origin);}
+    f.hidden=false;pgSize();if(S&&S.stop)S.stop();$("#fab").hidden=true;return;}else if(f)f.hidden=true;}
   main.innerHTML=({today:vToday,log:vBody,plan:vPlan,body:vBody,move:vFigure,timer:vTimer,yoga:vYoga,posture:vPosture})[tab]();
   {const rv=document.getElementById("yriver");if(rv){rv.scrollLeft=_rs;_fl.forEach(k=>{const el=rv.querySelector(`[data-yflip="${k}"]`);if(el)el.classList.add("flip");});}document.body.style.overflow=document.querySelector(".ycard")?"hidden":"";}
   main.querySelectorAll("textarea.grow").forEach(t=>{t.style.height="auto";t.style.height=t.scrollHeight+"px";});
   if(tab==="move"&&$("#stageSlot")){const st=buildStage();$("#stageSlot").appendChild(st.el);if(st.start)st.start();stageApply();}
   else if(S&&S.stop)S.stop();
-  if(tab==="posture"){pgSize();document.body.style.overflow="hidden";}
   paintT();
   const fb=$("#fab"),fa={today:"fab-ex",plan:"plan-add",yoga:yNew?"":"y-new",body:"fab-body",log:"fab-body"}[tab]||"";fb.hidden=!fa;fb.dataset.act=fa;
 }
