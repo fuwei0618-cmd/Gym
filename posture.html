@@ -748,6 +748,10 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .gm i{font-style:normal;font-size:.66rem;color:var(--chain);margin-left:5px}
 .mchip small{opacity:.7}
 .compass svg{max-height:300px}
+.pg{display:flex;gap:4px;align-items:center;background:var(--bg);border-radius:99px;padding:3px}
+.pg .pb{border-color:transparent;background:var(--panel);padding:4px 11px;font-size:.8rem}
+.pg .pb.on{background:var(--ink);color:var(--bg)}
+.pb.xb{font-family:var(--display);font-weight:700;padding:4px 12px}.pb.xb small{font-family:var(--body);font-weight:400;font-size:.62rem;margin-left:4px;opacity:.7}
 </style>
 <div class="wrap">
 <header>
@@ -1179,19 +1183,19 @@ const PROBS=[
  {id:"waistp",n:"腰痛",mine:1,why:"久坐髂腰肌縮短，骨盆前倒，腰替臀出力",t:["髂腰肌","股四頭肌","豎脊肌"],w:["臀大肌","深層核心"],parts:["psoas","abs","lowback"]},
  {id:"rounded",n:"圓肩駝背",why:"胸前繃著把肩往前拉，背後撐不住",t:["胸大肌","胸小肌","鎖骨下肌"],w:["三角肌後束","下斜方肌","菱形肌","前鋸肌"],parts:["pec","tspine","arm"]},
  {id:"fhp",n:"脖子前傾",why:"頭往前伸，後頸和前頸一直繃著",t:["枕下肌群","胸鎖乳突肌","上斜方肌","斜角肌"],w:["深層頸屈肌","下斜方肌"],parts:["neck"]},
- {id:"apt",n:"骨盆前傾",why:"髖前繃著把骨盆往前拉，臀和核心睡著",t:["髂腰肌","股四頭肌","闊筋膜張肌・ITB","豎脊肌"],w:["臀大肌","深層核心"],parts:["psoas","abs","lowback"]},
- {id:"xleg",n:"X 型腿",why:"臀側睡著，膝蓋往內倒",t:["梨狀肌","闊筋膜張肌・ITB","內收肌"],w:["臀大肌","臀中肌","大腿後側"],parts:["leg","psoas"]},
+ {id:"apt",n:"骨盆前傾",why:"髖前繃著把骨盆往前拉，臀和核心沒力",t:["髂腰肌","股四頭肌","闊筋膜張肌・ITB","豎脊肌"],w:["臀大肌","深層核心"],parts:["psoas","abs","lowback"]},
+ {id:"xleg",n:"X 型腿",why:"臀側沒力，膝蓋往內倒",t:["梨狀肌","闊筋膜張肌・ITB","內收肌"],w:["臀大肌","臀中肌","大腿後側"],parts:["leg","psoas"]},
  {id:"ground",n:"腳踏實地",why:"足底三腳架沒站穩，整條鏈往上歪",t:["小腿後側","足底筋膜"],w:["足弓內在肌"],parts:["foot"]}];
 let probSel="neckp";
 const XMAP={neckp:"up",rounded:"up",fhp:"up",waistp:"lo",apt:"lo"};
 const XS={up:{t:[[480,525],[588,625]],w:[[566,512],[455,648]],tl:"後頸・上斜方肌 ↘ 胸前・胸小肌",wl:"前頸・深層頸屈肌 ↙ 背後・下斜方肌",name:"上交叉"},
  lo:{t:[[462,780],[578,905]],w:[[588,765],[445,915]],tl:"下背・豎脊肌 ↘ 髖前・髂腰肌、大腿前側",wl:"腹部・深層核心 ↙ 臀部・大腿後側",name:"下交叉"}};
 let xView=false,xSel="up";
-const XGRP={up:{n:"上交叉症候群",why:"後頸＋胸前繃著、前頸＋背後睡著：頭往前、肩往前圓",probs:["neckp","rounded","fhp"]},lo:{n:"下交叉症候群",why:"下背＋髖前繃著、腹部＋臀部睡著：骨盆往前倒、腰替臀出力",probs:["waistp","apt"]}};
+const XGRP={up:{n:"上交叉症候群",why:"後頸＋胸前要放鬆、前頸＋背後要加強：頭往前、肩往前圓",probs:["neckp","rounded","fhp"]},lo:{n:"下交叉症候群",why:"下背＋髖前要放鬆、腹部＋臀部要加強：骨盆往前倒、腰替臀出力",probs:["waistp","apt"]}};
 function xProb(){const g=XGRP[xSel],ps=g.probs.map(id=>PROBS.find(p=>p.id===id));const u=k=>[...new Set(ps.flatMap(p=>p[k]))];return {id:"x_"+xSel,n:g.n,why:g.why,t:u("t"),w:u("w"),parts:u("parts"),x:xSel};}
 function sideSvg(){const img=document.querySelector("#fig image").getAttribute("href");const P=probSel,on=xView?xSel:XMAP[P];
   const X=k=>{const x=XS[k],dim=on&&on!==k;return `<g class="xg ${dim?"dim":""}"><line x1="${x.t[0][0]}" y1="${x.t[0][1]}" x2="${x.t[1][0]}" y2="${x.t[1][1]}" class="xl t"/><line x1="${x.w[0][0]}" y1="${x.w[0][1]}" x2="${x.w[1][0]}" y2="${x.w[1][1]}" class="xl w"/>
-   <text x="${x.t[1][0]+14}" y="${x.t[1][1]}" class="xt t">繃著</text><text x="${x.w[0][0]+14}" y="${x.w[0][1]-6}" class="xt w">睡著</text></g>`};
+   <text x="${x.t[1][0]+14}" y="${x.t[1][1]}" class="xt t">放鬆</text><text x="${x.w[0][0]+14}" y="${x.w[0][1]-6}" class="xt w">加強</text></g>`};
   return `<svg viewBox="340 380 410 1060" class="sidesvg" preserveAspectRatio="xMidYMid slice"><image href="${img}" x="0" y="0" width="1024" height="1536"/><line x1="520" y1="390" x2="520" y2="1430" class="xplumb"/>${X("up")}${X("lo")}</svg>`;}
 const ORDER=["neck","arm","pec","tspine","lowback","abs","psoas","leg","foot"];
 function lineThrough(ms,cls){const pts=ms.filter(m=>ANP[m]);const side=s=>pts.filter(m=>s?ANP[m][0]>=380:ANP[m][0]<380).sort((a,b)=>ANP[a][1]-ANP[b][1]);
@@ -1207,14 +1211,13 @@ function renderBody(){
       <span class="bc">${L.filter(m=>m[1]==="t").map(m=>`<em class="t ${P&&P.t.includes(m[0])?"hit":""}">${m[0]}</em>`).join("")}</span>
       <span class="bc">${L.filter(m=>m[1]==="w").map(m=>`<em class="w ${P&&P.w.includes(m[0])?"hit":""}">${m[0]}</em>`).join("")}</span></button>`}).join("");
   const keys=(q,sis)=>sis.flatMap(si=>q.s[si].map((_,ii)=>q.id+"|"+si+"|"+ii));
-  $("#bodyp").innerHTML=`<div class="bprob"><div class="vsw"><button class="${xView?"":"on"}" data-xv="0">問題</button><button class="${xView?"on":""}" data-xv="1">上下交叉</button></div>
-   ${xView?["up","lo"].map(k=>`<button class="pb xb ${xSel===k?"on":""}" data-xs="${k}"><b>${k==="up"?"上交叉":"下交叉"}</b><span>${XGRP[k].probs.map(id=>PROBS.find(p=>p.id===id).n).join("・")}</span></button>`).join(""):`<b>想解決</b>${PROBS.map(x=>`<button class="pb ${x.mine?"mine":""} ${probSel===x.id?"on":""}" data-prob="${x.id}">${x.n}${XMAP[x.id]?`<i class="xi">${XMAP[x.id]==="up"?"上":"下"}</i>`:""}</button>`).join("")}`}</div>
+  $("#bodyp").innerHTML=`<div class="bprob">${[["up","上交叉"],["lo","下交叉"]].map(([k,t])=>`<span class="pg"><button class="pb xb ${xView&&xSel===k?"on":""}" data-xs="${k}">${t}<small>全部</small></button>${XGRP[k].probs.map(id=>{const x=PROBS.find(p=>p.id===id);return `<button class="pb ${x.mine?"mine":""} ${!xView&&probSel===id?"on":""}" data-prob="${id}">${x.n}</button>`}).join("")}</span>`).join("")}<span class="pg">${PROBS.filter(x=>!XMAP[x.id]).map(x=>`<button class="pb ${!xView&&probSel===x.id?"on":""}" data-prob="${x.id}">${x.n}</button>`).join("")}</span></div>
    <div class="b2grid">
     <div class="bana"><div class="bsd">${sideSvg()}<small>側面</small></div><svg class="bfull" viewBox="-30 60 825 960"><image href="${ANAT}" x="0" y="0" width="765" height="1024"/>${lines}${dots}</svg>
-     <div class="bleg"><span><i class="lt"></i>繃著 → 鬆開</span><span><i class="lw"></i>睡著 → 叫醒</span></div></div>
+     <div class="bleg"><span><i class="lt"></i>要放鬆</span><span><i class="lw"></i>要加強</span></div></div>
     <div class="bright">
-     ${P?`<div class="pwhy"><b>${P.n}</b>${P.why}${(P.x||XMAP[P.id])?`<div class="xw"><span class="k">${XS[P.x||XMAP[P.id]].name}</span><span class="t">繃著＼${XS[P.x||XMAP[P.id]].tl}</span><span class="w">睡著／${XS[P.x||XMAP[P.id]].wl}</span></div>`:`<div class="xw"><span class="k">正背面看</span>這個問題側面看不明顯，看右邊的肌肉圖</div>`}</div>`:""}
-     <div class="bhd"><span>部位　由上往下</span><span class="t">🔴 繃著</span><span class="w">🟣 睡著</span></div>
+     ${P?`<div class="pwhy"><b>${P.n}</b>${P.why}${(P.x||XMAP[P.id])?`<div class="xw"><span class="k">${XS[P.x||XMAP[P.id]].name}</span><span class="t">要放鬆＼${XS[P.x||XMAP[P.id]].tl}</span><span class="w">要加強／${XS[P.x||XMAP[P.id]].wl}</span></div>`:`<div class="xw"><span class="k">正背面看</span>這個問題側面看不明顯，看右邊的肌肉圖</div>`}</div>`:""}
+     <div class="bhd"><span>部位　由上往下</span><span class="t">🔴 要放鬆</span><span class="w">🟣 要加強</span></div>
      <div class="brows">${rows}</div>
      <div class="bdet">${p?`<div class="bdh"><b>${bodySel+1} ${p.n}</b><span>${p.why}</span><button data-tablego="${bodySel}">動作庫 ›</button></div>
        <div class="bdt"><div class="btiles2 t">${keys(p,[0,1]).map(bTile).join("")}</div><div class="btiles2 w">${keys(p,[2,3]).map(bTile).join("")}</div></div>`:`<p class="empty2">點上面一個部位，看要做的動作</p>`}</div>
@@ -1223,8 +1226,8 @@ function renderBody(){
 document.addEventListener("click",e=>{
   const gmb=e.target.closest("[data-gm]");if(gmb){openGM(gmb.dataset.gm);return}
   const xv=e.target.closest("[data-xv]");if(xv){xView=xv.dataset.xv==="1";if(!xView&&!probSel)probSel="neckp";bodySel=null;musSel=null;renderBody();return}
-  const xs=e.target.closest("[data-xs]");if(xs){xSel=xs.dataset.xs;bodySel=null;musSel=null;renderBody();return}
-  const pr=e.target.closest("[data-prob]");if(pr){probSel=probSel===pr.dataset.prob?null:pr.dataset.prob;bodySel=null;musSel=null;renderBody();return}
+  const xs=e.target.closest("[data-xs]");if(xs){xView=true;xSel=xs.dataset.xs;bodySel=null;musSel=null;renderBody();return}
+  const pr=e.target.closest("[data-prob]");if(pr){xView=false;probSel=pr.dataset.prob;bodySel=null;musSel=null;renderBody();return}
   const bp=e.target.closest("[data-bp]");if(bp){bodySel=bodySel===+bp.dataset.bp?null:+bp.dataset.bp;musSel=null;renderBody();return}
   const bm=e.target.closest("[data-bmu]");if(bm&&!$("#bodyp").hidden){const m=bm.dataset.bmu;musSel=musSel===m?null:m;if(musSel){const pid=Object.keys(MUS).find(k=>MUS[k].some(x=>x[0]===m));if(pid)bodySel=PI(pid);}renderBody();return}
   const bk=e.target.closest("[data-bk]");if(bk){openItem(bk.dataset.bk);return}
@@ -1248,8 +1251,8 @@ function anatDraw(){
   $("#pup").innerHTML=`${bmodes(pupMode)}
    <div class="pgrid ang"><div class="anbox"><svg viewBox="0 30 765 980" id="ansvg"><image href="${ANAT}" x="0" y="0" width="765" height="1024"/>${dots}<text x="200" y="1005" class="anl">正面</text><text x="575" y="1005" class="anl">背面</text></svg></div>
    <div class="pside"><div class="ptitle"><span class="ey">懂</span><h2>肌肉圖</h2><p>點圖上的點，看這條肌肉是太緊還是沒力，以及哪些動作在處理它。</p></div>
-    <div class="anf">${[["","全部"],["neck","肩頸痛"],["waist","腰痛"]].map(([k,t])=>`<button data-anf="${k}">${t}</button>`).join("")}<span class="lg"><i class="t"></i>繃著<i class="w"></i>睡著</span></div>
-    ${anSel?`<div class="ansel"><h3>${anSel}<em class="${muState(anSel)}">${{t:"繃著",w:"睡著"}[muState(anSel)]||""}</em></h3><small>${muState(anSel)==="t"?"要做：鬆、伸":"要做：醒、練"}</small>
+    <div class="anf">${[["","全部"],["neck","肩頸痛"],["waist","腰痛"]].map(([k,t])=>`<button data-anf="${k}">${t}</button>`).join("")}<span class="lg"><i class="t"></i>要放鬆<i class="w"></i>要加強</span></div>
+    ${anSel?`<div class="ansel"><h3>${anSel}<em class="${muState(anSel)}">${{t:"要放鬆",w:"要加強"}[muState(anSel)]||""}</em></h3><small>${muState(anSel)==="t"?"要做：鬆、伸":"要做：醒、練"}</small>
       ${mv.map(o=>`<button class="anm" data-amk="${o.k}"><span class="st ${ST[o.si].c}">${ST[o.si].k}</span>${o.it.n}${o.it.sub&&o.it.sub!=="徒手"?`<small>${o.it.sub}</small>`:""}</button>`).join("")||`<p class="empty2">動作庫裡還沒有處理它的動作</p>`}</div>`:`<div class="ansel empty2">點一個肌肉點</div>`}
    </div></div>`;
 }
@@ -1278,8 +1281,8 @@ function pupInit(){
    <div class="pside">
     <div class="ptitle"><span class="ey">第一性原理</span><h2>你身上的線</h2><p>痛，是因為有的線太緊、有的線沒力，大腦也還在戒備。點下面四個開關，一個一個打開。</p></div>
     <div class="mylines">
-     <div><b>腰</b>久坐後站起來最痛<span><em class="t">繃著</em>髂腰肌　<em class="w">睡著</em>臀大肌</span></div>
-     <div><b>肩頸</b>斜方肌、肩鎖關節、鎖骨<span><em class="t">繃著</em>上斜方肌、胸小肌　<em class="w">睡著</em>下斜方肌</span></div>
+     <div><b>腰</b>久坐後站起來最痛<span><em class="t">要放鬆</em>髂腰肌　<em class="w">要加強</em>臀大肌</span></div>
+     <div><b>肩頸</b>斜方肌、肩鎖關節、鎖骨<span><em class="t">要放鬆</em>上斜方肌、胸小肌　<em class="w">要加強</em>下斜方肌</span></div>
     </div>
     <div class="psw">${LEV.map(l=>`<button class="sw ${l.c}" data-sw="${l.k}"><span class="dot"></span><b>${PTXT[l.k][0]}</b><small>${PTXT[l.k][1]}</small><i>${PTXT[l.k][2]}</i></button>`).join("")}</div>
     <div class="pscore"><span>站直程度</span><div class="pbar"><i id="pbar"></i></div><b id="pscore"></b></div>
@@ -1300,8 +1303,8 @@ function pupDraw(){
   const sl=ctl?0:40;$("#sMain").setAttribute("d",`M520 250 Q${520+sl} 320 ${ctl?520:534} 386`);$("#sMain").classList.toggle("on",ctl);
   $("#bar").setAttribute("transform",`translate(0 ${ctl?-10:12})`);$("#axis").classList.toggle("on",ctl);
   $("#heat").classList.toggle("calm",rec);$("#night").setAttribute("opacity",rec?.28:0);$("#moon").setAttribute("opacity",rec?1:0);
-  $("#labs").innerHTML=`<text x="604" y="560" class="plab l1t">${len?"鬆開了":"繃著"}</text><text x="604" y="850" class="plab l1t">${len?"鬆開了":"繃著"}</text>
-    <text x="${410-bulge}" y="680" class="plab l2t" style="text-anchor:end">${str?"醒來了":"睡著"}</text><text x="${400-bulge}" y="930" class="plab l2t" style="text-anchor:end">${str?"醒來了":"睡著"}</text>
+  $("#labs").innerHTML=`<text x="604" y="560" class="plab l1t">${len?"鬆開了":"要放鬆"}</text><text x="604" y="850" class="plab l1t">${len?"鬆開了":"要放鬆"}</text>
+    <text x="${410-bulge}" y="680" class="plab l2t" style="text-anchor:end">${str?"撐住了":"要加強"}</text><text x="${400-bulge}" y="930" class="plab l2t" style="text-anchor:end">${str?"撐住了":"要加強"}</text>
     <text x="${ctl?530:560}" y="330" class="plab l3t">${ctl?"提起來了":"懸掛線鬆掉"}</text>
     <text x="566" y="500" class="plab l4t">${rec?"放心了":"戒備中"}</text>`;
   const n=[len,str,ctl,rec].filter(Boolean).length,score=[12,35,58,80,100][n];
