@@ -629,6 +629,10 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .anm small{color:var(--mute);font-size:.72rem;margin-left:4px}
 .showmu{border:0;background:none;color:var(--chain);font:inherit;font-size:.74rem;cursor:pointer;margin-left:auto}
 .pgrid.ang{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+.tk.ytog{border:1.5px dashed var(--s2);background:var(--panel)}
+.tk.ytog .ti{font-size:1.3rem;background:var(--s2t)}
+.tk.ylesson{box-shadow:inset 0 0 0 2px var(--s2)}
+.tk.ylesson .ti{background:var(--s2);color:#fff;font-family:var(--display);font-size:.85rem}
 </style>
 <div class="wrap">
 <header>
@@ -885,6 +889,8 @@ let rxSel="neck",rxPick=null;
 const SECS=[60,60,40,40];
 const CONDS=[["sit","坐很久"],["phone","打字、滑手機多"],["hh","跳完 HH・穿跟鞋"],["tired","好累只想躺"]];
 const PCAT={pec:"a",psoas:"a",neck:"m",tspine:"m",lowback:"m",abs:"m",foot:"m",leg:"m",arm:"s"};
+let LESSON=null;
+function yogaOn(){const c=notes.yoga||{};return c.day===today()&&c.on;}
 function conds(){const c=notes.cond||{};return c.day===today()?(c.on||[]):[];}
 function stations(){
   const W=RXDEF[0],N=RXDEF[1],g=(c,s)=>rxGet(c,s),C=conds(),tired=C.includes("tired");
@@ -892,7 +898,7 @@ function stations(){
    {id:"mach",t:"機器",tag:"加分",d:"同時開・15 分",keys:["lowback|0|0","neck|0|0"],lab:{"lowback|0|0":{min:"15 分"},"neck|0|0":{n:"加熱披肩＋鹽袋",sub:"跟按摩椅同時",min:"同時",note:"鹽袋待買"}}},
    {id:"loose",t:"鬆",tag:"必做",d:tired?"今天只做保底":"洗澡前 5 分",keys:[BREATH,g(N,0),"psoas|0|0"],must:1,lab:{[BREATH]:{min:"1 分"},[g(N,0)]:{min:"左右各 1 分"},"psoas|0|0":{min:"左右各 1 分",note:"待買，先用筋膜球"}}},
    {id:"bath",t:"洗澡",tag:"加分",d:"熱水就是熱敷",keys:[]},
-   {id:"str",t:"伸展",tag:"加分",d:"洗完趁熱",keys:[g(N,1),g(W,1),g(N,2),g(W,2)]}];
+   {id:"str",t:"伸展",tag:"加分",d:yogaOn()?"瑜伽跟課":"洗完趁熱・快版",keys:yogaOn()?[]:[g(N,1),g(W,1),g(N,2),g(W,2)],yoga:yogaOn()}];
   if(!tired){
    const add=(si,k,c)=>{S[si].keys.push(k);(S[si].src=S[si].src||{})[k]=c;};
    if(C.includes("sit"))add(1,"psoas|0|2","坐很久"),add(3,"lowback|2|0","坐很久");
@@ -918,7 +924,7 @@ function renderRx(){
   $("#rx").innerHTML=`<div class="q"><b>今天怎麼了？</b>${CONDS.map(([k,t])=>`<button class="cond ${C.includes(k)?"on":""}" data-cond="${k}">${t}</button>`).join("")}</div>
    <div class="route">${S.map((s,i)=>`<div class="col ${s.skip?"skip":""}"><button class="stn ${s.must?"must":""} ${stDone(s)?"done":""}" data-stn="${s.id}">
      <span class="sc">${stDone(s)?"✓":i+1}</span><b>${s.t}</b><em>${s.skip?"今天跳過":s.tag}</em><small>${s.skip?"":s.d}</small><span class="sn">${s.keys.length&&!s.skip?s.keys.length+" 個":"&nbsp;"}</span></button>
-     <div class="its">${s.keys.map(k=>{const o=itemOf(k),c=(s.src||{})[k];return `<button class="tk ${c?"new":""} ${rxPick===k?"sel":""}" data-rpick="${k}">${(()=>{const L=(s.lab||{})[k]||{},nm=L.n||o.it.n,sb=L.sub||(o.it.sub&&o.it.sub!=="徒手"?o.it.sub:""),nt=L.note||(o.it.mark?o.it.mark:"");return `<span class="ti ${ST[o.si].c}">${pic(o)}</span><span class="tn">${nm}${sb?`<small>${sb}</small>`:""}</span>${L.min?`<span class="tmin">${L.min}</span>`:""}${nt?`<small class="tnote">${nt}</small>`:""}`})()}${c?`<small class="why">${c}</small>`:""}</button>`}).join("")}${s.id==="bath"?`<div class="tk add"><span class="ti">♨</span><span class="tn">熱水沖肩頸、腰</span></div>`:""}</div></div>`).join("")}</div>
+     <div class="its">${s.id==="str"&&!s.skip?`<button class="tk ytog" data-ytog="1"><span class="ti">${s.yoga?"⇄":"🧘"}</span><span class="tn">${s.yoga?"改回快版":"今天跟課"}</span></button>`:""}${s.yoga?`<button class="tk ylesson" data-ylesson="1"><span class="ti">瑜伽</span><span class="tn">${LESSON?`第 ${LESSON.n} 堂<small>${LESSON.name}</small>`:"目前那一堂<small>打開課卡</small>"}</span>${LESSON&&LESSON.min?`<span class="tmin">${LESSON.min} 分</span>`:""}</button>`:""}${s.keys.map(k=>{const o=itemOf(k),c=(s.src||{})[k];return `<button class="tk ${c?"new":""} ${rxPick===k?"sel":""}" data-rpick="${k}">${(()=>{const L=(s.lab||{})[k]||{},nm=L.n||o.it.n,sb=L.sub||(o.it.sub&&o.it.sub!=="徒手"?o.it.sub:""),nt=L.note||(o.it.mark?o.it.mark:"");return `<span class="ti ${ST[o.si].c}">${pic(o)}</span><span class="tn">${nm}${sb?`<small>${sb}</small>`:""}</span>${L.min?`<span class="tmin">${L.min}</span>`:""}${nt?`<small class="tnote">${nt}</small>`:""}`})()}${c?`<small class="why">${c}</small>`:""}</button>`}).join("")}${s.id==="bath"?`<div class="tk add"><span class="ti">♨</span><span class="tn">熱水沖肩頸、腰</span></div>`:""}</div></div>`).join("")}</div>
    <div class="pains">${RXDEF.map(c=>`<button class="pain" data-pain="${c.id}"><b>${c.t}</b><span><em class="t">太緊</em>${c.tight}</span><span><em class="w">沒力</em>${c.weak}</span><i>看動作、換動作 ›</i></button>`).join("")}</div>`;
   rxHot(true);
   document.querySelectorAll(".dot").forEach(d=>d.classList.remove("focus"));
@@ -940,7 +946,8 @@ function openPain(id){
 }
 // 跟著做
 let PL=null,tick=null;
-function playOpen(sid){const s=stations().find(x=>x.id===sid);if(s.skip)return;
+function alertBox(t){const sc=$("#scrim");sc.hidden=false;sc.innerHTML=`<div class="sheet"><p class="how">${t}</p><div class="acts"><button class="btn" data-a="x">好</button></div></div>`;sc.onclick=ev=>{if(ev.target===sc||ev.target.dataset.a==="x")sc.hidden=true};}
+function playOpen(sid){const s=stations().find(x=>x.id===sid);if(s.skip)return;if(s.yoga){if(INAPP)try{parent.postMessage({pg:"openLesson"},location.origin)}catch(x){}return}
   if(!s.keys.length){const d=doneSet().slice(),id=sid+"|*";notes.done={day:today(),keys:d.includes(id)?d.filter(x=>x!==id):[...d,id]};persist();renderRx();return}
   PL={s,i:0,keys:s.keys,t:0,run:false};playDraw();}
 function playDraw(){
@@ -980,6 +987,8 @@ document.addEventListener("click",e=>{
   const cd=e.target.closest("[data-cond]");if(cd){let on=conds().slice();const k=cd.dataset.cond;on=on.includes(k)?on.filter(x=>x!==k):[...on,k];notes.cond={day:today(),on};persist();renderRx();return}
   const rp=e.target.closest("[data-rpick]");if(rp){const k=rp.dataset.rpick;if(rxPick===k){openItem(k);return}rxPick=k;renderRx();return}
   if(e.target.id==="capGo"&&rxPick){openItem(rxPick);return}
+  if(e.target.closest("[data-ytog]")){notes.yoga={day:today(),on:!yogaOn()};persist();renderRx();return}
+  if(e.target.closest("[data-ylesson]")){if(INAPP)try{parent.postMessage({pg:"openLesson"},location.origin)}catch(x){}else alertBox("在健身房 App 裡打開，會直接跳到瑜伽課卡。");return}
   const sn=e.target.closest("[data-stn]");if(sn){playOpen(sn.dataset.stn);return}
   const pn=e.target.closest("[data-pain]");if(pn){openPain(pn.dataset.pain);return}
   const s=e.target.closest("[data-swap]");if(s){const [c,st]=s.dataset.swap.split("|");startSwap(c,st);return}
@@ -1247,7 +1256,7 @@ let v0="rx";
 view(v0);pick(0,false);
 
 if(INAPP){
-  window.addEventListener("message",e=>{if(e.origin!==location.origin||!e.data||e.data.pg!=="state")return;loaded=true;if(e.data.data&&JSON.stringify({flow:e.data.data.flow,notes:e.data.data.notes})===JSON.stringify({flow,notes}))return;if(e.data.data){applyState(e.data.data);try{localStorage.setItem("origina.posture",JSON.stringify(e.data.data))}catch(x){}}render();if(!$("#goals").hidden)renderGoals();});
+  window.addEventListener("message",e=>{if(e.origin===location.origin&&e.data&&e.data.pg==="lesson"){LESSON=e.data.info;if(!$("#rx").hidden)renderRx();return}if(e.origin!==location.origin||!e.data||e.data.pg!=="state")return;loaded=true;if(e.data.data&&JSON.stringify({flow:e.data.data.flow,notes:e.data.data.notes})===JSON.stringify({flow,notes}))return;if(e.data.data){applyState(e.data.data);try{localStorage.setItem("origina.posture",JSON.stringify(e.data.data))}catch(x){}}render();if(!$("#goals").hidden)renderGoals();});
   try{parent.postMessage({pg:"get"},location.origin)}catch(e){}
   document.documentElement.classList.add("inapp");
 }

@@ -1244,6 +1244,9 @@ function pgSize(){const f=$("#pgFrame");if(f)f.style.height=Math.max(200,window.
 window.addEventListener("resize",pgSize);
 window.addEventListener("message",e=>{
   if(e.origin!==location.origin||!e.data||!e.data.pg)return;
+  const curL=()=>{try{const c=curCourse(myYoga());let i=c.lessons.findIndex(l=>l.status==="doing");if(i<0)i=c.lessons.findIndex(l=>l.status!=="done");if(i<0)i=0;return {c,i,l:c.lessons[i]};}catch(err){return null}};
+  if((e.data.pg==="get"||e.data.pg==="lessonInfo")&&e.source){const L=curL();e.source.postMessage({pg:"lesson",info:L?{course:L.c.name,n:L.i+1,name:L.l.name,min:L.l.min||""}:null},location.origin);}
+  if(e.data.pg==="openLesson"){const L=curL();window.__pgRet=1;tab="yoga";yCard=L?L.i:0;render();window.scrollTo(0,0);return;}
   if(e.data.pg==="get"&&e.source)e.source.postMessage({pg:"state",data:docs.get("pgtable")||null},location.origin);
   else if(e.data.pg==="set"&&e.data.data)writeSoon("pgtable",{type:"pgtable",flow:e.data.data.flow||[],notes:e.data.data.notes||{}});
 });
@@ -1251,10 +1254,12 @@ window.addEventListener("message",e=>{
 let pendingRender=false;
 function render(){
   pendingRender=false;
+  if(window.__pgRet&&tab==="yoga"&&yCard==null){window.__pgRet=0;tab="posture";}
+  if(tab!=="yoga")window.__pgRet=0;
   document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab||(b.dataset.tab==="today"&&tab==="timer")||(b.dataset.tab==="body"&&tab==="log")||(b.dataset.tab==="plan"&&tab==="yoga")));
   const _rv=document.getElementById("yriver"),_rs=_rv?_rv.scrollLeft:0,_fl=[...document.querySelectorAll(".ypc.flip")].map(x=>x.dataset.yflip);
   document.documentElement.classList.toggle("pgmode",tab==="posture");
-  {let f=$("#pgFrame");if(tab==="posture"){if(!f){f=document.createElement("iframe");f.id="pgFrame";f.className="pgframe";f.title="體態桌";f.src="posture.html?v=1794124352";document.body.insertBefore(f,$("#tabs"));}else{const d=docs.get("pgtable");if(d&&f.contentWindow)f.contentWindow.postMessage({pg:"state",data:d},location.origin);}
+  {let f=$("#pgFrame");if(tab==="posture"){if(!f){f=document.createElement("iframe");f.id="pgFrame";f.className="pgframe";f.title="體態桌";f.src="posture.html?v=1794124850";document.body.insertBefore(f,$("#tabs"));}else{const d=docs.get("pgtable");if(d&&f.contentWindow)f.contentWindow.postMessage({pg:"state",data:d},location.origin);}
     f.hidden=false;pgSize();if(S&&S.stop)S.stop();$("#fab").hidden=true;return;}else if(f)f.hidden=true;}
   main.innerHTML=({today:vToday,log:vBody,plan:vPlan,body:vBody,move:vFigure,timer:vTimer,yoga:vYoga,posture:vPosture})[tab]();
   {const rv=document.getElementById("yriver");if(rv){rv.scrollLeft=_rs;_fl.forEach(k=>{const el=rv.querySelector(`[data-yflip="${k}"]`);if(el)el.classList.add("flip");});}document.body.style.overflow=document.querySelector(".ycard")?"hidden":"";}
