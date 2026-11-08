@@ -736,6 +736,11 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .xg.dim{opacity:.18}
 .xw{display:flex;flex-direction:column;gap:2px;margin-top:4px;font-size:.76rem}
 .xw .k{font-family:var(--display);font-weight:700}.xw .t{color:#b8432f}.xw .w{color:#7a3f58}
+.vsw{display:flex;background:var(--bg);border-radius:99px;padding:3px;margin-right:6px}
+.vsw button{border:0;background:none;border-radius:99px;padding:5px 12px;font:inherit;font-size:.82rem;color:var(--mute);cursor:pointer}
+.vsw button.on{background:var(--chain);color:#fff}
+.pb.xb{display:flex;align-items:baseline;gap:8px;padding:6px 16px}.pb.xb b{font-family:var(--display);font-size:1rem}.pb.xb span{font-size:.72rem;opacity:.75}
+.xi{font-style:normal;font-size:.6rem;margin-left:4px;border:1px solid currentColor;border-radius:4px;padding:0 3px;opacity:.7}
 </style>
 <div class="wrap">
 <header>
@@ -1173,7 +1178,10 @@ let probSel="neckp";
 const XMAP={neckp:"up",rounded:"up",fhp:"up",waistp:"lo",apt:"lo"};
 const XS={up:{t:[[480,525],[588,625]],w:[[566,512],[455,648]],tl:"後頸・上斜方肌 ↘ 胸前・胸小肌",wl:"前頸・深層頸屈肌 ↙ 背後・下斜方肌",name:"上交叉"},
  lo:{t:[[462,780],[578,905]],w:[[588,765],[445,915]],tl:"下背・豎脊肌 ↘ 髖前・髂腰肌、大腿前側",wl:"腹部・深層核心 ↙ 臀部・大腿後側",name:"下交叉"}};
-function sideSvg(){const img=document.querySelector("#fig image").getAttribute("href");const P=probSel,on=XMAP[P];
+let xView=false,xSel="up";
+const XGRP={up:{n:"上交叉症候群",why:"後頸＋胸前繃著、前頸＋背後睡著：頭往前、肩往前圓",probs:["neckp","rounded","fhp"]},lo:{n:"下交叉症候群",why:"下背＋髖前繃著、腹部＋臀部睡著：骨盆往前倒、腰替臀出力",probs:["waistp","apt"]}};
+function xProb(){const g=XGRP[xSel],ps=g.probs.map(id=>PROBS.find(p=>p.id===id));const u=k=>[...new Set(ps.flatMap(p=>p[k]))];return {id:"x_"+xSel,n:g.n,why:g.why,t:u("t"),w:u("w"),parts:u("parts"),x:xSel};}
+function sideSvg(){const img=document.querySelector("#fig image").getAttribute("href");const P=probSel,on=xView?xSel:XMAP[P];
   const X=k=>{const x=XS[k],dim=on&&on!==k;return `<g class="xg ${dim?"dim":""}"><line x1="${x.t[0][0]}" y1="${x.t[0][1]}" x2="${x.t[1][0]}" y2="${x.t[1][1]}" class="xl t"/><line x1="${x.w[0][0]}" y1="${x.w[0][1]}" x2="${x.w[1][0]}" y2="${x.w[1][1]}" class="xl w"/>
    <text x="${x.t[1][0]+14}" y="${x.t[1][1]}" class="xt t">繃著</text><text x="${x.w[0][0]+14}" y="${x.w[0][1]-6}" class="xt w">睡著</text></g>`};
   return `<svg viewBox="340 380 410 1060" class="sidesvg" preserveAspectRatio="xMidYMid slice"><image href="${img}" x="0" y="0" width="1024" height="1536"/><line x1="520" y1="390" x2="520" y2="1430" class="xplumb"/>${X("up")}${X("lo")}</svg>`;}
@@ -1181,7 +1189,7 @@ const ORDER=["neck","arm","pec","tspine","lowback","abs","psoas","leg","foot"];
 function lineThrough(ms,cls){const pts=ms.filter(m=>ANP[m]);const side=s=>pts.filter(m=>s?ANP[m][0]>=380:ANP[m][0]<380).sort((a,b)=>ANP[a][1]-ANP[b][1]);
   return [side(0),side(1)].filter(l=>l.length>1).map(l=>`<polyline class="pl ${cls}" points="${l.map(m=>ANP[m].join(",")).join(" ")}"/>`).join("");}
 function renderBody(){
-  const P=PROBS.find(x=>x.id===probSel);const p=bodySel!=null?PARTS[bodySel]:null;
+  const P=xView?xProb():PROBS.find(x=>x.id===probSel);const p=bodySel!=null?PARTS[bodySel]:null;
   const lit=new Set(P?[...P.t,...P.w]:[]);if(p)(MUS[p.id]||[]).forEach(m=>lit.add(m[0]));
   const dots=Object.entries(ANP).map(([m,[x,y]])=>{const st=muState(m),on=lit.has(m),sel=musSel===m;const lab=on||sel;const right=(x<380&&x>200)||x>575;
     return `<g class="an ${st} ${on?"on":""} ${sel?"sel":""} ${!on?"dim":""}" data-bmu="${m}"><circle cx="${x}" cy="${y}" r="${sel?12:on?9:6}"/>${lab?`<text x="${x+(right?14:-14)}" y="${y}" style="text-anchor:${right?"start":"end"}">${m}</text>`:""}</g>`}).join("");
@@ -1191,12 +1199,13 @@ function renderBody(){
       <span class="bc">${L.filter(m=>m[1]==="t").map(m=>`<em class="t ${P&&P.t.includes(m[0])?"hit":""}">${m[0]}</em>`).join("")}</span>
       <span class="bc">${L.filter(m=>m[1]==="w").map(m=>`<em class="w ${P&&P.w.includes(m[0])?"hit":""}">${m[0]}</em>`).join("")}</span></button>`}).join("");
   const keys=(q,sis)=>sis.flatMap(si=>q.s[si].map((_,ii)=>q.id+"|"+si+"|"+ii));
-  $("#bodyp").innerHTML=`<div class="bprob"><b>想解決</b>${PROBS.map(x=>`<button class="pb ${x.mine?"mine":""} ${probSel===x.id?"on":""}" data-prob="${x.id}">${x.n}</button>`).join("")}</div>
+  $("#bodyp").innerHTML=`<div class="bprob"><div class="vsw"><button class="${xView?"":"on"}" data-xv="0">問題</button><button class="${xView?"on":""}" data-xv="1">上下交叉</button></div>
+   ${xView?["up","lo"].map(k=>`<button class="pb xb ${xSel===k?"on":""}" data-xs="${k}"><b>${k==="up"?"上交叉":"下交叉"}</b><span>${XGRP[k].probs.map(id=>PROBS.find(p=>p.id===id).n).join("・")}</span></button>`).join(""):`<b>想解決</b>${PROBS.map(x=>`<button class="pb ${x.mine?"mine":""} ${probSel===x.id?"on":""}" data-prob="${x.id}">${x.n}${XMAP[x.id]?`<i class="xi">${XMAP[x.id]==="up"?"上":"下"}</i>`:""}</button>`).join("")}`}</div>
    <div class="b2grid">
     <div class="bana"><div class="bsd">${sideSvg()}<small>側面</small></div><svg class="bfull" viewBox="-30 60 825 960"><image href="${ANAT}" x="0" y="0" width="765" height="1024"/>${lines}${dots}</svg>
      <div class="bleg"><span><i class="lt"></i>繃著 → 鬆開</span><span><i class="lw"></i>睡著 → 叫醒</span></div></div>
     <div class="bright">
-     ${P?`<div class="pwhy"><b>${P.n}</b>${P.why}${XMAP[P.id]?`<div class="xw"><span class="k">${XS[XMAP[P.id]].name}</span><span class="t">繃著＼${XS[XMAP[P.id]].tl}</span><span class="w">睡著／${XS[XMAP[P.id]].wl}</span></div>`:`<div class="xw"><span class="k">正背面看</span>這個問題側面看不明顯，看右邊的肌肉圖</div>`}</div>`:""}
+     ${P?`<div class="pwhy"><b>${P.n}</b>${P.why}${(P.x||XMAP[P.id])?`<div class="xw"><span class="k">${XS[P.x||XMAP[P.id]].name}</span><span class="t">繃著＼${XS[P.x||XMAP[P.id]].tl}</span><span class="w">睡著／${XS[P.x||XMAP[P.id]].wl}</span></div>`:`<div class="xw"><span class="k">正背面看</span>這個問題側面看不明顯，看右邊的肌肉圖</div>`}</div>`:""}
      <div class="bhd"><span>部位　由上往下</span><span class="t">🔴 繃著</span><span class="w">🟣 睡著</span></div>
      <div class="brows">${rows}</div>
      <div class="bdet">${p?`<div class="bdh"><b>${bodySel+1} ${p.n}</b><span>${p.why}</span><button data-tablego="${bodySel}">動作庫 ›</button></div>
@@ -1204,6 +1213,8 @@ function renderBody(){
     </div></div>`;
 }
 document.addEventListener("click",e=>{
+  const xv=e.target.closest("[data-xv]");if(xv){xView=xv.dataset.xv==="1";if(!xView&&!probSel)probSel="neckp";bodySel=null;musSel=null;renderBody();return}
+  const xs=e.target.closest("[data-xs]");if(xs){xSel=xs.dataset.xs;bodySel=null;musSel=null;renderBody();return}
   const pr=e.target.closest("[data-prob]");if(pr){probSel=probSel===pr.dataset.prob?null:pr.dataset.prob;bodySel=null;musSel=null;renderBody();return}
   const bp=e.target.closest("[data-bp]");if(bp){bodySel=bodySel===+bp.dataset.bp?null:+bp.dataset.bp;musSel=null;renderBody();return}
   const bm=e.target.closest("[data-bmu]");if(bm&&!$("#bodyp").hidden){const m=bm.dataset.bmu;musSel=musSel===m?null:m;if(musSel){const pid=Object.keys(MUS).find(k=>MUS[k].some(x=>x[0]===m));if(pid)bodySel=PI(pid);}renderBody();return}
