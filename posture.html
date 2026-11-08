@@ -752,6 +752,12 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .pg .pb{border-color:transparent;background:var(--panel);padding:4px 11px;font-size:.8rem}
 .pg .pb.on{background:var(--ink);color:var(--bg)}
 .pb.xb{font-family:var(--display);font-weight:700;padding:4px 12px}.pb.xb small{font-family:var(--body);font-weight:400;font-size:.62rem;margin-left:4px;opacity:.7}
+.gmw{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:10px;margin-top:10px;align-items:center}
+.gmimg{background:#fbf8f2;border-radius:12px;overflow:hidden}
+.gmmap{width:100%;height:auto;display:block;max-height:320px}
+.gmmap .an text{font-size:38px;stroke-width:9px}
+.gmneed .meta{margin:6px 0 4px}
+@media (max-width:560px){.gmw{grid-template-columns:1fr}}
 </style>
 <div class="wrap">
 <header>
@@ -1384,13 +1390,18 @@ const GMOVES=[
  {id:"ssplit",n:"左右一字馬",goal:"一字馬",test:"兩腿往兩側打開，胯下離地幾公分",ph:"例：離地 35",need:[["內收肌","拉開"],["梨狀肌","放鬆"],["臀中肌","控制"]],mv:["青蛙趴","4 字伸展","蚌殼式"]},
  {id:"squat",n:"深蹲到底",goal:"靈活・體態",test:"腳跟不離地、背不圓，能蹲到多深",ph:"例：大腿平行地面",need:[["小腿後側","拉開"],["臀大肌","出力"],["深層核心","撐住"]],mv:["推牆小腿伸展","臀推","死蟲式"]},
  {id:"heel",n:"跟鞋單腳站穩",goal:"跳 HH",test:"穿跟鞋單腳站幾秒（左右各記）",ph:"例：左 8／右 12 秒",need:[["足弓內在肌","出力"],["臀中肌","穩住"],["小腿後側","力量"]],mv:["三腳架單腳站","縮足運動","蚌殼式","提踵"]}];
+const RELAXW=["拉開","放鬆","打開","後腳拉開","前腳拉開"];
+function gmRole(r){return RELAXW.includes(r)?"t":"w";}
+function gmMap(m){const dots=m.need.filter(([mu])=>ANP[mu]).map(([mu,r])=>{const[x,y]=ANP[mu],c=gmRole(r),right=(x<380&&x>200)||x>575;return `<g class="an ${c} on" data-gmu="${mu}"><circle cx="${x}" cy="${y}" r="11"/><text x="${x+(right?16:-16)}" y="${y}" style="text-anchor:${right?"start":"end"}">${mu}</text></g>`}).join("");
+  return `<svg class="gmmap" viewBox="-60 60 885 960"><image href="${ANAT}" x="0" y="0" width="765" height="1024"/>${dots}</svg>`;}
 function findKey(n){for(const p of PARTS)for(let si=0;si<4;si++){const ii=p.s[si].findIndex(it=>it.n===n);if(ii>=0)return p.id+"|"+si+"|"+ii}return null}
 function openGM(id){
   const m=GMOVES.find(x=>x.id===id),sc=$("#scrim");sc.hidden=false;
   const draw=()=>{sc.innerHTML=`<div class="sheet wide" role="dialog" aria-modal="true"><div class="meta">② 好用・驗收動作　<span>${m.goal}</span></div><h2>${m.n}</h2>
    <div class="warn" style="background:var(--bg)"><b style="color:var(--ink)">自我檢查</b>　${m.test}<label class="rec" for="gm_${m.id}">最近一次<input id="gm_${m.id}" data-gi="gm_${m.id}" placeholder="${m.ph}" value="${(notes["gm_"+m.id]||"").replace(/"/g,"&quot;")}"></label></div>
-   <p class="meta" style="margin-top:12px">要靠這些肌肉（點了看身體）</p>
-   <div class="gparts">${m.need.map(([mu,r])=>`<button class="mchip ${muState(mu)}" data-gmu="${mu}">${mu}<small> ${r}</small></button>`).join("")}</div>
+   <div class="gmw"><div class="gmimg">${gmMap(m)}</div><div class="gmneed">
+    <p class="meta">要放鬆（點了看身體）</p><div class="gparts">${m.need.filter(n=>gmRole(n[1])==="t").map(([mu,r])=>`<button class="mchip t" data-gmu="${mu}">${mu}<small> ${r}</small></button>`).join("")||"—"}</div>
+    <p class="meta">要加強</p><div class="gparts">${m.need.filter(n=>gmRole(n[1])==="w").map(([mu,r])=>`<button class="mchip w" data-gmu="${mu}">${mu}<small> ${r}</small></button>`).join("")||"—"}</div></div></div>
    <p class="meta" style="margin-top:6px">練習動作（點了看做法、加到今晚）</p>
    <div class="btiles2" style="background:var(--bg)">${m.mv.map(findKey).filter(Boolean).map(bTile).join("")}</div>
    <div class="acts"><button class="btn ghost" data-a="x" style="flex:1">關閉</button></div></div>`;};
