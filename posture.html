@@ -688,6 +688,42 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .tvs.sm button{padding:4px 11px;font-size:.78rem}
 .tobody{display:block;margin-top:6px;border:0;background:none;padding:0;color:var(--chain);font:inherit;font-size:.72rem;cursor:pointer}
 @media (max-width:900px){.tool{height:auto}.tool .tlleft,.tool .tlside{height:auto}}
+.bodyp{height:calc(100vh - 116px);min-height:560px;gap:8px}
+.bprob{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.bprob b{font-family:var(--display);margin-right:4px}
+.pb{border:1.5px solid var(--line);background:var(--bg);border-radius:99px;padding:5px 13px;font:inherit;font-size:.85rem;color:var(--ink);cursor:pointer}
+.pb.mine{border-color:#e3a596}
+.pb.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.b2grid{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.15fr);gap:12px}
+.bana{position:relative;background:#fbf8f2;border-radius:14px;overflow:hidden;min-height:0;display:flex;flex-direction:column}
+.bana svg{flex:1;min-height:0;width:100%;height:100%}
+.bana .an text{font-size:17px;stroke-width:5px}
+.bana .an.dim circle{opacity:.35}
+.pl{fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:.8}
+.pl.t{stroke:#d0583f;stroke-width:5}
+.pl.w{stroke:#8b5468;stroke-width:4;stroke-dasharray:10 9}
+.bleg{position:absolute;left:10px;bottom:8px;display:flex;gap:10px;font-size:.7rem;color:var(--mute);background:rgba(255,255,255,.85);border-radius:8px;padding:3px 8px}
+.bleg i{display:inline-block;width:18px;height:0;vertical-align:middle;margin-right:4px}
+.bleg .lt{border-top:3px solid #d0583f}.bleg .lw{border-top:3px dashed #8b5468}
+.bright{display:flex;flex-direction:column;gap:6px;min-height:0}
+.pwhy{font-size:.82rem;background:var(--bg);border-radius:10px;padding:6px 10px}.pwhy b{font-family:var(--display);margin-right:8px;color:var(--chain)}
+.bhd{display:grid;grid-template-columns:86px 1fr 1fr;gap:6px;font-size:.7rem;color:var(--mute);padding:0 6px}
+.brows{display:flex;flex-direction:column;gap:3px}
+.br{display:grid;grid-template-columns:86px 1fr 1fr;gap:6px;align-items:center;border:0;background:var(--bg);border-radius:10px;padding:5px 6px;font:inherit;color:var(--ink);cursor:pointer;text-align:left;transition:opacity .2s}
+.br.dim{opacity:.35}
+.br.on{box-shadow:inset 0 0 0 2px var(--chain)}
+.bn2{font-size:.82rem;font-weight:600;white-space:nowrap}.bn2 i{font-style:normal;display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--chain);color:#fff;font-size:.64rem;margin-right:5px}
+.bc{display:flex;flex-wrap:wrap;gap:3px}
+.bc em{font-style:normal;font-size:.64rem;border-radius:99px;padding:1px 6px;border:1px solid}
+.bc em.t{border-color:#e9bfb4;color:#b8432f}.bc em.w{border-color:#d8bfca;color:#7a3f58}
+.bc em.t.hit{background:#d0583f;color:#fff;border-color:#d0583f}.bc em.w.hit{background:#8b5468;color:#fff;border-color:#8b5468}
+.bdet{flex:1;min-height:0;overflow:auto;background:var(--bg);border-radius:12px;padding:8px}
+.bdh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;font-size:.76rem;color:var(--mute);margin-bottom:6px}.bdh b{font-family:var(--display);font-size:.95rem;color:var(--ink)}
+.bdh button{margin-left:auto;border:0;background:none;color:var(--chain);font:inherit;font-size:.74rem;cursor:pointer}
+.bdt{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btiles2{display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:4px;border-radius:10px;padding:6px}
+.btiles2.t{background:#fbeee9}.btiles2.w{background:#f5ebf0}
+@media (max-width:900px){.bodyp{height:auto}.b2grid{grid-template-columns:1fr}.bana svg{height:auto}}
 </style>
 <div class="wrap">
 <header>
@@ -1106,34 +1142,52 @@ document.addEventListener("click",e=>{
 let bodySel=null,musSel=null;
 const PPROB={neck:["脖子前傾","圓肩駝背"],pec:["圓肩駝背"],tspine:["圓肩駝背"],arm:["圓肩駝背"],lowback:["骨盆前傾"],abs:["骨盆前傾"],psoas:["骨盆前傾"],leg:["X 型腿"],foot:["腳踏實地"]};
 const bmodes=cur=>`<div class="pmodes">${[["parts","部位與肌肉"],["line","提線木偶・原理"],["anat","肌肉全圖"]].map(([k,t])=>`<button class="${cur===k?"on":""}" data-bmode="${k}">${t}</button>`).join("")}</div>`;
-function goBody(pi,mu){bodySel=pi;musSel=mu||null;view("body");}
+function goBody(pi,mu){bodySel=pi;musSel=mu||null;probSel=null;view("body");}
 function crop(list){if(!list.length)return "";const xs=list.map(m=>ANP[m][0]),ys=list.map(m=>ANP[m][1]);let x0=Math.min(...xs)-70,x1=Math.max(...xs)+70,y0=Math.min(...ys)-60,y1=Math.max(...ys)+60;
   const w=Math.max(170,x1-x0),h=Math.max(170,y1-y0);x0=(x0+x1)/2-w/2;y0=(y0+y1)/2-h/2;
   const k=w/260;const dots=list.map(m=>{const[x,y]=ANP[m],st=muState(m),on=musSel===m;return `<g class="an ${st} ${on?"sel":""} ${musSel&&!on?"dim":""}" data-bmu="${m}"><circle cx="${x}" cy="${y}" r="${(on?8:6)*k}" style="stroke-width:${2.4*k}"/><text x="${x+10*k}" y="${y}" style="text-anchor:start;font-size:${12*k}px;stroke-width:${3.5*k}px">${m}</text></g>`}).join("");
   return `<svg class="acrop" viewBox="${x0} ${y0} ${w} ${h}"><image href="${ANAT}" x="0" y="0" width="765" height="1024"/>${dots}</svg>`;}
 function bTile(k){const o=itemOf(k);const on=onTonight(k);const ms=musOf(o.p,o.si,o.it);const hit=!musSel||ms.includes(musSel);
   return `<button class="bt ${ST[o.si].c} ${hit?"":"dim"}" data-bk="${k}"><span class="bi">${o.it.img&&THUMBS[o.it.img]?`<img src="${THUMBS[o.it.img]}" alt="">`:`<span class="hand">${o.it.lab||"徒手"}</span>`}</span><span class="bn"><em>${ST[o.si].k}</em>${o.it.n}${o.it.sub&&o.it.sub!=="徒手"?`<small>${o.it.sub}</small>`:""}</span>${o.it.mark?`<i class="bm">${o.it.mark}</i>`:""}${on?`<i class="bon">今晚</i>`:""}</button>`;}
+const PROBS=[
+ {id:"neckp",n:"肩頸痛",mine:1,why:"頭往前、肩往前圓，肩頸一直撐著",t:["上斜方肌","枕下肌群","斜角肌","胸小肌"],w:["深層頸屈肌","下斜方肌"],parts:["neck","pec","tspine"]},
+ {id:"waistp",n:"腰痛",mine:1,why:"久坐髂腰肌縮短，骨盆前倒，腰替臀出力",t:["髂腰肌","股四頭肌","豎脊肌"],w:["臀大肌","深層核心"],parts:["psoas","abs","lowback"]},
+ {id:"rounded",n:"圓肩駝背",why:"胸前繃著把肩往前拉，背後撐不住",t:["胸大肌","胸小肌","鎖骨下肌"],w:["三角肌後束","下斜方肌","菱形肌","前鋸肌"],parts:["pec","tspine","arm"]},
+ {id:"fhp",n:"脖子前傾",why:"頭往前伸，後頸和前頸一直繃著",t:["枕下肌群","胸鎖乳突肌","上斜方肌","斜角肌"],w:["深層頸屈肌","下斜方肌"],parts:["neck"]},
+ {id:"apt",n:"骨盆前傾",why:"髖前繃著把骨盆往前拉，臀和核心睡著",t:["髂腰肌","股四頭肌","闊筋膜張肌・ITB","豎脊肌"],w:["臀大肌","深層核心"],parts:["psoas","abs","lowback"]},
+ {id:"xleg",n:"X 型腿",why:"臀側睡著，膝蓋往內倒",t:["梨狀肌","闊筋膜張肌・ITB","內收肌"],w:["臀大肌","臀中肌","大腿後側"],parts:["leg","psoas"]},
+ {id:"ground",n:"腳踏實地",why:"足底三腳架沒站穩，整條鏈往上歪",t:["小腿後側","足底筋膜"],w:["足弓內在肌"],parts:["foot"]}];
+let probSel="neckp";
+const ORDER=["neck","arm","pec","tspine","lowback","abs","psoas","leg","foot"];
+function lineThrough(ms,cls){const pts=ms.filter(m=>ANP[m]);const side=s=>pts.filter(m=>s?ANP[m][0]>=380:ANP[m][0]<380).sort((a,b)=>ANP[a][1]-ANP[b][1]);
+  return [side(0),side(1)].filter(l=>l.length>1).map(l=>`<polyline class="pl ${cls}" points="${l.map(m=>ANP[m].join(",")).join(" ")}"/>`).join("");}
 function renderBody(){
-  if(bodySel==null)bodySel=PI("neck");
-  const p=PARTS[bodySel],L=MUS[p.id]||[];const T=L.filter(m=>m[1]==="t").map(m=>m[0]),W=L.filter(m=>m[1]==="w").map(m=>m[0]);
-  const keys=si=>p.s[si].map((_,ii)=>p.id+"|"+si+"|"+ii);
-  const all=L.map(m=>m[0]).filter(m=>ANP[m]),fr=all.filter(m=>ANP[m][0]<380),bk=all.filter(m=>ANP[m][0]>=380);
-  $("#bodyp").innerHTML=`${bmodes("parts")}<div class="b4"><span><b>第一性原理</b>痛＝有的肌肉<em class="t">繃著</em>、有的<em class="w">睡著</em>：繃著的鬆開、睡著的叫醒，再靠<b>控制</b>（姿勢）和<b>恢復</b>（睡眠、呼吸）留住。</span><button data-tablego="${bodySel}">在動作庫看這一列 ›</button></div>
-   <div class="bparts">${PARTS.map((q,i)=>[q,i]).reverse().map(([q,i])=>`<button class="${i===bodySel?"on":""}" data-bp="${i}">${i+1} ${q.n.split("・")[0]}</button>`).join("")}</div>
-   <div class="bhead"><h2><span class="n">${bodySel+1}</span>${p.n}</h2><p>${p.why}</p>${(PPROB[p.id]||[]).map(x=>`<i class="prob">${x}</i>`).join("")}</div>
-   <div class="bgrid">
-    <div class="bmap">${fr.length?`<div><small>正面</small>${crop(fr)}</div>`:""}${bk.length?`<div><small>背面</small>${crop(bk)}</div>`:""}</div>
-    <div class="bcols">
-     <div class="bcol t"><h3>🔴 繃著 <span>→ 要鬆開</span></h3><div class="bm2">${T.map(m=>`<button class="mchip t ${musSel===m?"on":""}" data-bmu="${m}">${m}</button>`).join("")}</div>
-       <div class="btiles">${[...keys(0),...keys(1)].map(bTile).join("")||'<span class="empty2">—</span>'}</div></div>
-     <div class="bcol w"><h3>🟣 睡著 <span>→ 要叫醒</span></h3><div class="bm2">${W.map(m=>`<button class="mchip w ${musSel===m?"on":""}" data-bmu="${m}">${m}</button>`).join("")}</div>
-       <div class="btiles">${[...keys(2),...keys(3)].map(bTile).join("")||'<span class="empty2">—</span>'}</div></div>
+  const P=PROBS.find(x=>x.id===probSel);const p=bodySel!=null?PARTS[bodySel]:null;
+  const lit=new Set(P?[...P.t,...P.w]:[]);if(p)(MUS[p.id]||[]).forEach(m=>lit.add(m[0]));
+  const dots=Object.entries(ANP).map(([m,[x,y]])=>{const st=muState(m),on=lit.has(m),sel=musSel===m;const lab=on||sel;const right=(x<380&&x>200)||x>575;
+    return `<g class="an ${st} ${on?"on":""} ${sel?"sel":""} ${!on?"dim":""}" data-bmu="${m}"><circle cx="${x}" cy="${y}" r="${sel?12:on?9:6}"/>${lab?`<text x="${x+(right?14:-14)}" y="${y}" style="text-anchor:${right?"start":"end"}">${m}</text>`:""}</g>`}).join("");
+  const lines=P?lineThrough(P.t,"t")+lineThrough(P.w,"w"):"";
+  const rows=ORDER.map(id=>{const pi=PI(id),q=PARTS[pi],L=MUS[id]||[];const inP=!P||P.parts.includes(id);
+    return `<button class="br ${bodySel===pi?"on":""} ${inP?"":"dim"}" data-bp="${pi}"><span class="bn2"><i>${pi+1}</i>${q.n.split("・")[0]}</span>
+      <span class="bc">${L.filter(m=>m[1]==="t").map(m=>`<em class="t ${P&&P.t.includes(m[0])?"hit":""}">${m[0]}</em>`).join("")}</span>
+      <span class="bc">${L.filter(m=>m[1]==="w").map(m=>`<em class="w ${P&&P.w.includes(m[0])?"hit":""}">${m[0]}</em>`).join("")}</span></button>`}).join("");
+  const keys=(q,sis)=>sis.flatMap(si=>q.s[si].map((_,ii)=>q.id+"|"+si+"|"+ii));
+  $("#bodyp").innerHTML=`<div class="bprob"><b>想解決</b>${PROBS.map(x=>`<button class="pb ${x.mine?"mine":""} ${probSel===x.id?"on":""}" data-prob="${x.id}">${x.n}</button>`).join("")}</div>
+   <div class="b2grid">
+    <div class="bana"><svg viewBox="-50 40 865 975"><image href="${ANAT}" x="0" y="0" width="765" height="1024"/>${lines}${dots}</svg>
+     <div class="bleg"><span><i class="lt"></i>繃著 → 鬆開</span><span><i class="lw"></i>睡著 → 叫醒</span></div></div>
+    <div class="bright">
+     ${P?`<div class="pwhy"><b>${P.n}</b>${P.why}</div>`:""}
+     <div class="bhd"><span>部位　由上往下</span><span class="t">🔴 繃著</span><span class="w">🟣 睡著</span></div>
+     <div class="brows">${rows}</div>
+     <div class="bdet">${p?`<div class="bdh"><b>${bodySel+1} ${p.n}</b><span>${p.why}</span><button data-tablego="${bodySel}">動作庫 ›</button></div>
+       <div class="bdt"><div class="btiles2 t">${keys(p,[0,1]).map(bTile).join("")}</div><div class="btiles2 w">${keys(p,[2,3]).map(bTile).join("")}</div></div>`:`<p class="empty2">點上面一個部位，看要做的動作</p>`}</div>
     </div></div>`;
-  pick(bodySel,false);
 }
 document.addEventListener("click",e=>{
-  const bp=e.target.closest("[data-bp]");if(bp){bodySel=+bp.dataset.bp;musSel=null;renderBody();return}
-  const bm=e.target.closest("[data-bmu]");if(bm){musSel=musSel===bm.dataset.bmu?null:bm.dataset.bmu;renderBody();return}
+  const pr=e.target.closest("[data-prob]");if(pr){probSel=probSel===pr.dataset.prob?null:pr.dataset.prob;bodySel=null;musSel=null;renderBody();return}
+  const bp=e.target.closest("[data-bp]");if(bp){bodySel=bodySel===+bp.dataset.bp?null:+bp.dataset.bp;musSel=null;renderBody();return}
+  const bm=e.target.closest("[data-bmu]");if(bm&&!$("#bodyp").hidden){const m=bm.dataset.bmu;musSel=musSel===m?null:m;if(musSel){const pid=Object.keys(MUS).find(k=>MUS[k].some(x=>x[0]===m));if(pid)bodySel=PI(pid);}renderBody();return}
   const bk=e.target.closest("[data-bk]");if(bk){openItem(bk.dataset.bk);return}
   const bmo=e.target.closest("[data-bmode]");if(bmo){const k=bmo.dataset.bmode;if(k==="parts"){view("body");return}pupMode=k;pupBuilt=false;view("pup");pupInit();return}
   const tg=e.target.closest("[data-tablego]");if(tg){const pi=+tg.dataset.tablego;view("table");pick(pi,true);return}
@@ -1341,7 +1395,7 @@ function view(v){
   if(v!=="table"&&swap){swap=null;$("#swapbar").hidden=true;}
   if(v==="rx")renderRx();else rxHot(false);
   $("#tGoal").classList.toggle("on",v==="goal");$("#tTable").classList.toggle("on",v==="table");$("#tPup").classList.toggle("on",v==="pup");
-  document.querySelector(".main").classList.toggle("solo",v==="pup");document.querySelector(".figbox").hidden=v==="pup";
+  document.querySelector(".main").classList.toggle("solo",v==="pup"||v==="body");document.querySelector(".figbox").hidden=v==="pup"||v==="body";
   if(v==="pup")pupInit();
   try{localStorage.setItem("bedview",v)}catch(e){}
   if(v==="goal")renderGoals();
