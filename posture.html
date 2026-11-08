@@ -741,6 +741,13 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .vsw button.on{background:var(--chain);color:#fff}
 .pb.xb{display:flex;align-items:baseline;gap:8px;padding:6px 16px}.pb.xb b{font-family:var(--display);font-size:1rem}.pb.xb span{font-size:.72rem;opacity:.75}
 .xi{font-style:normal;font-size:.6rem;margin-left:4px;border:1px solid currentColor;border-radius:4px;padding:0 3px;opacity:.7}
+.gmrow{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:5px;align-items:center;background:var(--bg);border-radius:12px;padding:5px 10px;white-space:nowrap}
+.gmrow small{display:none}
+.gmrow b{font-family:var(--display);color:var(--chain)}.gmrow small{font-size:.7rem;color:var(--mute);margin-right:4px}
+.gm{flex:none;border:1.5px solid var(--line);background:var(--panel);border-radius:99px;padding:3px 10px;font:inherit;font-size:.8rem;color:var(--ink);cursor:pointer}
+.gm i{font-style:normal;font-size:.66rem;color:var(--chain);margin-left:5px}
+.mchip small{opacity:.7}
+.compass svg{max-height:300px}
 </style>
 <div class="wrap">
 <header>
@@ -794,7 +801,7 @@ const MUS={foot:[["足底筋膜","t"],["小腿後側","t"],["足弓內在肌","w
  pec:[["胸小肌","t"],["胸大肌","t"],["鎖骨下肌","t"],["前鋸肌","w"],["三角肌後束","w"]],
  neck:[["上斜方肌","t"],["枕下肌群","t"],["斜角肌","t"],["胸鎖乳突肌","t"],["深層頸屈肌","w"],["下斜方肌","w"]],
  arm:[["前臂屈肌","t"],["肱二頭肌","t"],["肱三頭肌","w"]]};
-const MOVEM={"繩索面拉":["下斜方肌","三角肌後束"],"Y 字上舉":["下斜方肌"],"坐姿划船":["菱形肌","中斜方肌"],"反向飛鳥":["三角肌後束","菱形肌"],"滑輪下拉":["闊背肌","下斜方肌"],"羅馬椅":["豎脊肌","臀大肌","大腿後側"],"棒式":["深層核心"],"抗旋轉推":["深層核心","腹斜肌"],"臀推":["臀大肌"],"羅馬尼亞硬舉":["大腿後側","臀大肌"],"保加利亞分腿蹲":["臀大肌","股四頭肌"],"髖外展機":["臀中肌"],"單腳臀橋":["臀大肌","臀中肌"],"提踵":["小腿後側"],"三頭下壓":["肱三頭肌"],"橋式":["臀大肌","深層核心"],"死蟲式":["深層核心"],"360° 呼吸":["橫膈膜","深層核心"],"鳥狗式":["多裂肌","深層核心"],"收下巴":["深層頸屈肌"],"蚌殼式":["臀中肌"],"縮足運動":["足弓內在肌"],"三腳架單腳站":["足弓內在肌","臀中肌"],"門框開胸":["胸大肌","胸小肌"],"低位弓箭步":["髂腰肌","股四頭肌"],"斜角肌伸展":["斜角肌"],"青蛙趴":["內收肌"],"4 字伸展":["梨狀肌"],"前臂伸展":["前臂屈肌"],"推牆小腿伸展":["小腿後側"],"手臂靠牆開胸":["肱二頭肌","胸大肌"],"軟木瑜伽輪":["胸椎旁肌群","腹斜肌"]};
+const MOVEM={"繩索面拉":["下斜方肌","三角肌後束"],"Y 字上舉":["下斜方肌"],"坐姿划船":["菱形肌","中斜方肌"],"反向飛鳥":["三角肌後束","菱形肌"],"滑輪下拉":["闊背肌","下斜方肌"],"羅馬椅":["豎脊肌","臀大肌","大腿後側"],"棒式":["深層核心"],"抗旋轉推":["深層核心","腹斜肌"],"臀推":["臀大肌"],"羅馬尼亞硬舉":["大腿後側","臀大肌"],"保加利亞分腿蹲":["臀大肌","股四頭肌"],"髖外展機":["臀中肌"],"單腳臀橋":["臀大肌","臀中肌"],"提踵":["小腿後側"],"三頭下壓":["肱三頭肌"],"橋式":["臀大肌","深層核心"],"死蟲式":["深層核心"],"360° 呼吸":["橫膈膜","深層核心"],"鳥狗式":["多裂肌","深層核心"],"收下巴":["深層頸屈肌"],"蚌殼式":["臀中肌"],"縮足運動":["足弓內在肌"],"三腳架單腳站":["足弓內在肌","臀中肌"],"門框開胸":["胸大肌","胸小肌"],"低位弓箭步":["髂腰肌","股四頭肌"],"斜角肌伸展":["斜角肌"],"青蛙趴":["內收肌"],"4 字伸展":["梨狀肌"],"前臂伸展":["前臂屈肌"],"推牆小腿伸展":["小腿後側"],"仰臥抬腿伸展":["大腿後側"],"手臂靠牆開胸":["肱二頭肌","胸大肌"],"軟木瑜伽輪":["胸椎旁肌群","腹斜肌"]};
 const SUBM={"夾肩胛":["下斜方肌","菱形肌"],"正躺飛鳥":["三角肌後束","菱形肌"],"直躺開胸":["胸大肌","胸小肌"],"壓胸小肌":["胸小肌"],"壓闊筋膜張肌":["闊筋膜張肌・ITB"],"大腿前側":["股四頭肌"],"大腿外側":["闊筋膜張肌・ITB"],"大腿內側":["內收肌"],"壓枕下":["枕下肌群"],"滾足底":["足底筋膜"],"小腿":["小腿後側"],"小腿、阿基里斯腱":["小腿後側"],"墊骶骨":["髂腰肌"],"墊脖子":["深層頸屈肌"],"橫放上背":["胸椎旁肌群"],"俯臥":["髂腰肌"],"仰臥":["腰方肌","豎脊肌"],"腋下前面":["胸大肌","前鋸肌"]};
 function musOf(p,si,it){if(MOVEM[it.n])return MOVEM[it.n];if(SUBM[it.sub])return SUBM[it.sub];const L=MUS[p.id]||[];return (si<=1?L.filter(m=>m[1]==="t"):L.filter(m=>m[1]==="w")).map(m=>m[0]);}
 function musState(p,m){const f=(MUS[p.id]||[]).find(x=>x[0]===m);if(f)return f[1];for(const k in MUS){const g=MUS[k].find(x=>x[0]===m);if(g)return g[1]}return "";}
@@ -823,6 +830,7 @@ const PARTS=[
    {n:"八輪環抱滾輪",sub:"大腿",img:"ring",how:"套住大腿上下滾，內側、外側都滾到。每條腿 1 分鐘。"}
   ],[
    {n:"青蛙趴",sub:"徒手",img:null,how:"趴著，膝蓋往兩側打開、腳掌朝外，屁股慢慢往後坐，停 1 分鐘。一字馬的基礎。",warn:"膝蓋有壓迫痛就墊毛巾、縮小角度。"},
+   {n:"仰臥抬腿伸展",sub:"彈力帶・大腿後側",img:"band",how:"仰躺，彈力帶套住一腳腳掌，膝蓋伸直慢慢把腿往上拉到大腿後側有拉感，另一腳伸直貼地。左右各 30～45 秒。",warn:"下背貼地；膝蓋可以微彎，不要硬拉。"},
    {n:"4 字伸展",sub:"梨狀肌",img:null,how:"仰躺，一腳腳踝放在另一腳膝蓋上，抱著下面那條腿往胸口拉。左右各 30 秒。"}
   ],[
    {n:"蚌殼式",sub:"彈力帶",img:"band",how:"側躺屈膝，彈力帶套在膝蓋上，腳跟併攏，上面的膝蓋往上打開再慢慢放。左右各 15 下。"}
@@ -1213,6 +1221,7 @@ function renderBody(){
     </div></div>`;
 }
 document.addEventListener("click",e=>{
+  const gmb=e.target.closest("[data-gm]");if(gmb){openGM(gmb.dataset.gm);return}
   const xv=e.target.closest("[data-xv]");if(xv){xView=xv.dataset.xv==="1";if(!xView&&!probSel)probSel="neckp";bodySel=null;musSel=null;renderBody();return}
   const xs=e.target.closest("[data-xs]");if(xs){xSel=xs.dataset.xs;bodySel=null;musSel=null;renderBody();return}
   const pr=e.target.closest("[data-prob]");if(pr){probSel=probSel===pr.dataset.prob?null:pr.dataset.prob;bodySel=null;musSel=null;renderBody();return}
@@ -1356,13 +1365,36 @@ function renderGoals(){
       <div class="macts"><button class="mbtn" data-goal="${g.id}">怎麼做、自我檢查</button><button class="mbtn pri" data-tgo="${g.id}">用這個目標看部位桌 ›</button></div>
     </div>
    </div>
+   <div class="gmrow"><b>② 驗收動作</b><small>想做到的動作；點開看靠哪些肌肉、練什麼</small>${GMOVES.map(m=>`<button class="gm" data-gm="${m.id}">${m.n}${notes["gm_"+m.id]?`<i>${notes["gm_"+m.id]}</i>`:""}</button>`).join("")}</div>
    <div class="order">
      <div class="o1"><b>現在：① 三件一起做</b>睡前<em>鬆＋伸＋呼吸</em>；每天 2～3 個<em>醒</em>（收下巴、夾肩胛、橋式）；白天隨時<em>控制</em>；重訓課負責<em>練</em>。</div>
      <div><b>穩了再加</b>② 每週 1～2 次加一字馬和 HH 的準備。</div>
      <div><b>最後</b>③ 腹肌、小腹靠重訓和飲食，排在後面。</div>
-     <div><b>保底 3 分</b>躺上床：360° 呼吸＋鬆最痛的地方。<button id="gFlow">我的流程 ›</button></div>
+     <div><b>保底 3 分</b>躺上床：360° 呼吸＋鬆最痛的地方。<button id="gFlow">今晚 ›</button></div>
    </div>`;
   lightParts(g.parts.map(PI));
+}
+const GMOVES=[
+ {id:"fold",n:"站姿前彎碰地",goal:"一字馬・靈活",test:"膝蓋伸直往下彎，指尖離地幾公分",ph:"例：差 10 公分",need:[["大腿後側","拉開"],["小腿後側","拉開"],["豎脊肌","放鬆"]],mv:["仰臥抬腿伸展","推牆小腿伸展","上半身按摩椅"]},
+ {id:"wheel",n:"下腰",goal:"靈活・HH",test:"站姿後仰，眼睛看得到後面的牆嗎；或做瑜伽輪後彎",ph:"例：看到天花板",need:[["胸椎旁肌群","打開"],["髂腰肌","拉開"],["胸大肌","拉開"],["臀大肌","出力"]],mv:["軟木瑜伽輪","低位弓箭步","門框開胸","臀推"]},
+ {id:"fsplit",n:"前後一字馬",goal:"一字馬",test:"前後劈腿，屁股離地幾公分（左右各記）",ph:"例：左 25／右 30",need:[["髂腰肌","後腳拉開"],["大腿後側","前腳拉開"],["深層核心","骨盆擺正"]],mv:["低位弓箭步","仰臥抬腿伸展","死蟲式"]},
+ {id:"ssplit",n:"左右一字馬",goal:"一字馬",test:"兩腿往兩側打開，胯下離地幾公分",ph:"例：離地 35",need:[["內收肌","拉開"],["梨狀肌","放鬆"],["臀中肌","控制"]],mv:["青蛙趴","4 字伸展","蚌殼式"]},
+ {id:"squat",n:"深蹲到底",goal:"靈活・體態",test:"腳跟不離地、背不圓，能蹲到多深",ph:"例：大腿平行地面",need:[["小腿後側","拉開"],["臀大肌","出力"],["深層核心","撐住"]],mv:["推牆小腿伸展","臀推","死蟲式"]},
+ {id:"heel",n:"跟鞋單腳站穩",goal:"跳 HH",test:"穿跟鞋單腳站幾秒（左右各記）",ph:"例：左 8／右 12 秒",need:[["足弓內在肌","出力"],["臀中肌","穩住"],["小腿後側","力量"]],mv:["三腳架單腳站","縮足運動","蚌殼式","提踵"]}];
+function findKey(n){for(const p of PARTS)for(let si=0;si<4;si++){const ii=p.s[si].findIndex(it=>it.n===n);if(ii>=0)return p.id+"|"+si+"|"+ii}return null}
+function openGM(id){
+  const m=GMOVES.find(x=>x.id===id),sc=$("#scrim");sc.hidden=false;
+  const draw=()=>{sc.innerHTML=`<div class="sheet wide" role="dialog" aria-modal="true"><div class="meta">② 好用・驗收動作　<span>${m.goal}</span></div><h2>${m.n}</h2>
+   <div class="warn" style="background:var(--bg)"><b style="color:var(--ink)">自我檢查</b>　${m.test}<label class="rec" for="gm_${m.id}">最近一次<input id="gm_${m.id}" data-gi="gm_${m.id}" placeholder="${m.ph}" value="${(notes["gm_"+m.id]||"").replace(/"/g,"&quot;")}"></label></div>
+   <p class="meta" style="margin-top:12px">要靠這些肌肉（點了看身體）</p>
+   <div class="gparts">${m.need.map(([mu,r])=>`<button class="mchip ${muState(mu)}" data-gmu="${mu}">${mu}<small> ${r}</small></button>`).join("")}</div>
+   <p class="meta" style="margin-top:6px">練習動作（點了看做法、加到今晚）</p>
+   <div class="btiles2" style="background:var(--bg)">${m.mv.map(findKey).filter(Boolean).map(bTile).join("")}</div>
+   <div class="acts"><button class="btn ghost" data-a="x" style="flex:1">關閉</button></div></div>`;};
+  draw();
+  sc.onclick=ev=>{if(ev.target===sc||ev.target.dataset.a==="x"){sc.hidden=true;renderGoals();return}
+   const mu=ev.target.closest("[data-gmu]");if(mu){sc.hidden=true;const ms=mu.dataset.gmu;const pid=Object.keys(MUS).find(k=>MUS[k].some(x=>x[0]===ms));goBody(PI(pid),ms);return}
+   const bk=ev.target.closest("[data-bk]");if(bk){openItem(bk.dataset.bk);}};
 }
 function openGoal(id){
   const g=GOALS.find(x=>x.id===id);
