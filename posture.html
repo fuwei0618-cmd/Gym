@@ -624,7 +624,7 @@ function render(){
      <span class="ph ${it.img?"":"hand"}">${ph(it)}</span><span class="nm">${it.n}${it.mark?`<span class="tag">${it.mark}</span>`:""}${it.sub&&it.sub!=="徒手"?`<small>${it.sub}</small>`:""}</span><span class="ck"></span></button>`}).join(""):`<div class="empty">${si===3?"—":"之後放床上動作"}</div>`}</div>`).join("")}
   </div>`).join("");
   // 人像點
-  const pts=PARTS.map(p=>p.x+" "+p.y);
+  const pts=PARTS.filter(p=>p.id!=="arm").map(p=>p.x+" "+p.y);
   $("#chain").setAttribute("d","M"+pts.join(" L"));
   $("#dots").innerHTML=PARTS.map((p,pi)=>{const back=p.id==="lowback"||p.id==="tspine";const nm=p.n.split("・")[0];
    const lx=p.side==="l"?p.x-26:p.x+26;return `<g class="dot ${back?"back":""}" data-p="${pi}"><circle class="halo" cx="${p.x}" cy="${p.y}" r="15"/><circle class="o" cx="${p.x}" cy="${p.y}" r="14.5"/><text x="${p.x}" y="${p.y}">${pi+1}</text>
@@ -669,6 +669,18 @@ function openFlow(){
 $("#openFlow").onclick=openFlow;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#scrim").hidden=true;$("#flowScrim").hidden=true}});
 // 範例：預先放一組（第一次開啟）
+// 第 9 列：手臂
+PARTS.push({id:"arm",n:"手臂",why:"滑手機、打字讓前臂一直緊，上臂前側緊會把肩膀往前帶",x:520,y:672,lx:160,side:"l",
+ s:[[
+  {n:"八輪環抱滾輪",sub:"套住前臂、上臂",img:"ring",how:"套在前臂或上臂，上下滾。前臂內側（手掌那面）最常緊，多滾一點。每隻手 1 分鐘。"},
+  {n:"筋膜球",sub:"放桌上壓前臂",img:"ball",how:"球放桌上，前臂壓著慢慢滾，痠點停 20 秒。"},
+  {n:"狼牙棒滾軸",sub:"上臂",img:"stick",how:"握住兩端，滾上臂前側和外側。"}
+ ],[
+  {n:"前臂伸展",sub:"徒手",img:null,how:"手臂伸直、掌心朝前，另一手把手指往身體方向扳，停 30 秒。再把手背朝前做一次。"},
+  {n:"手臂靠牆開胸",sub:"徒手",img:null,how:"手掌貼牆、手臂伸直在肩膀高度，身體慢慢轉離牆壁，感覺手臂前側到胸口拉開。左右各 30 秒。"}
+ ],[],[
+  {n:"三頭下壓",sub:"健身房",img:null,lab:"重訓",how:"上臂夾在身體兩側不動，只用手肘把繩索往下壓直。3 組 12 下。"}
+ ]]});
 // 補充：肩頸、胸前
 {const nk=PARTS.find(p=>p.id==="neck");nk.s[1].push({n:"斜角肌伸展",sub:"徒手",img:null,how:"坐好，一手壓住同側鎖骨，頭往另一側斜後方倒，停 30 秒。"});nk.s[2].unshift({n:"收下巴",sub:"徒手",img:null,how:"仰躺，後腦勺輕輕往地板壓、下巴往後收（像做雙下巴），停 5 秒。10 下。"});
  const pc=PARTS.find(p=>p.id==="pec");pc.s[1].push({n:"門框開胸",sub:"徒手",img:null,how:"手肘彎 90 度靠在門框，身體往前走一步，感覺胸前拉開。左右各 30 秒。"});}
