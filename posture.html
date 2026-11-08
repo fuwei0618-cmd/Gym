@@ -694,10 +694,10 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .pb{border:1.5px solid var(--line);background:var(--bg);border-radius:99px;padding:5px 13px;font:inherit;font-size:.85rem;color:var(--ink);cursor:pointer}
 .pb.mine{border-color:#e3a596}
 .pb.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.b2grid{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.15fr);gap:12px}
+.b2grid{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px}
 .bana{position:relative;background:#fbf8f2;border-radius:14px;overflow:hidden;min-height:0;display:flex;flex-direction:column}
 .bana svg{flex:1;min-height:0;width:100%;height:100%}
-.bana .an text{font-size:17px;stroke-width:5px}
+.bana .an text{font-size:24px;stroke-width:6px}
 .bana .an.dim circle{opacity:.35}
 .pl{fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:.8}
 .pl.t{stroke:#d0583f;stroke-width:5}
@@ -707,9 +707,9 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .bleg .lt{border-top:3px solid #d0583f}.bleg .lw{border-top:3px dashed #8b5468}
 .bright{display:flex;flex-direction:column;gap:6px;min-height:0}
 .pwhy{font-size:.82rem;background:var(--bg);border-radius:10px;padding:6px 10px}.pwhy b{font-family:var(--display);margin-right:8px;color:var(--chain)}
-.bhd{display:grid;grid-template-columns:86px 1fr 1fr;gap:6px;font-size:.7rem;color:var(--mute);padding:0 6px}
+.bhd{display:grid;grid-template-columns:76px 1fr 1fr;gap:6px;font-size:.7rem;color:var(--mute);padding:0 6px}
 .brows{display:flex;flex-direction:column;gap:3px}
-.br{display:grid;grid-template-columns:86px 1fr 1fr;gap:6px;align-items:center;border:0;background:var(--bg);border-radius:10px;padding:5px 6px;font:inherit;color:var(--ink);cursor:pointer;text-align:left;transition:opacity .2s}
+.br{display:grid;grid-template-columns:76px 1fr 1fr;gap:6px;align-items:center;border:0;background:var(--bg);border-radius:10px;padding:5px 6px;font:inherit;color:var(--ink);cursor:pointer;text-align:left;transition:opacity .2s}
 .br.dim{opacity:.35}
 .br.on{box-shadow:inset 0 0 0 2px var(--chain)}
 .bn2{font-size:.82rem;font-weight:600;white-space:nowrap}.bn2 i{font-style:normal;display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--chain);color:#fff;font-size:.64rem;margin-right:5px}
@@ -724,6 +724,18 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .btiles2{display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:4px;border-radius:10px;padding:6px}
 .btiles2.t{background:#fbeee9}.btiles2.w{background:#f5ebf0}
 @media (max-width:900px){.bodyp{height:auto}.b2grid{grid-template-columns:1fr}.bana svg{height:auto}}
+.bana{flex-direction:row}
+.bsd{flex:0 0 27%;position:relative;background:#e9e3d8;border-right:1px solid var(--line)}
+.bsd small{position:absolute;left:6px;top:6px;font-size:.64rem;color:#fff;background:rgba(0,0,0,.35);border-radius:6px;padding:1px 6px}
+.sidesvg{width:100%;height:100%;display:block}
+.bana svg.bfull{flex:1;min-width:0;height:100%}
+.xplumb{stroke:var(--s2);stroke-width:4;stroke-dasharray:10 12;opacity:.8}
+.xl{stroke-linecap:round}.xl.t{stroke:#e0533b;stroke-width:12}.xl.w{stroke:#a0548a;stroke-width:10;stroke-dasharray:22 14}
+.xt{font-size:30px;font-weight:700;dominant-baseline:central;paint-order:stroke;stroke:rgba(255,250,244,.95);stroke-width:8px}
+.xt.t{fill:#c24e36}.xt.w{fill:#7a3f58}
+.xg.dim{opacity:.18}
+.xw{display:flex;flex-direction:column;gap:2px;margin-top:4px;font-size:.76rem}
+.xw .k{font-family:var(--display);font-weight:700}.xw .t{color:#b8432f}.xw .w{color:#7a3f58}
 </style>
 <div class="wrap">
 <header>
@@ -1158,6 +1170,13 @@ const PROBS=[
  {id:"xleg",n:"X 型腿",why:"臀側睡著，膝蓋往內倒",t:["梨狀肌","闊筋膜張肌・ITB","內收肌"],w:["臀大肌","臀中肌","大腿後側"],parts:["leg","psoas"]},
  {id:"ground",n:"腳踏實地",why:"足底三腳架沒站穩，整條鏈往上歪",t:["小腿後側","足底筋膜"],w:["足弓內在肌"],parts:["foot"]}];
 let probSel="neckp";
+const XMAP={neckp:"up",rounded:"up",fhp:"up",waistp:"lo",apt:"lo"};
+const XS={up:{t:[[480,525],[588,625]],w:[[566,512],[455,648]],tl:"後頸・上斜方肌 ↘ 胸前・胸小肌",wl:"前頸・深層頸屈肌 ↙ 背後・下斜方肌",name:"上交叉"},
+ lo:{t:[[462,780],[578,905]],w:[[588,765],[445,915]],tl:"下背・豎脊肌 ↘ 髖前・髂腰肌、大腿前側",wl:"腹部・深層核心 ↙ 臀部・大腿後側",name:"下交叉"}};
+function sideSvg(){const img=document.querySelector("#fig image").getAttribute("href");const P=probSel,on=XMAP[P];
+  const X=k=>{const x=XS[k],dim=on&&on!==k;return `<g class="xg ${dim?"dim":""}"><line x1="${x.t[0][0]}" y1="${x.t[0][1]}" x2="${x.t[1][0]}" y2="${x.t[1][1]}" class="xl t"/><line x1="${x.w[0][0]}" y1="${x.w[0][1]}" x2="${x.w[1][0]}" y2="${x.w[1][1]}" class="xl w"/>
+   <text x="${x.t[1][0]+14}" y="${x.t[1][1]}" class="xt t">繃著</text><text x="${x.w[0][0]+14}" y="${x.w[0][1]-6}" class="xt w">睡著</text></g>`};
+  return `<svg viewBox="340 380 410 1060" class="sidesvg" preserveAspectRatio="xMidYMid slice"><image href="${img}" x="0" y="0" width="1024" height="1536"/><line x1="520" y1="390" x2="520" y2="1430" class="xplumb"/>${X("up")}${X("lo")}</svg>`;}
 const ORDER=["neck","arm","pec","tspine","lowback","abs","psoas","leg","foot"];
 function lineThrough(ms,cls){const pts=ms.filter(m=>ANP[m]);const side=s=>pts.filter(m=>s?ANP[m][0]>=380:ANP[m][0]<380).sort((a,b)=>ANP[a][1]-ANP[b][1]);
   return [side(0),side(1)].filter(l=>l.length>1).map(l=>`<polyline class="pl ${cls}" points="${l.map(m=>ANP[m].join(",")).join(" ")}"/>`).join("");}
@@ -1174,10 +1193,10 @@ function renderBody(){
   const keys=(q,sis)=>sis.flatMap(si=>q.s[si].map((_,ii)=>q.id+"|"+si+"|"+ii));
   $("#bodyp").innerHTML=`<div class="bprob"><b>想解決</b>${PROBS.map(x=>`<button class="pb ${x.mine?"mine":""} ${probSel===x.id?"on":""}" data-prob="${x.id}">${x.n}</button>`).join("")}</div>
    <div class="b2grid">
-    <div class="bana"><svg viewBox="-50 40 865 975"><image href="${ANAT}" x="0" y="0" width="765" height="1024"/>${lines}${dots}</svg>
+    <div class="bana"><div class="bsd">${sideSvg()}<small>側面</small></div><svg class="bfull" viewBox="-30 60 825 960"><image href="${ANAT}" x="0" y="0" width="765" height="1024"/>${lines}${dots}</svg>
      <div class="bleg"><span><i class="lt"></i>繃著 → 鬆開</span><span><i class="lw"></i>睡著 → 叫醒</span></div></div>
     <div class="bright">
-     ${P?`<div class="pwhy"><b>${P.n}</b>${P.why}</div>`:""}
+     ${P?`<div class="pwhy"><b>${P.n}</b>${P.why}${XMAP[P.id]?`<div class="xw"><span class="k">${XS[XMAP[P.id]].name}</span><span class="t">繃著＼${XS[XMAP[P.id]].tl}</span><span class="w">睡著／${XS[XMAP[P.id]].wl}</span></div>`:`<div class="xw"><span class="k">正背面看</span>這個問題側面看不明顯，看右邊的肌肉圖</div>`}</div>`:""}
      <div class="bhd"><span>部位　由上往下</span><span class="t">🔴 繃著</span><span class="w">🟣 睡著</span></div>
      <div class="brows">${rows}</div>
      <div class="bdet">${p?`<div class="bdh"><b>${bodySel+1} ${p.n}</b><span>${p.why}</span><button data-tablego="${bodySel}">動作庫 ›</button></div>
