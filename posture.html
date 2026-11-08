@@ -504,6 +504,21 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .pain em.t{background:#d0583f}.pain em.w{background:var(--s4)}
 .pain i{font-style:normal;font-size:.74rem;color:var(--chain);margin-left:auto}
 @media (max-width:700px){.route{flex-direction:column}.rl2{width:4px;height:12px;flex-basis:12px;margin-left:30px}.pains{grid-template-columns:1fr}}
+.route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:start}
+.col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.col.skip{opacity:.35}
+.stn.must{transform:none}
+.its{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.its .tk{width:auto;padding:6px 4px;position:relative}
+.its .ti{width:100%;height:54px}
+.its .ti img{max-height:46px!important;max-width:80%!important;width:auto;height:auto}
+.tn small{display:block;color:var(--mute);font-size:.62rem}
+.its .ti .hand{font-size:.68rem;letter-spacing:.15em;color:var(--c)}
+.its .ti.s1,.its .ti.s2,.its .ti.s3,.its .ti.s4{background:var(--t)}
+.tn{font-size:.72rem;line-height:1.25}
+.tk.new{box-shadow:inset 0 0 0 2px var(--s5)}
+.tk .why{font-size:.6rem;background:var(--s5);color:#fff;border-radius:99px;padding:0 6px}
+@media (max-width:700px){.route{grid-template-columns:1fr 1fr}}
 </style>
 <div class="wrap">
 <header>
@@ -750,9 +765,10 @@ function stations(){
    {id:"bath",t:"洗澡",tag:"加分",d:"熱水就是熱敷",keys:[]},
    {id:"str",t:"伸展",tag:"加分",d:"洗完趁熱",keys:[g(N,1),g(W,1),g(N,2),g(W,2)]}];
   if(!tired){
-   if(C.includes("sit"))S[1].keys.push("psoas|0|2"),S[3].keys.push("lowback|2|0");
-   if(C.includes("phone"))S[1].keys.push("arm|0|0"),S[3].keys.push("arm|1|0");
-   if(C.includes("hh"))S[0].keys.push("foot|0|1"),S[1].keys.push("foot|0|0"),S[3].keys.push("foot|1|1");
+   const add=(si,k,c)=>{S[si].keys.push(k);(S[si].src=S[si].src||{})[k]=c;};
+   if(C.includes("sit"))add(1,"psoas|0|2","坐很久"),add(3,"lowback|2|0","坐很久");
+   if(C.includes("phone"))add(1,"arm|0|0","打字滑手機"),add(3,"arm|1|0","打字滑手機");
+   if(C.includes("hh"))add(0,"foot|0|1","HH"),add(1,"foot|0|0","HH"),add(3,"foot|1|1","HH");
   }else{S[0].skip=S[2].skip=S[3].skip=1;}
   S.forEach(s=>s.keys=[...new Set(s.keys)].filter(k=>itemOf(k)));
   return S;
@@ -769,12 +785,10 @@ function rxHot(on){
 }
 function renderRx(){
   const S=stations(),C=conds(),done=doneSet();
-  const tools=[];S.filter(s=>!s.skip).forEach(s=>s.keys.forEach(k=>{const o=itemOf(k);const nm=o.it.n;if(o.it.img&&!tools.find(t=>t.n===nm))tools.push({n:nm,o})}));
   $("#rx").innerHTML=`<div class="q"><b>今天怎麼了？</b>${CONDS.map(([k,t])=>`<button class="cond ${C.includes(k)?"on":""}" data-cond="${k}">${t}</button>`).join("")}</div>
-   <div class="route">${S.map((s,i)=>`${i?'<span class="rl2"></span>':""}<button class="stn ${s.must?"must":""} ${stDone(s)?"done":""} ${s.skip?"skip":""}" data-stn="${s.id}">
-     <span class="sc">${stDone(s)?"✓":i+1}</span><b>${s.t}</b><em>${s.skip?"今天跳過":s.tag}</em><small>${s.skip?"":s.d}</small>${s.keys.length&&!s.skip?`<span class="sn">${s.keys.length} 個</span>`:""}</button>`).join("")}</div>
-   <div class="gl3">今晚要拿的東西<small>照照片拿到床邊就好</small></div>
-   <div class="basket">${tools.map(t=>`<button class="tk" data-rk="${S.flatMap(s=>s.keys).find(k=>itemOf(k).it.n===t.n)}"><span class="ti">${pic(t.o)}</span>${t.n}</button>`).join("")}<div class="tk add"><span class="ti">鹽</span>鹽袋<small>待買</small></div></div>
+   <div class="route">${S.map((s,i)=>`<div class="col ${s.skip?"skip":""}"><button class="stn ${s.must?"must":""} ${stDone(s)?"done":""}" data-stn="${s.id}">
+     <span class="sc">${stDone(s)?"✓":i+1}</span><b>${s.t}</b><em>${s.skip?"今天跳過":s.tag}</em><small>${s.skip?"":s.d}</small>${s.keys.length&&!s.skip?`<span class="sn">${s.keys.length} 個</span>`:""}</button>
+     <div class="its">${s.keys.map(k=>{const o=itemOf(k),c=(s.src||{})[k];return `<button class="tk ${c?"new":""}" data-rk="${k}"><span class="ti ${ST[o.si].c}">${pic(o)}</span><span class="tn">${o.it.n}${o.it.sub&&o.it.sub!=="徒手"?`<small>${o.it.sub}</small>`:""}</span>${c?`<small class="why">${c}</small>`:""}</button>`}).join("")}${s.id==="mach"?`<div class="tk add"><span class="ti">鹽</span><span class="tn">鹽袋</span><small>待買</small></div>`:""}${s.id==="bath"?`<div class="tk add"><span class="ti">♨</span><span class="tn">熱水沖肩頸、腰</span></div>`:""}</div></div>`).join("")}</div>
    <div class="pains">${RXDEF.map(c=>`<button class="pain" data-pain="${c.id}"><b>${c.t}</b><span><em class="t">太緊</em>${c.tight}</span><span><em class="w">沒力</em>${c.weak}</span><i>看動作、換動作 ›</i></button>`).join("")}</div>`;
   rxHot(true);
 }
