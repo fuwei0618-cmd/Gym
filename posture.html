@@ -633,6 +633,15 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .tk.ytog .ti{font-size:1.3rem;background:var(--s2t)}
 .tk.ylesson{box-shadow:inset 0 0 0 2px var(--s2)}
 .tk.ylesson .ti{background:var(--s2);color:#fff;font-family:var(--display);font-size:.85rem}
+.tlleft{display:flex;flex-direction:column;gap:10px;min-width:0}
+.tvs{display:flex;gap:6px}
+.tvs button{border:1.5px solid var(--line);background:var(--bg);border-radius:99px;padding:6px 16px;font:inherit;font-size:.85rem;color:var(--ink);cursor:pointer}
+.tvs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tg{display:flex;flex-direction:column;gap:6px}
+.tgh b{font-family:var(--display);font-size:1rem;margin-right:8px}.tgh small{font-size:.72rem;color:var(--mute)}
+.tli.wish{opacity:.6;border:1.5px dashed var(--line);cursor:default}
+.tli.wish .ti .hand{color:var(--chain)}
+.tnote2{font-size:.72rem;color:var(--mute);margin:0}
 </style>
 <div class="wrap">
 <header>
@@ -1009,13 +1018,27 @@ const PADS=[["bp6","文大夫 頂背開肩枕＋腰托","◎","光滑、高度�
 const PSO=[["T:psoasr","原本那款（推薦）","◎","凸點尖，壓髂腰肌最深；腋下、胸前、大腿、頸部也能用","尖・按摩用"],
  ["thaiio","THAIIO 腰腹按摩墊","○","凸點圓、多顆小圓點；頸部、腰臀、腹股溝、腋下、大腿前側；有示範圖","圓・比較溫和"]];
 const SHAPES=[["點","小怪獸、錐形","最慢","收尾：只壓 1～2 個最痠的點",["monster","cone"]],["單球","刺蝟球、筋膜球","中","滾上背、手臂；胸前偏刺",["spiky","T:ball"]],["兩球","刺蝟花生球、花生球","快","橫放鎖骨正下方；要熱就先用披肩熱敷",["peanut","hot"]],["長條","鬆解器、枕下按摩器","最快","順著鎖骨下方趴著壓；鬆解器也能壓腋下",["occ","thumb","spine2"]]];
-let toolSel=null;
-function toolIndex(){const m=new Map();PARTS.forEach((p,pi)=>p.s.forEach((list,si)=>list.forEach((it,ii)=>{if(!it.img&&!it.mark)return;const TL={psoasr:"雙凸點鬆解器",ball:"筋膜球",ring:"八輪環抱滾輪",stick:"狼牙棒滾軸",band:"彈力帶",block:"瑜伽磚",thigh:"美腿夾",leg:"腿部按摩器",slant:"拉筋板",belly:"揉腹儀",chair:"上半身按摩椅",wheel:"軟木瑜伽輪",shawl:"加熱披肩",neck:"肩頸按摩器"};const k=it.mark?it.n:TL[it.img];if(!k)return;if(!m.has(k))m.set(k,{n:k,img:it.img,mark:it.mark,uses:[]});m.get(k).uses.push({pi,si,key:p.id+"|"+si+"|"+ii,sub:(TL[it.img]&&it.n!==k?it.n+(it.sub&&it.sub!=="徒手"?"・"+it.sub:""):it.sub),parts:it.parts})})));return [...m.values()].sort((a,b)=>b.uses.length-a.uses.length);}
+let toolSel=null,toolView="type";
+const TMETA={"上半身按摩椅":["機器","初"],"腿部按摩器":["機器","初"],"揉腹儀":["機器","初"],"肩頸按摩器":["機器","中"],"加熱披肩":["機器","初"],
+ "筋膜球":["按摩","中"],"八輪環抱滾輪":["按摩","中"],"狼牙棒滾軸":["按摩","高"],"雙凸點鬆解器":["按摩","高"],"長滾筒":["按摩","初"],
+ "瑜伽磚":["拉筋","初"],"拉筋板":["拉筋","中"],"軟木瑜伽輪":["拉筋","中"],"彈力帶":["訓練",""],"美腿夾":["訓練",""]};
+const WISH=[["鹽袋","機器","初"],["背墊","拉筋","初"],["刺蝟花生球","按摩","高"],["點狀按摩器","按摩","高"]];
+const TYPES=[["機器","插電、不用出力"],["按摩","手動壓、滾"],["拉筋","撐住、拉開"],["訓練","醒、練用"]];
+const LVS=[["初","初階・睡覺用","躺著不用動、溫和，睡前放著就好"],["中","中階・一般按摩","有壓力但舒服，日常放鬆"],["高","高階・刺痛類","點狀、尖凸點，痠痛點專攻，時間短"]];
+function toolIndex(){const m=new Map();PARTS.forEach((p,pi)=>p.s.forEach((list,si)=>list.forEach((it,ii)=>{if(!it.img&&!it.mark&&it.n!=="長滾筒")return;const TL={psoasr:"雙凸點鬆解器",ball:"筋膜球",ring:"八輪環抱滾輪",stick:"狼牙棒滾軸",band:"彈力帶",block:"瑜伽磚",thigh:"美腿夾",leg:"腿部按摩器",slant:"拉筋板",belly:"揉腹儀",chair:"上半身按摩椅",wheel:"軟木瑜伽輪",shawl:"加熱披肩",neck:"肩頸按摩器"};const k=it.mark||it.n==="長滾筒"?it.n:TL[it.img];if(!k)return;if(!m.has(k))m.set(k,{n:k,img:it.img,mark:it.mark,uses:[]});m.get(k).uses.push({pi,si,key:p.id+"|"+si+"|"+ii,sub:(TL[it.img]&&it.n!==k?it.n+(it.sub&&it.sub!=="徒手"?"・"+it.sub:""):it.sub),parts:it.parts})})));return [...m.values()].sort((a,b)=>b.uses.length-a.uses.length);}
+function tCard(t,sel){return `<button class="tli ${sel&&sel.n===t.n?"on":""}" data-tool="${t.n}"><span class="ti">${t.img&&THUMBS[t.img]?`<img src="${THUMBS[t.img]}" alt="">`:`<span class="hand">工具</span>`}</span><b>${t.n}</b><small>${t.mark?t.mark:t.uses.length+" 個用法"}</small></button>`;}
+function wCard(w){return `<div class="tli wish"><span class="ti"><span class="hand">待買</span></span><b>${w[0]}</b><small>待買</small></div>`;}
+function toolGroups(T,sel){
+  const grp=(title,sub,cards)=>`<div class="tg"><div class="tgh"><b>${title}</b><small>${sub}</small></div><div class="tlinv">${cards||`<span class="empty2">—</span>`}</div></div>`;
+  if(toolView==="type")return TYPES.map(([ty,sub])=>grp(ty,sub,T.filter(t=>(TMETA[t.n]||[])[0]===ty).map(t=>tCard(t,sel)).join("")+WISH.filter(w=>w[1]===ty).map(wCard).join(""))).join("");
+  if(toolView==="lv")return LVS.map(([lv,title,sub])=>grp(title,sub,T.filter(t=>(TMETA[t.n]||[])[1]===lv).map(t=>tCard(t,sel)).join("")+WISH.filter(w=>w[2]===lv).map(wCard).join(""))).join("")+`<p class="tnote2">彈力帶、美腿夾是訓練用，不分強度。</p>`;
+  return PARTS.map((p,pi)=>[p,pi]).reverse().map(([p,pi])=>{const ts=T.filter(t=>t.uses.some(u=>u.pi===pi||(u.parts||[]).includes(p.id)));return grp(`${pi+1} ${p.n}`,"",ts.map(t=>tCard(t,sel)).join(""))}).join("");
+}
 function renderTool(){
   const T=toolIndex(),sel=T.find(t=>t.n===toolSel)||null;
   $("#tool").innerHTML=`<div class="tlhead"><div><span class="ey">備</span><h2>工具櫃</h2></div><p>動作庫照「部位」排，工具櫃照「工具」排，是同一份資料的兩個入口。點工具，看它能用在哪些部位；點部位，直接跳到動作庫那一列。</p></div>
    <div class="tlgrid">
-    <div class="tlinv">${T.map(t=>`<button class="tli ${sel&&sel.n===t.n?"on":""}" data-tool="${t.n}"><span class="ti">${t.img&&THUMBS[t.img]?`<img src="${THUMBS[t.img]}" alt="">`:`<span class="hand">工具</span>`}</span><b>${t.n}</b><small>${t.mark?t.mark:t.uses.length+" 個用法"}</small></button>`).join("")}</div>
+    <div class="tlleft"><div class="tvs">${[["type","類型"],["lv","強度"],["part","部位"]].map(([k,t])=>`<button class="${toolView===k?"on":""}" data-tv="${k}">${t}</button>`).join("")}</div>${toolGroups(T,sel)}</div>
     <div class="tlside">${sel?`<div class="tluse"><h3>${sel.n}<small>用在這些地方</small></h3>${sel.uses.map(u=>`<button class="tlu" data-tlu="${u.key}"><span class="st ${ST[u.si].c}">${ST[u.si].k}</span><span><b>${u.pi+1} ${PARTS[u.pi].n}</b>${u.sub?`<small>${u.sub}</small>`:""}</span><i>動作庫 ›</i></button>`).join("")}</div>`:`<div class="tluse empty2">點左邊的工具，看它可以用在哪些部位</div>`}
      <div class="tlbuy"><h3>待買・夢想</h3>${BUY.map(b=>`<div><em class="${b[2]==="夢想"?"dream":""}">${b[2]}</em><b>${b[0]}</b><small>${b[1]}</small></div>`).join("")}</div>
      <div class="tlpad"><h3>雙凸點鬆解器：兩款比較<small>都不適合躺著放鬆，那是背墊的工作</small></h3>${PSO.map(p=>`<div class="pd"><img src="${p[0].startsWith("T:")?THUMBS[p[0].slice(2)]:SHIMG[p[0]]}" alt="" style="object-fit:contain;background:#fff"><i class="m${p[2]==="◎"?"g":"y"}">${p[2]}</i><span><b>${p[1]}</b><small>${p[3]}</small></span><em>${p[4]}</em></div>`).join("")}</div>
@@ -1030,6 +1053,7 @@ document.addEventListener("click",e=>{
   const af=e.target.closest("[data-anf]");if(af){const k=af.dataset.anf;anHi=k?RXDEF.find(c=>c.id===k).parts.flatMap(p=>(MUS[p]||[]).map(m=>m[0])):null;anSel=null;anatDraw();return}
   const am=e.target.closest("[data-amk]");if(am){openItem(am.dataset.amk);return}
   const sm=e.target.closest("[data-showmu]");if(sm){$("#scrim").hidden=true;anHi=sm.dataset.showmu.split(",");anSel=anHi[0];pupMode="anat";view("pup");return}
+  const tv=e.target.closest("[data-tv]");if(tv){toolView=tv.dataset.tv;renderTool();return}
   const t=e.target.closest("[data-tool]");if(t){toolSel=t.dataset.tool;renderTool();return}
   const u=e.target.closest("[data-tlu]");if(u){const o=itemOf(u.dataset.tlu);view("table");pick(o.pi,true);return}
 });
