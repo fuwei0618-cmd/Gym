@@ -676,6 +676,18 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .bt .bm,.bt .bon{position:absolute;top:-5px;right:4px;font-style:normal;font-size:.56rem;color:#fff;border-radius:99px;padding:0 5px}
 .bt .bm{background:var(--mute)}.bt .bon{background:var(--s2)}.bt .bm+.bon{right:40px}
 @media (max-width:900px){.bgrid,.bcols{grid-template-columns:1fr}}
+.tool{height:calc(100vh - 110px);min-height:520px}
+.tool .tlhead h2{font-size:1.1rem}.tool .tlhead .ey{display:none}
+.tool .tlhead p{display:none}
+.tool .tlgrid{flex:1;min-height:0;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.tool .tlleft,.tool .tlside{height:100%;overflow:auto;min-height:0}
+.tool .tlinv{grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:6px}
+.tool .tli{padding:6px 4px}.tool .tli .ti{width:44px;height:44px}.tool .tli .ti img{max-width:38px;max-height:38px}
+.tool .tli b{font-size:.7rem}.tool .tli small{font-size:.6rem}
+.tool .tg{gap:4px}.tool .tlleft{gap:8px}
+.tvs.sm button{padding:4px 11px;font-size:.78rem}
+.tobody{display:block;margin-top:6px;border:0;background:none;padding:0;color:var(--chain);font:inherit;font-size:.72rem;cursor:pointer}
+@media (max-width:900px){.tool{height:auto}.tool .tlleft,.tool .tlside{height:auto}}
 </style>
 <div class="wrap">
 <header>
@@ -683,7 +695,7 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
     <h1>體態桌</h1>
     <div class="sub">睡前做 <b>鬆 → 伸 → 醒</b>，重訓日加上 <b>練</b>。紅色虛線是你的代償鏈：骨盆前傾一路傳到肩頸。</div>
   </div>
-  <div class="hr"><div class="seg tabs5" role="tablist"><button id="tRx" role="tab"><small>做</small><b>今晚</b><em>每天</em></button><button id="tGoal" role="tab"><small>想</small><b>方向</b><em>為什麼</em></button><button id="tBody" role="tab"><small>懂・查</small><b>身體</b><em>哪裡、為什麼</em></button><button id="tPup" role="tab" hidden><small>懂</small><b>原理</b><em>怎麼運作</em></button><button id="tTable" role="tab" hidden><small>查</small><b>動作庫</b><em>換動作</em></button><button id="tTool" role="tab"><small>備</small><b>工具櫃</b><em>要用要買</em></button></div><span id="cnt" hidden>0</span><button id="openFlow" hidden></button></div>
+  <div class="hr"><div class="seg tabs5" role="tablist"><button id="tRx" role="tab"><small>做</small><b>今晚</b><em>每天</em></button><button id="tGoal" role="tab"><small>想</small><b>方向</b><em>為什麼</em></button><button id="tBody" role="tab"><small>懂</small><b>身體</b><em>哪裡、為什麼</em></button><button id="tPup" role="tab" hidden><small>懂</small><b>原理</b><em>怎麼運作</em></button><button id="tTable" role="tab"><small>查</small><b>動作庫</b><em>換動作</em></button><button id="tTool" role="tab"><small>備</small><b>工具櫃</b><em>要用要買</em></button></div><span id="cnt" hidden>0</span><button id="openFlow" hidden></button></div>
 </header>
 <div class="main">
   <aside class="figbox">
@@ -852,7 +864,7 @@ function render(){
   const TG=tgoal?GOALS.find(x=>x.id===tgoal):null,CW=TG?colW(TG):null,op=w=>w>=60?1:w>=40?.8:w>=20?.45:.22;
   document.querySelectorAll(".thead .th").forEach((th,i)=>{th.style.opacity=CW&&i>0?op(CW[i-1]):1});
   $("#rows").innerHTML=PARTS.map((p,pi)=>[p,pi]).reverse().map(([p,pi])=>`<div class="row ${TG&&!TG.parts.includes(p.id)?"dim":""}" id="r-${p.id}" data-p="${pi}">
-   <div class="part" data-p="${pi}"><span class="n">${pi+1}</span><h3>${p.n}</h3><p>${p.why}</p><div class="mus">${(MUS[p.id]||[]).map(m=>`<i class="${m[1]}">${m[0]}</i>`).join("")}</div></div>
+   <div class="part" data-p="${pi}"><span class="n">${pi+1}</span><h3>${p.n}</h3><p>${p.why}</p><button class="tobody" data-bodygo="${pi}">看肌肉、為什麼 ›</button></div>
    ${p.s.map((list,si)=>`<div class="cell ${ST[si].c}" style="opacity:${CW?op(CW[si]):1}"><span class="lane">${ST[si].k}</span>${list.length?list.map((it,ii)=>{const k=key(p.id,si,ii);return `<button class="chip ${onTonight(k)?"in":""}" data-k="${k}">
      <span class="ph ${it.img?"":"hand"}">${ph(it)}</span><span class="nm">${it.n}${it.mark?`<span class="tag">${it.mark}</span>`:""}${it.sub&&it.sub!=="徒手"?`<small>${it.sub}</small>`:""}</span><span class="ck"></span></button>`}).join(""):`<div class="empty">${si===3?"—":"之後放床上動作"}</div>`}</div>`).join("")}
   </div>`).join("");
@@ -1053,7 +1065,7 @@ const PADS=[["bp6","文大夫 頂背開肩枕＋腰托","◎","光滑、高度�
 const PSO=[["T:psoasr","原本那款（推薦）","◎","凸點尖，壓髂腰肌最深；腋下、胸前、大腿、頸部也能用","尖・按摩用"],
  ["thaiio","THAIIO 腰腹按摩墊","○","凸點圓、多顆小圓點；頸部、腰臀、腹股溝、腋下、大腿前側；有示範圖","圓・比較溫和"]];
 const SHAPES=[["點","小怪獸、錐形","最慢","收尾：只壓 1～2 個最痠的點",["monster","cone"]],["單球","刺蝟球、筋膜球","中","滾上背、手臂；胸前偏刺",["spiky","T:ball"]],["兩球","刺蝟花生球、花生球","快","橫放鎖骨正下方；要熱就先用披肩熱敷",["peanut","hot"]],["長條","鬆解器、枕下按摩器","最快","順著鎖骨下方趴著壓；鬆解器也能壓腋下",["occ","thumb","spine2"]]];
-let toolSel=null,toolView="type";
+let toolSel=null,toolView="type",toolSide="use";
 const TMETA={"上半身按摩椅":["機器","初"],"腿部按摩器":["機器","初"],"揉腹儀":["機器","初"],"肩頸按摩器":["機器","中"],"加熱披肩":["機器","初"],
  "筋膜球":["按摩","中"],"八輪環抱滾輪":["按摩","中"],"狼牙棒滾軸":["按摩","高"],"雙凸點鬆解器":["按摩","高"],"長滾筒":["按摩","初"],
  "瑜伽磚":["拉筋","初"],"拉筋板":["拉筋","中"],"軟木瑜伽輪":["拉筋","中"],"彈力帶":["訓練",""],"美腿夾":["訓練",""]};
@@ -1074,11 +1086,8 @@ function renderTool(){
   $("#tool").innerHTML=`<div class="tlhead"><div><span class="ey">備</span><h2>工具櫃</h2></div><p>動作庫照「部位」排，工具櫃照「工具」排，是同一份資料的兩個入口。點工具，看它能用在哪些部位；點部位，直接跳到動作庫那一列。</p></div>
    <div class="tlgrid">
     <div class="tlleft"><div class="tvs">${[["type","類型"],["lv","強度"],["part","部位"]].map(([k,t])=>`<button class="${toolView===k?"on":""}" data-tv="${k}">${t}</button>`).join("")}</div>${toolGroups(T,sel)}</div>
-    <div class="tlside">${sel?`<div class="tluse"><h3>${sel.n}<small>用在這些地方</small></h3>${sel.uses.map(u=>`<button class="tlu" data-tlu="${u.key}"><span class="st ${ST[u.si].c}">${ST[u.si].k}</span><span><b>${u.pi+1} ${PARTS[u.pi].n}</b>${u.sub?`<small>${u.sub}</small>`:""}</span><i>看部位 ›</i></button>`).join("")}</div>`:`<div class="tluse empty2">點左邊的工具，看它可以用在哪些部位</div>`}
-     <div class="tlbuy"><h3>待買・夢想</h3>${BUY.map(b=>`<div><em class="${b[2]==="夢想"?"dream":""}">${b[2]}</em><b>${b[0]}</b><small>${b[1]}</small></div>`).join("")}</div>
-     <div class="tlpad"><h3>雙凸點鬆解器：兩款比較<small>都不適合躺著放鬆，那是背墊的工作</small></h3>${PSO.map(p=>`<div class="pd"><img src="${p[0].startsWith("T:")?THUMBS[p[0].slice(2)]:SHIMG[p[0]]}" alt="" style="object-fit:contain;background:#fff"><i class="m${p[2]==="◎"?"g":"y"}">${p[2]}</i><span><b>${p[1]}</b><small>${p[3]}</small></span><em>${p[4]}</em></div>`).join("")}</div>
-     <div class="tlpad"><h3>躺著放鬆的背墊<small>光滑才放鬆；有凸點的是按摩，不是躺著用</small></h3>${PADS.map(p=>`<div class="pd"><img src="${SHIMG[p[0]]}" alt=""><i class="m${p[2]==="◎"?"g":p[2]==="○"?"y":p[2]==="△"?"o":"z"}">${p[2]}</i><span><b>${p[1]}</b><small>${p[3]}</small></span><em>${p[4]}</em></div>`).join("")}</div>
-     <div class="tlshape"><h3>工具形狀：面積越大越省時間</h3><div class="shg">${SHAPES.map(s=>`<div><span class="shi">${s[4].map(k=>`<img src="${k.startsWith("T:")?THUMBS[k.slice(2)]:SHIMG[k]}" alt="">`).join("")}</span><b>${s[0]}</b><span>${s[1]}</span><small>${s[2]}・${s[3]}</small></div>`).join("")}</div></div>
+    <div class="tlside"><div class="tvs sm">${[["use","用法"],["buy","待買"],["pso","雙凸點"],["pad","背墊"],["shape","形狀"]].map(([k,t])=>`<button class="${toolSide===k?"on":""}" data-ts="${k}">${t}</button>`).join("")}</div>
+     ${toolSide==="use"?`${sel?`<div class="tluse"><h3>${sel.n}<small>用在這些地方</small></h3>${sel.uses.map(u=>`<button class="tlu" data-tlu="${u.key}"><span class="st ${ST[u.si].c}">${ST[u.si].k}</span><span><b>${u.pi+1} ${PARTS[u.pi].n}</b>${u.sub?`<small>${u.sub}</small>`:""}</span><i>看部位 ›</i></button>`).join("")}</div>`:`<div class="tluse empty2">點左邊的工具，看它可以用在哪些部位</div>`}`:toolSide==="buy"?`<div class="tlbuy"><h3>待買・夢想</h3>${BUY.map(b=>`<div><em class="${b[2]==="夢想"?"dream":""}">${b[2]}</em><b>${b[0]}</b><small>${b[1]}</small></div>`).join("")}</div>`:toolSide==="pso"?`<div class="tlpad"><h3>雙凸點鬆解器：兩款比較<small>都不適合躺著放鬆，那是背墊的工作</small></h3>${PSO.map(p=>`<div class="pd"><img src="${p[0].startsWith("T:")?THUMBS[p[0].slice(2)]:SHIMG[p[0]]}" alt="" style="object-fit:contain;background:#fff"><i class="m${p[2]==="◎"?"g":"y"}">${p[2]}</i><span><b>${p[1]}</b><small>${p[3]}</small></span><em>${p[4]}</em></div>`).join("")}</div>`:toolSide==="pad"?`<div class="tlpad"><h3>躺著放鬆的背墊<small>光滑才放鬆；有凸點的是按摩，不是躺著用</small></h3>${PADS.map(p=>`<div class="pd"><img src="${SHIMG[p[0]]}" alt=""><i class="m${p[2]==="◎"?"g":p[2]==="○"?"y":p[2]==="△"?"o":"z"}">${p[2]}</i><span><b>${p[1]}</b><small>${p[3]}</small></span><em>${p[4]}</em></div>`).join("")}</div>`:`<div class="tlshape"><h3>工具形狀：面積越大越省時間</h3><div class="shg">${SHAPES.map(s=>`<div><span class="shi">${s[4].map(k=>`<img src="${k.startsWith("T:")?THUMBS[k.slice(2)]:SHIMG[k]}" alt="">`).join("")}</span><b>${s[0]}</b><span>${s[1]}</span><small>${s[2]}・${s[3]}</small></div>`).join("")}</div></div>`}
     </div></div>`;
   if(sel)lightParts([...new Set(sel.uses.flatMap(u=>(u.parts||[PARTS[u.pi].id]).map(PI)))]);
 }
@@ -1088,13 +1097,15 @@ document.addEventListener("click",e=>{
   const af=e.target.closest("[data-anf]");if(af){const k=af.dataset.anf;anHi=k?RXDEF.find(c=>c.id===k).parts.flatMap(p=>(MUS[p]||[]).map(m=>m[0])):null;anSel=null;anatDraw();return}
   const am=e.target.closest("[data-amk]");if(am){openItem(am.dataset.amk);return}
   const sm=e.target.closest("[data-showmu]");if(sm){$("#scrim").hidden=true;const ms=sm.dataset.showmu.split(",");const pid=Object.keys(MUS).find(k=>MUS[k].some(m=>m[0]===ms[0]));goBody(PI(pid),ms[0]);return}
+  const ts=e.target.closest("[data-ts]");if(ts){toolSide=ts.dataset.ts;renderTool();return}
   const tv=e.target.closest("[data-tv]");if(tv){toolView=tv.dataset.tv;renderTool();return}
-  const t=e.target.closest("[data-tool]");if(t){toolSel=t.dataset.tool;renderTool();return}
+  const t=e.target.closest("[data-tool]");if(t){toolSel=t.dataset.tool;toolSide="use";renderTool();return}
   const u=e.target.closest("[data-tlu]");if(u){const o=itemOf(u.dataset.tlu);goBody(o.pi);return}
 });
 // ===== 身體（原理＋動作庫＋肌肉圖）=====
 let bodySel=null,musSel=null;
 const PPROB={neck:["脖子前傾","圓肩駝背"],pec:["圓肩駝背"],tspine:["圓肩駝背"],arm:["圓肩駝背"],lowback:["骨盆前傾"],abs:["骨盆前傾"],psoas:["骨盆前傾"],leg:["X 型腿"],foot:["腳踏實地"]};
+const bmodes=cur=>`<div class="pmodes">${[["parts","部位與肌肉"],["line","提線木偶・原理"],["anat","肌肉全圖"]].map(([k,t])=>`<button class="${cur===k?"on":""}" data-bmode="${k}">${t}</button>`).join("")}</div>`;
 function goBody(pi,mu){bodySel=pi;musSel=mu||null;view("body");}
 function crop(list){if(!list.length)return "";const xs=list.map(m=>ANP[m][0]),ys=list.map(m=>ANP[m][1]);let x0=Math.min(...xs)-70,x1=Math.max(...xs)+70,y0=Math.min(...ys)-60,y1=Math.max(...ys)+60;
   const w=Math.max(170,x1-x0),h=Math.max(170,y1-y0);x0=(x0+x1)/2-w/2;y0=(y0+y1)/2-h/2;
@@ -1107,7 +1118,7 @@ function renderBody(){
   const p=PARTS[bodySel],L=MUS[p.id]||[];const T=L.filter(m=>m[1]==="t").map(m=>m[0]),W=L.filter(m=>m[1]==="w").map(m=>m[0]);
   const keys=si=>p.s[si].map((_,ii)=>p.id+"|"+si+"|"+ii);
   const all=L.map(m=>m[0]).filter(m=>ANP[m]),fr=all.filter(m=>ANP[m][0]<380),bk=all.filter(m=>ANP[m][0]>=380);
-  $("#bodyp").innerHTML=`<div class="b4"><span><b>第一性原理</b>痛＝有的肌肉<em class="t">繃著</em>、有的<em class="w">睡著</em>：繃著的鬆開、睡著的叫醒，再靠<b>控制</b>（姿勢）和<b>恢復</b>（睡眠、呼吸）留住。</span><button data-pupgo="1">看提線木偶 ›</button></div>
+  $("#bodyp").innerHTML=`${bmodes("parts")}<div class="b4"><span><b>第一性原理</b>痛＝有的肌肉<em class="t">繃著</em>、有的<em class="w">睡著</em>：繃著的鬆開、睡著的叫醒，再靠<b>控制</b>（姿勢）和<b>恢復</b>（睡眠、呼吸）留住。</span><button data-tablego="${bodySel}">在動作庫看這一列 ›</button></div>
    <div class="bparts">${PARTS.map((q,i)=>[q,i]).reverse().map(([q,i])=>`<button class="${i===bodySel?"on":""}" data-bp="${i}">${i+1} ${q.n.split("・")[0]}</button>`).join("")}</div>
    <div class="bhead"><h2><span class="n">${bodySel+1}</span>${p.n}</h2><p>${p.why}</p>${(PPROB[p.id]||[]).map(x=>`<i class="prob">${x}</i>`).join("")}</div>
    <div class="bgrid">
@@ -1124,7 +1135,9 @@ document.addEventListener("click",e=>{
   const bp=e.target.closest("[data-bp]");if(bp){bodySel=+bp.dataset.bp;musSel=null;renderBody();return}
   const bm=e.target.closest("[data-bmu]");if(bm){musSel=musSel===bm.dataset.bmu?null:bm.dataset.bmu;renderBody();return}
   const bk=e.target.closest("[data-bk]");if(bk){openItem(bk.dataset.bk);return}
-  if(e.target.closest("[data-pupgo]")){pupMode="line";pupBuilt=false;view("pup");return}
+  const bmo=e.target.closest("[data-bmode]");if(bmo){const k=bmo.dataset.bmode;if(k==="parts"){view("body");return}pupMode=k;pupBuilt=false;view("pup");pupInit();return}
+  const tg=e.target.closest("[data-tablego]");if(tg){const pi=+tg.dataset.tablego;view("table");pick(pi,true);return}
+  const bg=e.target.closest("[data-bodygo]");if(bg){goBody(+bg.dataset.bodygo);return}
   if(e.target.closest("[data-backbody]")){view("body");return}
 });
 // ===== 提線木偶（用健身房照片）=====
@@ -1139,7 +1152,7 @@ function anatDraw(){
   const hi=anHi||[];
   const dots=Object.entries(ANP).map(([m,[x,y]])=>{const st=muState(m),on=hi.includes(m),sel=anSel===m;return `<g class="an ${st} ${on?"on":""} ${sel?"sel":""} ${hi.length&&!on?"dim":""}" data-mu="${m}"><circle cx="${x}" cy="${y}" r="${sel?13:on?11:8}"/>${on||sel?`<text x="${x+(x<380&&x>200||x>575?16:-16)}" y="${y}" style="text-anchor:${x<380&&x>200||x>575?"start":"end"}">${m}</text>`:""}</g>`}).join("");
   const mv=anSel?movesFor(anSel):[];
-  $("#pup").innerHTML=`<div class="pmodes"><button data-backbody="1">← 身體</button>${[["line","你身上的線"],["anat","肌肉圖"]].map(([k,t])=>`<button class="${pupMode===k?"on":""}" data-pm="${k}">${t}</button>`).join("")}</div>
+  $("#pup").innerHTML=`${bmodes(pupMode)}
    <div class="pgrid ang"><div class="anbox"><svg viewBox="0 30 765 980" id="ansvg"><image href="${ANAT}" x="0" y="0" width="765" height="1024"/>${dots}<text x="200" y="1005" class="anl">正面</text><text x="575" y="1005" class="anl">背面</text></svg></div>
    <div class="pside"><div class="ptitle"><span class="ey">懂</span><h2>肌肉圖</h2><p>點圖上的點，看這條肌肉是太緊還是沒力，以及哪些動作在處理它。</p></div>
     <div class="anf">${[["","全部"],["neck","肩頸痛"],["waist","腰痛"]].map(([k,t])=>`<button data-anf="${k}">${t}</button>`).join("")}<span class="lg"><i class="t"></i>繃著<i class="w"></i>睡著</span></div>
@@ -1151,7 +1164,7 @@ function pupInit(){
   if(pupMode==="anat"){anatDraw();return}
   if(!pupBuilt||!$("#pupsvg")){pupBuilt=true;
   const img=document.querySelector("#fig image").getAttribute("href");
-  $("#pup").innerHTML=`<div class="pmodes"><button data-backbody="1">← 身體</button><button class="on" data-pm="line">你身上的線</button><button data-pm="anat">肌肉圖</button></div><div class="pgrid">
+  $("#pup").innerHTML=`${bmodes("line")}<div class="pgrid">
    <div class="stage" id="stage"><svg viewBox="300 215 500 1200" id="pupsvg" role="img" aria-label="提線木偶">
     <image href="${img}" x="0" y="0" width="1024" height="1536"/>
     <rect id="night" x="0" y="0" width="1024" height="1536" fill="#1d2433" opacity="0"/>
@@ -1324,7 +1337,7 @@ function openLever(k){
 }
 function lightParts(list){document.querySelectorAll(".dot").forEach(e=>e.classList.toggle("on",list.includes(+e.dataset.p)));}
 function view(v){
-  $("#goals").hidden=v!=="goal";$("#table").hidden=v!=="table";$("#pup").hidden=v!=="pup";$("#rx").hidden=v!=="rx";$("#tRx").classList.toggle("on",v==="rx");$("#tool").hidden=v!=="tool";$("#tTool").classList.toggle("on",v==="tool");$("#bodyp").hidden=v!=="body";$("#tBody").classList.toggle("on",v==="body"||v==="pup"||v==="table");if(v==="body")renderBody();if(v==="tool")renderTool();
+  $("#goals").hidden=v!=="goal";$("#table").hidden=v!=="table";$("#pup").hidden=v!=="pup";$("#rx").hidden=v!=="rx";$("#tRx").classList.toggle("on",v==="rx");$("#tool").hidden=v!=="tool";$("#tTool").classList.toggle("on",v==="tool");$("#bodyp").hidden=v!=="body";$("#tBody").classList.toggle("on",v==="body"||v==="pup");if(v==="body")renderBody();if(v==="tool")renderTool();
   if(v!=="table"&&swap){swap=null;$("#swapbar").hidden=true;}
   if(v==="rx")renderRx();else rxHot(false);
   $("#tGoal").classList.toggle("on",v==="goal");$("#tTable").classList.toggle("on",v==="table");$("#tPup").classList.toggle("on",v==="pup");
