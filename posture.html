@@ -766,6 +766,8 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .bc em.hitt{background:#d0583f;color:#fff;border-color:#d0583f}
 .tfwrap{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
 .chip.fade{opacity:.3}
+.ri{font-style:normal;font-size:.62rem;color:var(--chain);margin-right:3px}
+.pb.on .ri{color:#f0a796}
 </style>
 <div class="wrap">
 <header>
@@ -1205,22 +1207,25 @@ let probSel="neckp";
 const XMAP={neckp:"up",rounded:"up",fhp:"up",waistp:"lo",apt:"lo"};
 const XS={up:{t:[[480,525],[588,625]],w:[[566,512],[455,648]],tl:"後頸・上斜方肌 ↘ 胸前・胸小肌",wl:"前頸・深層頸屈肌 ↙ 背後・下斜方肌",name:"上交叉"},
  lo:{t:[[462,780],[578,905]],w:[[588,765],[445,915]],tl:"下背・豎脊肌 ↘ 髖前・髂腰肌、大腿前側",wl:"腹部・深層核心 ↙ 臀部・大腿後側",name:"下交叉"}};
-let xView=false,xSel="up",gmSel=null;
+let xView=false,xSel="up",gmSel=null,goSel=null;
+function goProb(){const g=GOALS.find(x=>x.id===goSel);const ms=g.parts.flatMap(p=>MUS[p]||[]);const keep=k=>(g.mix[k]||0)>=40;
+  return {id:"go_"+g.id,n:g.t,why:`${["①舒服","②好用","③好看"][g.r]}・最靠${LEV.slice().sort((x,y)=>g.mix[y.k]-g.mix[x.k])[0].n}：`+LEV.filter(l=>g.kw[l.k]).sort((x,y)=>g.mix[y.k]-g.mix[x.k]).map(l=>l.n+"（"+g.kw[l.k]+"）").join("、"),
+   t:keep("len")?ms.filter(m=>m[1]==="t").map(m=>m[0]):[],w:keep("str")||keep("ctl")?ms.filter(m=>m[1]==="w").map(m=>m[0]):[],parts:g.parts};}
 function gmProb(){const m=GMOVES.find(x=>x.id===gmSel);const pt=mu=>Object.keys(MUS).find(k=>MUS[k].some(x=>x[0]===mu));return {id:"gm_"+m.id,gm:m,n:m.n,why:m.test,t:m.need.filter(n=>gmRole(n[1])==="t").map(n=>n[0]),w:m.need.filter(n=>gmRole(n[1])==="w").map(n=>n[0]),parts:[...new Set(m.need.map(n=>pt(n[0])).filter(Boolean))]};}
 const XGRP={up:{n:"上交叉症候群",why:"後頸＋胸前要放鬆、前頸＋背後要加強：頭往前、肩往前圓",probs:["neckp","rounded","fhp"]},lo:{n:"下交叉症候群",why:"下背＋髖前要放鬆、腹部＋臀部要加強：骨盆往前倒、腰替臀出力",probs:["waistp","apt"]}};
 function xProb(){const g=XGRP[xSel],ps=g.probs.map(id=>PROBS.find(p=>p.id===id));const u=k=>[...new Set(ps.flatMap(p=>p[k]))];return {id:"x_"+xSel,n:g.n,why:g.why,t:u("t"),w:u("w"),parts:u("parts"),x:xSel};}
-function sideSvg(){const img=document.querySelector("#fig image").getAttribute("href");const P=probSel,on=gmSel?"none":xView?xSel:XMAP[P];
+function sideSvg(){const img=document.querySelector("#fig image").getAttribute("href");const P=probSel,on=goSel||gmSel?"none":xView?xSel:XMAP[P];
   const X=k=>{const x=XS[k],dim=on&&on!==k;return `<g class="xg ${dim?"dim":""}"><line x1="${x.t[0][0]}" y1="${x.t[0][1]}" x2="${x.t[1][0]}" y2="${x.t[1][1]}" class="xl t"/><line x1="${x.w[0][0]}" y1="${x.w[0][1]}" x2="${x.w[1][0]}" y2="${x.w[1][1]}" class="xl w"/>
    <text x="${x.t[1][0]+14}" y="${x.t[1][1]}" class="xt t">放鬆</text><text x="${x.w[0][0]+14}" y="${x.w[0][1]-6}" class="xt w">加強</text></g>`};
   return `<svg viewBox="340 380 410 1060" class="sidesvg" preserveAspectRatio="xMidYMid slice"><image href="${img}" x="0" y="0" width="1024" height="1536"/><line x1="520" y1="390" x2="520" y2="1430" class="xplumb"/>${X("up")}${X("lo")}</svg>`;}
 const ORDER=["neck","arm","pec","tspine","lowback","abs","psoas","leg","foot"];
 function lineThrough(ms,cls){const pts=ms.filter(m=>ANP[m]);const side=s=>pts.filter(m=>s?ANP[m][0]>=380:ANP[m][0]<380).sort((a,b)=>ANP[a][1]-ANP[b][1]);
   return [side(0),side(1)].filter(l=>l.length>1).map(l=>`<polyline class="pl ${cls}" points="${l.map(m=>ANP[m].join(",")).join(" ")}"/>`).join("");}
-function probBar(){return `${[["up","上交叉"],["lo","下交叉"]].map(([k,t])=>`<span class="pg"><button class="pb xb ${!gmSel&&xView&&xSel===k?"on":""}" data-xs="${k}">${t}<small>全部</small></button>${XGRP[k].probs.map(id=>{const x=PROBS.find(p=>p.id===id);return `<button class="pb ${x.mine?"mine":""} ${!gmSel&&!xView&&probSel===id?"on":""}" data-prob="${id}">${x.n}</button>`}).join("")}</span>`).join("")}<span class="pg">${PROBS.filter(x=>!XMAP[x.id]).map(x=>`<button class="pb ${!gmSel&&!xView&&probSel===x.id?"on":""}" data-prob="${x.id}">${x.n}</button>`).join("")}</span><span class="pg gmg"><b class="pgl">驗收動作</b>${GMOVES.map(m=>`<button class="pb ${gmSel===m.id?"on":""}" data-bgm="${m.id}">${m.n}${notes["gm_"+m.id]?`<i class="xi">${notes["gm_"+m.id]}</i>`:""}</button>`).join("")}</span>`;}
-function curP(){return gmSel?gmProb():xView?xProb():PROBS.find(x=>x.id===probSel)||null;}
+function probBar(){return `${[["up","上交叉"],["lo","下交叉"]].map(([k,t])=>`<span class="pg"><button class="pb xb ${!goSel&&!gmSel&&xView&&xSel===k?"on":""}" data-xs="${k}">${t}<small>全部</small></button>${XGRP[k].probs.map(id=>{const x=PROBS.find(p=>p.id===id);return `<button class="pb ${x.mine?"mine":""} ${!goSel&&!gmSel&&!xView&&probSel===id?"on":""}" data-prob="${id}">${x.n}</button>`}).join("")}</span>`).join("")}<span class="pg">${PROBS.filter(x=>!XMAP[x.id]).map(x=>`<button class="pb ${!goSel&&!gmSel&&!xView&&probSel===x.id?"on":""}" data-prob="${x.id}">${x.n}</button>`).join("")}</span><span class="pg gog"><b class="pgl">目標</b>${GOALS.map(g=>`<button class="pb ${goSel===g.id?"on":""}" data-bgo="${g.id}"><i class="ri">${"①②③"[g.r]}</i>${g.t}</button>`).join("")}</span><span class="pg gmg"><b class="pgl">驗收動作</b>${GMOVES.map(m=>`<button class="pb ${!goSel&&gmSel===m.id?"on":""}" data-bgm="${m.id}">${m.n}${notes["gm_"+m.id]?`<i class="xi">${notes["gm_"+m.id]}</i>`:""}</button>`).join("")}</span>`;}
+function curP(){return goSel?goProb():gmSel?gmProb():xView?xProb():PROBS.find(x=>x.id===probSel)||null;}
 function refreshP(){tFilterOn=true;if(!$("#bodyp").hidden){renderBody();}else if(!$("#table").hidden){renderFilter();render();const P=curP();if(P){lightParts(P.parts.map(PI));const top=PARTS.map((p,i)=>i).filter(i=>P.parts.includes(PARTS[i].id)).sort((x,y)=>y-x)[0];const r=document.getElementById("r-"+PARTS[top].id);if(r)r.scrollIntoView({behavior:"smooth",block:"start"});}}}
 function renderBody(){
-  const P=gmSel?gmProb():xView?xProb():PROBS.find(x=>x.id===probSel);const p=bodySel!=null?PARTS[bodySel]:null;
+  const P=curP();const p=bodySel!=null?PARTS[bodySel]:null;
   const lit=new Set(P?[...P.t,...P.w]:[]);if(p)(MUS[p.id]||[]).forEach(m=>lit.add(m[0]));
   const dots=Object.entries(ANP).map(([m,[x,y]])=>{const st=P&&P.t.includes(m)?"t":P&&P.w.includes(m)?"w":muState(m),on=lit.has(m),sel=musSel===m;const lab=on||sel;const right=(x<380&&x>200)||x>575;
     return `<g class="an ${st} ${on?"on":""} ${sel?"sel":""} ${!on?"dim":""}" data-bmu="${m}"><circle cx="${x}" cy="${y}" r="${sel?12:on?9:6}"/>${lab?`<text x="${x+(right?14:-14)}" y="${y}" style="text-anchor:${right?"start":"end"}">${m}</text>`:""}</g>`}).join("");
@@ -1235,7 +1240,7 @@ function renderBody(){
     <div class="bana"><div class="bsd">${sideSvg()}<small>側面</small></div><svg class="bfull" viewBox="-30 60 825 960"><image href="${ANAT}" x="0" y="0" width="765" height="1024"/>${lines}${dots}</svg>
      <div class="bleg"><span><i class="lt"></i>要放鬆</span><span><i class="lw"></i>要加強</span></div></div>
     <div class="bright">
-     ${P&&P.gm?`<div class="pwhy"><b>${P.n}</b>${P.why}<label class="rec" for="bgm_${P.gm.id}">最近一次<input id="bgm_${P.gm.id}" data-gi="gm_${P.gm.id}" placeholder="${P.gm.ph}" value="${(notes["gm_"+P.gm.id]||"").replace(/"/g,"&quot;")}"></label><div class="btiles2 gmt">${P.gm.mv.map(findKey).filter(Boolean).map(bTile).join("")}</div></div>`:P?`<div class="pwhy"><b>${P.n}</b>${P.why}${(P.x||XMAP[P.id])?`<div class="xw"><span class="k">${XS[P.x||XMAP[P.id]].name}</span><span class="t">要放鬆＼${XS[P.x||XMAP[P.id]].tl}</span><span class="w">要加強／${XS[P.x||XMAP[P.id]].wl}</span></div>`:`<div class="xw"><span class="k">正背面看</span>這個問題側面看不明顯，看右邊的肌肉圖</div>`}</div>`:""}
+     ${P&&P.gm?`<div class="pwhy"><b>${P.n}</b>${P.why}<label class="rec" for="bgm_${P.gm.id}">最近一次<input id="bgm_${P.gm.id}" data-gi="gm_${P.gm.id}" placeholder="${P.gm.ph}" value="${(notes["gm_"+P.gm.id]||"").replace(/"/g,"&quot;")}"></label><div class="btiles2 gmt">${P.gm.mv.map(findKey).filter(Boolean).map(bTile).join("")}</div></div>`:P?`<div class="pwhy"><b>${P.n}</b>${P.why}${(P.x||XMAP[P.id])?`<div class="xw"><span class="k">${XS[P.x||XMAP[P.id]].name}</span><span class="t">要放鬆＼${XS[P.x||XMAP[P.id]].tl}</span><span class="w">要加強／${XS[P.x||XMAP[P.id]].wl}</span></div>`:(P.id.startsWith("go_")?"":`<div class="xw"><span class="k">正背面看</span>這個問題側面看不明顯，看右邊的肌肉圖</div>`)}</div>`:""}
      <div class="bhd"><span>部位　由上往下</span><span class="t">🔴 要放鬆</span><span class="w">🟣 要加強</span></div>
      <div class="brows">${rows}</div>
      <div class="bdet">${p?`<div class="bdh"><b>${bodySel+1} ${p.n}</b><span>${p.why}</span><button data-tablego="${bodySel}">動作庫 ›</button></div>
@@ -1245,10 +1250,11 @@ function renderBody(){
 document.addEventListener("click",e=>{
   const gmb=e.target.closest("[data-gm]");if(gmb){gmSel=gmb.dataset.gm;bodySel=null;musSel=null;view("body");return}
   if(e.target.closest("[data-tfall]")){tFilterOn=false;renderFilter();render();return}
-  const bg2=e.target.closest("[data-bgm]");if(bg2){gmSel=bg2.dataset.bgm;bodySel=null;musSel=null;refreshP();return}
+  const bgo=e.target.closest("[data-bgo]");if(bgo){goSel=bgo.dataset.bgo;gmSel=null;bodySel=null;musSel=null;refreshP();return}
+  const bg2=e.target.closest("[data-bgm]");if(bg2){gmSel=bg2.dataset.bgm;goSel=null;bodySel=null;musSel=null;refreshP();return}
   const xv=e.target.closest("[data-xv]");if(xv){xView=xv.dataset.xv==="1";if(!xView&&!probSel)probSel="neckp";bodySel=null;musSel=null;renderBody();return}
-  const xs=e.target.closest("[data-xs]");if(xs){gmSel=null;xView=true;xSel=xs.dataset.xs;bodySel=null;musSel=null;refreshP();return}
-  const pr=e.target.closest("[data-prob]");if(pr){gmSel=null;xView=false;probSel=pr.dataset.prob;bodySel=null;musSel=null;refreshP();return}
+  const xs=e.target.closest("[data-xs]");if(xs){gmSel=null;goSel=null;xView=true;xSel=xs.dataset.xs;bodySel=null;musSel=null;refreshP();return}
+  const pr=e.target.closest("[data-prob]");if(pr){gmSel=null;goSel=null;xView=false;probSel=pr.dataset.prob;bodySel=null;musSel=null;refreshP();return}
   const bp=e.target.closest("[data-bp]");if(bp){bodySel=bodySel===+bp.dataset.bp?null:+bp.dataset.bp;musSel=null;renderBody();return}
   const bm=e.target.closest("[data-bmu]");if(bm&&!$("#bodyp").hidden){const m=bm.dataset.bmu;musSel=musSel===m?null:m;if(musSel){const pid=Object.keys(MUS).find(k=>MUS[k].some(x=>x[0]===m));if(pid)bodySel=PI(pid);}renderBody();return}
   const bk=e.target.closest("[data-bk]");if(bk){openItem(bk.dataset.bk);return}
@@ -1499,7 +1505,7 @@ document.addEventListener("click",e=>{
   if(e.target.id==="gFlow"){view("rx");return}
   if(e.target.id==="gFlow2"){view("rx");return}
   if(e.target.id==="gTable")view("table");
-  const tgo=e.target.closest("[data-tgo]");if(tgo){tgoal=tgo.dataset.tgo;view("table");return}
+  const tgo=e.target.closest("[data-tgo]");if(tgo){goSel=tgo.dataset.tgo;gmSel=null;tFilterOn=true;view("table");refreshP();return}
   const tg=e.target.closest("[data-tg]");if(tg){tgoal=tg.dataset.tg||null;renderFilter();render();if(tgoal){const G=GOALS.find(x=>x.id===tgoal);lightParts(G.parts.map(PI))}return}
   const gs=e.target.closest("[data-gsel]");if(gs){curGoal=gs.dataset.gsel;renderGoals();return}
   const gl=e.target.closest("[data-goal]");if(gl&&!e.target.closest(".pn")){openGoal(gl.dataset.goal);return}
