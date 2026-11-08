@@ -936,8 +936,8 @@ document.addEventListener("click",e=>{
 document.addEventListener("change",e=>{const d=e.target.dataset.done;if(d===undefined)return;
   let keys=doneSet().slice();keys=e.target.checked?[...keys,d]:keys.filter(x=>x!==d);notes.done={day:today(),keys};persist();renderRx();});
 // ===== 工具櫃 =====
-const BUY=[["鹽袋","疊在加熱披肩上，加重量又保溫","待買"],["雙凸點鬆解器","髂腰肌主力，也當胸前長條工具","待買"],["點狀按摩器","小怪獸或錐形二選一，收尾壓痠點","待買"],["刺蝟球","滾上背、手臂","待買"],["冷熱兩用花生球","橫放在鎖骨正下方，可加熱","待買"],["全身按摩椅","恢復的享受，按不到胸前和髂腰肌","夢想"]];
-const SHAPES=[["點","小怪獸、錐形","最慢","收尾：只壓 1～2 個最痠的點",["monster","cone"]],["單球","刺蝟球、筋膜球","中","滾上背、手臂；胸前偏刺",["spiky","T:ball"]],["兩球","冷熱球、花生球","快","橫放鎖骨正下方",["hot","peanut"]],["長條","鬆解器、枕下按摩器","最快","順著鎖骨下方趴著壓；鬆解器也能壓腋下",["occ","thumb","spine2"]]];
+const BUY=[["鹽袋","疊在加熱披肩上，加重量又保溫","待買"],["雙凸點鬆解器","髂腰肌主力；也能壓腋下、胸前，躺著當開背墊","待買"],["點狀按摩器","小怪獸或錐形二選一，收尾壓痠點","待買"],["刺蝟花生球","滾上背、脊椎兩側、手臂","待買"],["全身按摩椅","恢復的享受，按不到胸前和髂腰肌","夢想"]];
+const SHAPES=[["點","小怪獸、錐形","最慢","收尾：只壓 1～2 個最痠的點",["monster","cone"]],["單球","刺蝟球、筋膜球","中","滾上背、手臂；胸前偏刺",["spiky","T:ball"]],["兩球","刺蝟花生球、花生球","快","橫放鎖骨正下方；要熱就先用披肩熱敷",["peanut","hot"]],["長條","鬆解器、枕下按摩器","最快","順著鎖骨下方趴著壓；鬆解器也能壓腋下",["occ","thumb","spine2"]]];
 let toolSel=null;
 function toolIndex(){const m=new Map();PARTS.forEach((p,pi)=>p.s.forEach((list,si)=>list.forEach((it,ii)=>{if(!it.img&&!it.mark)return;const TL={psoasr:"雙凸點鬆解器",ball:"筋膜球",ring:"八輪環抱滾輪",stick:"狼牙棒滾軸",band:"彈力帶",block:"瑜伽磚",thigh:"美腿夾",leg:"腿部按摩器",slant:"拉筋板",belly:"揉腹儀",chair:"上半身按摩椅",wheel:"軟木瑜伽輪",shawl:"加熱披肩",neck:"肩頸按摩器"};const k=it.mark?it.n:TL[it.img];if(!k)return;if(!m.has(k))m.set(k,{n:k,img:it.img,mark:it.mark,uses:[]});m.get(k).uses.push({pi,si,key:p.id+"|"+si+"|"+ii,sub:(TL[it.img]&&it.n!==k?it.n+(it.sub&&it.sub!=="徒手"?"・"+it.sub:""):it.sub),parts:it.parts})})));return [...m.values()].sort((a,b)=>b.uses.length-a.uses.length);}
 function renderTool(){
