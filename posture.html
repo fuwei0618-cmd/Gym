@@ -764,6 +764,8 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .btiles2.gmt{background:transparent;padding:4px 0 0}
 .bprob{row-gap:5px}
 .bc em.hitt{background:#d0583f;color:#fff;border-color:#d0583f}
+.tfwrap{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.chip.fade{opacity:.3}
 </style>
 <div class="wrap">
 <header>
@@ -922,7 +924,7 @@ PARTS.forEach(p=>{p.s[3]=(LIAN[p.id]||p.s[3]||[]).map(it=>it.sub==="徒手"?it:{
 {const lb=PARTS.find(p=>p.id==="lowback");lb.s[2]=[{n:"鳥狗式",sub:"徒手",img:null,how:"四足跪姿，吐氣時對側手腳慢慢伸直，腰背保持平、不晃。左右各 8 次。",warn:"腰往下塌或骨盆歪就把腿放低。"}];}
 // ===== 儲存：在健身房 App 裡就跟 App 一起同步，單獨打開就存在這台裝置 =====
 const INAPP=window.parent!==window;
-let flow=[],notes={},loaded=false,fmode="night",tgoal=null;
+let flow=[],notes={},loaded=false,fmode="night",tgoal=null,tFilterOn=false;
 const colW=g=>[(g.mix.len+g.mix.rec)/2,g.mix.len,(g.mix.ctl+g.mix.str)/2,g.mix.str];
 const SAMPLE=["psoas|0|0","pec|0|0","psoas|1|0","abs|2|0","abs|2|1","psoas|2|0"];
 function persist(){
@@ -938,11 +940,12 @@ const key=(p,s,i)=>p+"|"+s+"|"+i;
 const $=s=>document.querySelector(s);
 const ph=(it,big)=>it.lab&&!it.img?it.lab:it.img&&THUMBS[it.img]?`<img src="${THUMBS[it.img]}" alt="">`:(it.sub==="徒手"||!it.img&&/徒手|呼吸|式|弓箭步/.test(it.n)?"徒手":"工具");
 function render(){
-  const TG=tgoal?GOALS.find(x=>x.id===tgoal):null,CW=TG?colW(TG):null,op=w=>w>=60?1:w>=40?.8:w>=20?.45:.22;
-  document.querySelectorAll(".thead .th").forEach((th,i)=>{th.style.opacity=CW&&i>0?op(CW[i-1]):1});
+  const FP=tFilterOn?curP():null,TG=FP,CW=null,op=w=>1;
+  document.querySelectorAll(".thead .th").forEach(th=>{th.style.opacity=1});
+  const hitIt=(p,si,it)=>{if(!FP)return true;const ms=musOf(p,si,it);return si<=1?ms.some(m=>FP.t.includes(m)):ms.some(m=>FP.w.includes(m));};
   $("#rows").innerHTML=PARTS.map((p,pi)=>[p,pi]).reverse().map(([p,pi])=>`<div class="row ${TG&&!TG.parts.includes(p.id)?"dim":""}" id="r-${p.id}" data-p="${pi}">
    <div class="part" data-p="${pi}"><span class="n">${pi+1}</span><h3>${p.n}</h3><p>${p.why}</p><button class="tobody" data-bodygo="${pi}">看肌肉、為什麼 ›</button></div>
-   ${p.s.map((list,si)=>`<div class="cell ${ST[si].c}" style="opacity:${CW?op(CW[si]):1}"><span class="lane">${ST[si].k}</span>${list.length?list.map((it,ii)=>{const k=key(p.id,si,ii);return `<button class="chip ${onTonight(k)?"in":""}" data-k="${k}">
+   ${p.s.map((list,si)=>`<div class="cell ${ST[si].c}" style="opacity:${CW?op(CW[si]):1}"><span class="lane">${ST[si].k}</span>${list.length?list.map((it,ii)=>{const k=key(p.id,si,ii);return `<button class="chip ${onTonight(k)?"in":""} ${FP&&FP.parts.includes(p.id)&&!hitIt(p,si,it)?"fade":""}" data-k="${k}">
      <span class="ph ${it.img?"":"hand"}">${ph(it)}</span><span class="nm">${it.n}${it.mark?`<span class="tag">${it.mark}</span>`:""}${it.sub&&it.sub!=="徒手"?`<small>${it.sub}</small>`:""}</span><span class="ck"></span></button>`}).join(""):`<div class="empty">${si===3?"—":"之後放床上動作"}</div>`}</div>`).join("")}
   </div>`).join("");
   // 人像點
@@ -1213,6 +1216,9 @@ function sideSvg(){const img=document.querySelector("#fig image").getAttribute("
 const ORDER=["neck","arm","pec","tspine","lowback","abs","psoas","leg","foot"];
 function lineThrough(ms,cls){const pts=ms.filter(m=>ANP[m]);const side=s=>pts.filter(m=>s?ANP[m][0]>=380:ANP[m][0]<380).sort((a,b)=>ANP[a][1]-ANP[b][1]);
   return [side(0),side(1)].filter(l=>l.length>1).map(l=>`<polyline class="pl ${cls}" points="${l.map(m=>ANP[m].join(",")).join(" ")}"/>`).join("");}
+function probBar(){return `${[["up","上交叉"],["lo","下交叉"]].map(([k,t])=>`<span class="pg"><button class="pb xb ${!gmSel&&xView&&xSel===k?"on":""}" data-xs="${k}">${t}<small>全部</small></button>${XGRP[k].probs.map(id=>{const x=PROBS.find(p=>p.id===id);return `<button class="pb ${x.mine?"mine":""} ${!gmSel&&!xView&&probSel===id?"on":""}" data-prob="${id}">${x.n}</button>`}).join("")}</span>`).join("")}<span class="pg">${PROBS.filter(x=>!XMAP[x.id]).map(x=>`<button class="pb ${!gmSel&&!xView&&probSel===x.id?"on":""}" data-prob="${x.id}">${x.n}</button>`).join("")}</span><span class="pg gmg"><b class="pgl">驗收動作</b>${GMOVES.map(m=>`<button class="pb ${gmSel===m.id?"on":""}" data-bgm="${m.id}">${m.n}${notes["gm_"+m.id]?`<i class="xi">${notes["gm_"+m.id]}</i>`:""}</button>`).join("")}</span>`;}
+function curP(){return gmSel?gmProb():xView?xProb():PROBS.find(x=>x.id===probSel)||null;}
+function refreshP(){tFilterOn=true;if(!$("#bodyp").hidden){renderBody();}else if(!$("#table").hidden){renderFilter();render();const P=curP();if(P){lightParts(P.parts.map(PI));const top=PARTS.map((p,i)=>i).filter(i=>P.parts.includes(PARTS[i].id)).sort((x,y)=>y-x)[0];const r=document.getElementById("r-"+PARTS[top].id);if(r)r.scrollIntoView({behavior:"smooth",block:"start"});}}}
 function renderBody(){
   const P=gmSel?gmProb():xView?xProb():PROBS.find(x=>x.id===probSel);const p=bodySel!=null?PARTS[bodySel]:null;
   const lit=new Set(P?[...P.t,...P.w]:[]);if(p)(MUS[p.id]||[]).forEach(m=>lit.add(m[0]));
@@ -1224,7 +1230,7 @@ function renderBody(){
       <span class="bc">${L.filter(m=>m[1]==="t").map(m=>`<em class="t ${P&&P.t.includes(m[0])?"hit":""}">${m[0]}</em>`).join("")}</span>
       <span class="bc">${L.filter(m=>m[1]==="w").map(m=>`<em class="w ${P&&P.w.includes(m[0])?"hit":""} ${P&&P.t.includes(m[0])?"hitt":""}">${m[0]}</em>`).join("")}</span></button>`}).join("");
   const keys=(q,sis)=>sis.flatMap(si=>q.s[si].map((_,ii)=>q.id+"|"+si+"|"+ii));
-  $("#bodyp").innerHTML=`<div class="bprob">${[["up","上交叉"],["lo","下交叉"]].map(([k,t])=>`<span class="pg"><button class="pb xb ${!gmSel&&xView&&xSel===k?"on":""}" data-xs="${k}">${t}<small>全部</small></button>${XGRP[k].probs.map(id=>{const x=PROBS.find(p=>p.id===id);return `<button class="pb ${x.mine?"mine":""} ${!gmSel&&!xView&&probSel===id?"on":""}" data-prob="${id}">${x.n}</button>`}).join("")}</span>`).join("")}<span class="pg">${PROBS.filter(x=>!XMAP[x.id]).map(x=>`<button class="pb ${!gmSel&&!xView&&probSel===x.id?"on":""}" data-prob="${x.id}">${x.n}</button>`).join("")}</span><span class="pg gmg"><b class="pgl">驗收動作</b>${GMOVES.map(m=>`<button class="pb ${gmSel===m.id?"on":""}" data-bgm="${m.id}">${m.n}${notes["gm_"+m.id]?`<i class="xi">${notes["gm_"+m.id]}</i>`:""}</button>`).join("")}</span></div>
+  $("#bodyp").innerHTML=`<div class="bprob">${probBar()}</div>
    <div class="b2grid">
     <div class="bana"><div class="bsd">${sideSvg()}<small>側面</small></div><svg class="bfull" viewBox="-30 60 825 960"><image href="${ANAT}" x="0" y="0" width="765" height="1024"/>${lines}${dots}</svg>
      <div class="bleg"><span><i class="lt"></i>要放鬆</span><span><i class="lw"></i>要加強</span></div></div>
@@ -1238,10 +1244,11 @@ function renderBody(){
 }
 document.addEventListener("click",e=>{
   const gmb=e.target.closest("[data-gm]");if(gmb){gmSel=gmb.dataset.gm;bodySel=null;musSel=null;view("body");return}
-  const bg2=e.target.closest("[data-bgm]");if(bg2){gmSel=bg2.dataset.bgm;bodySel=null;musSel=null;renderBody();return}
+  if(e.target.closest("[data-tfall]")){tFilterOn=false;renderFilter();render();return}
+  const bg2=e.target.closest("[data-bgm]");if(bg2){gmSel=bg2.dataset.bgm;bodySel=null;musSel=null;refreshP();return}
   const xv=e.target.closest("[data-xv]");if(xv){xView=xv.dataset.xv==="1";if(!xView&&!probSel)probSel="neckp";bodySel=null;musSel=null;renderBody();return}
-  const xs=e.target.closest("[data-xs]");if(xs){gmSel=null;xView=true;xSel=xs.dataset.xs;bodySel=null;musSel=null;renderBody();return}
-  const pr=e.target.closest("[data-prob]");if(pr){gmSel=null;xView=false;probSel=pr.dataset.prob;bodySel=null;musSel=null;renderBody();return}
+  const xs=e.target.closest("[data-xs]");if(xs){gmSel=null;xView=true;xSel=xs.dataset.xs;bodySel=null;musSel=null;refreshP();return}
+  const pr=e.target.closest("[data-prob]");if(pr){gmSel=null;xView=false;probSel=pr.dataset.prob;bodySel=null;musSel=null;refreshP();return}
   const bp=e.target.closest("[data-bp]");if(bp){bodySel=bodySel===+bp.dataset.bp?null:+bp.dataset.bp;musSel=null;renderBody();return}
   const bm=e.target.closest("[data-bmu]");if(bm&&!$("#bodyp").hidden){const m=bm.dataset.bmu;musSel=musSel===m?null:m;if(musSel){const pid=Object.keys(MUS).find(k=>MUS[k].some(x=>x[0]===m));if(pid)bodySel=PI(pid);}renderBody();return}
   const bk=e.target.closest("[data-bk]");if(bk){openItem(bk.dataset.bk);return}
@@ -1359,7 +1366,7 @@ function gpos(g){const C=200,R=[52,112,162][g.r],a=GANG[g.id]*Math.PI/180;return
 const LEVCOL={len:"鬆・伸",str:"醒・練",ctl:"醒＋三個意念",rec:"鬆＋呼吸＋睡眠"};
 function renderFilter(){
   const el=$("#tfilter");if(!el)return;
-  el.innerHTML=`<span class="tfl">用目標看</span><button class="tfc ${!tgoal?"on":""}" data-tg="">全部</button>${RINGS.map((r,ri)=>`<span class="tfr">${"①②③"[ri]}</span>${GOALS.filter(g=>g.r===ri).map(g=>`<button class="tfc ${tgoal===g.id?"on":""} ${g.now?"now":""}" data-tg="${g.id}">${g.t}</button>`).join("")}`).join("")}`;
+  el.innerHTML=`<div class="tfwrap"><button class="tfc ${!tFilterOn?"on":""}" data-tfall="1">全部</button>${probBar()}</div>`;
 }
 function renderGoals(){
   const g=GOALS.find(x=>x.id===curGoal);const cw=colW(g);
