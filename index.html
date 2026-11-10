@@ -1258,7 +1258,7 @@ function render(){
   document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab||(b.dataset.tab==="today"&&tab==="timer")||(b.dataset.tab==="body"&&tab==="log")||(b.dataset.tab==="plan"&&tab==="yoga")));
   const _rv=document.getElementById("yriver"),_rs=_rv?_rv.scrollLeft:0,_fl=[...document.querySelectorAll(".ypc.flip")].map(x=>x.dataset.yflip);
   document.documentElement.classList.toggle("pgmode",tab==="posture");
-  {let f=$("#pgFrame");if(tab==="posture"){if(!f){f=document.createElement("iframe");f.id="pgFrame";f.className="pgframe";f.title="體態桌";f.src="posture.html?v=1794156526";document.body.insertBefore(f,$("#tabs"));}else{const d=docs.get("pgtable");if(d&&f.contentWindow)f.contentWindow.postMessage({pg:"state",data:d},location.origin);}
+  {let f=$("#pgFrame");if(tab==="posture"){if(!f){f=document.createElement("iframe");f.id="pgFrame";f.className="pgframe";f.title="體態桌";f.src="posture.html?v=1794311263";document.body.insertBefore(f,$("#tabs"));}else{const d=docs.get("pgtable");if(d&&f.contentWindow)f.contentWindow.postMessage({pg:"state",data:d},location.origin);}
     f.hidden=false;pgSize();if(S&&S.stop)S.stop();$("#fab").hidden=true;return;}else if(f)f.hidden=true;}
   main.innerHTML=({today:vToday,log:vBody,plan:vPlan,body:vBody,move:vFigure,timer:vTimer,yoga:vYoga,posture:vPosture})[tab]();
   {const rv=document.getElementById("yriver");if(rv){rv.scrollLeft=_rs;_fl.forEach(k=>{const el=rv.querySelector(`[data-yflip="${k}"]`);if(el)el.classList.add("flip");});}document.body.style.overflow=document.querySelector(".ycard")?"hidden":"";}
