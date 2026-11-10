@@ -800,23 +800,26 @@ button.mh{font-family:var(--display);font-size:.95rem;color:var(--c);cursor:poin
 .sv-tg{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;font:inherit;font-size:.75rem;padding:2px 10px;cursor:pointer}
 .its .tk.strsel{cursor:default}.strsel .tn{display:flex;flex-direction:column;gap:3px;font-size:.72rem}
 
-.strpage{position:fixed;inset:0;background:var(--bg);overflow-y:auto;padding:calc(14px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px),calc((100% - 760px)/2)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px),calc((100% - 760px)/2));display:flex;flex-direction:column;gap:12px}
-.sph{display:flex;align-items:center;justify-content:space-between}.sph h2{margin:0;font-size:1.4rem}
-.spdays{display:flex;gap:6px;flex-wrap:wrap}.spdays button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;cursor:pointer}
+.strpage{position:fixed;inset:0;background:var(--bg);overflow-y:auto;padding:calc(10px + env(safe-area-inset-top,0px)) max(14px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:8px}
+.sph{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap}.sph h2{margin:0;font-size:1.2rem}
+.spdays{display:flex;gap:4px}.spdays button{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-size:.85rem;cursor:pointer;padding:0}
 .spdays button.td{border-color:var(--s4);color:var(--s4);font-weight:700}.spdays button.on{background:var(--s4);color:var(--panel);border-color:var(--s4)}
-.spsum{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.spsum>span:first-child{font-weight:700;font-size:1.1rem}.spsum b{font-size:1.7rem;color:var(--s4);font-variant-numeric:tabular-nums}.spsum span{color:var(--mute)}
-.spsum label{margin-left:auto;font-size:.85rem;color:var(--mute);display:flex;gap:6px;align-items:center}.spsum select{font:inherit;padding:4px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink)}
-.spb{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
-.spbh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px}.spbh h3{margin:0;font-size:1.1rem}.spm{color:var(--mute);font-size:.8rem}
-.spt2{font-size:.72rem;padding:2px 8px;border-radius:999px}.spt2.rot{background:var(--s2t);color:var(--s2)}.spt2.fix{background:var(--s3t);color:var(--s3)}
-.spb ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
-.spb li{display:flex;gap:10px;align-items:center;padding:4px 0;border-top:1px solid var(--line)}.spb li:first-child{border-top:0}
-.spn{width:1.3em;text-align:right;color:var(--mute);font-size:.8rem;font-variant-numeric:tabular-nums}
-.spb li img,.spi{width:60px;height:60px;border-radius:10px;object-fit:cover;object-position:top;flex:0 0 60px;background:var(--line)}
-.spt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}.spt small{color:var(--mute);font-size:.78rem}.spt em{font-style:normal;font-size:.78rem;color:var(--mute);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.spc{width:36px;height:36px;border-radius:50%;border:2px solid var(--s2);background:transparent;color:var(--s2);font-weight:700;font-size:1rem;cursor:pointer;flex:0 0 36px}
-.dn .spc{background:var(--s2);color:var(--panel)}.spb li.dn{opacity:.5}.spb li.dn b{text-decoration:line-through}
-.spgo{align-self:stretch}.spe{color:var(--mute);font-size:.85rem;margin:0}
+.spsum{display:flex;align-items:baseline;gap:6px}.spsum b{font-size:1.3rem;color:var(--s4);font-variant-numeric:tabular-nums}.spsum span{color:var(--mute);font-size:.85rem;font-variant-numeric:tabular-nums}
+.spr{font-size:.8rem;color:var(--mute);display:flex;gap:4px;align-items:center}.spr select{font:inherit;font-size:.85rem;padding:3px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink)}
+.sph .spgo{padding:7px 16px;margin-left:auto;background:var(--s4);color:var(--panel);border:0;border-radius:999px;font:inherit;font-weight:700;cursor:pointer}.sph .px{margin-left:0}.sph .spgo+.px,.sph .spr+.px{margin-left:auto}.sph .spgo+.px{margin-left:0}
+.spbody{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start}
+.spb{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 10px;flex:1 1 300px;min-width:0}
+.spb.fix{flex-grow:1.6}
+.spbh{display:flex;gap:6px;align-items:baseline;margin-bottom:6px}.spbh h3{margin:0;font-size:.98rem}.spm{color:var(--mute);font-size:.75rem}
+.spt2{font-size:.68rem;padding:1px 7px;border-radius:999px}.spt2.rot{background:var(--s2t);color:var(--s2)}.spt2.fix{background:var(--s3t);color:var(--s3)}
+.spg{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(76px,11vw,128px),1fr));gap:6px}
+.spk{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:4px 4px 5px;display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit;color:var(--ink);cursor:pointer;text-align:center;min-width:0}
+.spimg{position:relative;width:100%;aspect-ratio:1/1;border-radius:7px;overflow:hidden;background:var(--line);display:block}
+.spimg img{width:100%;height:100%;object-fit:cover;object-position:top}
+.spimg i{position:absolute;top:3px;left:3px;font-style:normal;font-size:.65rem;font-weight:700;background:var(--panel);border-radius:999px;min-width:17px;height:17px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.spk b{font-size:clamp(.72rem,1.3vw,.86rem);line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.spk small{font-size:.64rem;color:var(--mute);line-height:1.2}
+.spk.w{background:var(--s3t)}.spk.dn{opacity:.45}.spk.dn .spimg i{background:var(--s2);color:var(--panel)}
+.spe{color:var(--mute);font-size:.78rem;margin:0}
 </style>
 <div class="wrap">
 <header>
@@ -936,21 +939,21 @@ document.addEventListener("dragstart",e=>{const c=e.target.closest&&e.target.clo
 document.addEventListener("dragover",e=>{if(svDrag&&e.target.closest&&e.target.closest(".sv-lane"))e.preventDefault()});
 document.addEventListener("drop",e=>{if(!svDrag)return;const c=e.target.closest(".sv-st"),l=e.target.closest(".sv-lane");if(!l)return;e.preventDefault();const k=svDrag;svDrag=null;if(c&&c.dataset.sk===k)return;strMove(k,l.dataset.sf,c?c.dataset.sk:null)});
 
-/* ---- 今晚伸展一頁 ---- */
+/* ---- 今晚伸展一頁（一頁看完） ---- */
 let spDay=null;
 function strFor(d){const st=strState(),r=st.week[d]??STR_WEEK[d];return {r,rot:r>=0&&r!==STR_FIX?strSegKeys(r):[],fix:strSegKeys(STR_FIX)}}
 function strPage(){const sc=$("#scrim");sc.hidden=false;const td=new Date().getDay();if(spDay===null)spDay=td;const isT=spDay===td;
  const F=strFor(spDay),all=[...F.rot,...F.fix],dn=doneSet(),isD=k=>dn.includes("str|"+STRK[k]);
  const mn=a=>Math.round(a.reduce((x,k)=>x+strMin(STRS[k].t),0));const left=all.filter(k=>!isD(k));
- const li=(k,i)=>{const s=STRS[k];return `<li class="${isT&&isD(k)?"dn":""}"><span class="spn">${i+1}</span>${s.img.length?`<img src="${s.img[0]}" alt="">`:`<span class="spi"></span>`}<span class="spt"><b>${s.n}</b><small>${s.t}${s.k==="醒"?"・醒":""}${s.f?"・"+s.f:""}</small><em>${s.h}</em></span>${isT?`<button type="button" class="spc" data-spck="${k}" aria-label="做完">${isD(k)?"✓":""}</button>`:""}</li>`};
- const blk=(lab,cls,i,ks)=>`<section class="spb"><div class="spbh"><span class="spt2 ${cls}">${lab}</span><h3>${strSegName(i)}</h3><span class="spm">${STR_SEG[i][1]}</span><span class="spm">約 ${mn(ks)} 分</span></div>${ks.length?`<ol>${ks.map(li).join("")}</ol>`:`<p class="spe">這段還沒有按「留」的動作，到動作庫「依串看」挑。</p>`}</section>`;
- sc.innerHTML=`<div class="strpage" role="dialog" aria-modal="true"><div class="sph"><h2>今晚伸展</h2><button class="px" data-spx="1" aria-label="關閉">×</button></div>
- <div class="spdays">${STR_ORD.map(d=>`<button type="button" data-spd="${d}" class="${d===spDay?"on":""} ${d===td?"td":""}">${STR_DN[d]}</button>`).join("")}</div>
- <div class="spsum"><span>${isT?"今晚":"週"+STR_DN[spDay]}</span><b>約 ${mn(all)} 分</b>${isT&&all.length?`<span>${all.length-left.length}／${all.length} 做完</span>`:""}
- <label>輪到<select data-spr="${spDay}">${[-1,...STR_ROT].map(i=>`<option value="${i}" ${i===F.r?"selected":""}>${strSegName(i)}</option>`).join("")}</select></label></div>
- ${F.rot.length||F.r>=0&&F.r!==STR_FIX?blk("先做","rot",F.r,F.rot):""}${blk("每晚固定","fix",STR_FIX,F.fix)}
- ${isT&&left.length?`<button type="button" class="btn spgo" data-spgo="1">跟著做（計時，從還沒做的開始）</button>`:""}
- <p class="spe">順序：先做輪到的那段，最後腿上牆，做完就睡。</p></div>`;
+ const tile=(k,i)=>{const s=STRS[k],d=isT&&isD(k);return `<button type="button" class="spk ${d?"dn":""} ${s.k==="醒"?"w":""}" ${isT?`data-spck="${k}"`:""} title="${s.h}"><span class="spimg">${s.img.length?`<img src="${s.img[0]}" alt="">`:""}<i>${d?"✓":i+1}</i></span><b>${s.n}</b><small>${s.t}${s.k==="醒"?"・醒":""}</small></button>`};
+ const blk=(lab,cls,i,ks)=>`<section class="spb ${cls}"><div class="spbh"><span class="spt2 ${cls}">${lab}</span><h3>${strSegName(i)}</h3><span class="spm">約 ${mn(ks)} 分</span></div>${ks.length?`<div class="spg">${ks.map(tile).join("")}</div>`:`<p class="spe">這段還沒有按「留」的動作。</p>`}</section>`;
+ sc.innerHTML=`<div class="strpage" role="dialog" aria-modal="true">
+ <div class="sph"><h2>今晚伸展</h2><div class="spdays">${STR_ORD.map(d=>`<button type="button" data-spd="${d}" class="${d===spDay?"on":""} ${d===td?"td":""}">${STR_DN[d]}</button>`).join("")}</div>
+ <div class="spsum"><b>約 ${mn(all)} 分</b>${isT&&all.length?`<span>${all.length-left.length}／${all.length}</span>`:""}</div>
+ <label class="spr">輪到<select data-spr="${spDay}">${[-1,...STR_ROT].map(i=>`<option value="${i}" ${i===F.r?"selected":""}>${strSegName(i)}</option>`).join("")}</select></label>
+ ${isT&&left.length?`<button type="button" class="btn spgo" data-spgo="1">跟著做 ▶</button>`:""}<button class="px" data-spx="1" aria-label="關閉">×</button></div>
+ <div class="spbody">${F.r>=0&&F.r!==STR_FIX?blk("先做","rot",F.r,F.rot):""}${blk("最後・每晚固定","fix",STR_FIX,F.fix)}</div>
+ <p class="spe">點方塊打勾；「跟著做」會看到做法和計時。</p></div>`;
  sc.onclick=ev=>{const t=ev.target;if(t===sc||t.closest("[data-spx]")){sc.hidden=true;spDay=null;renderRx();return}
   const d=t.closest("[data-spd]");if(d){spDay=+d.dataset.spd;strPage();return}
   const c=t.closest("[data-spck]");if(c){const id="str|"+STRK[c.dataset.spck],a=doneSet().slice();notes.done={day:today(),keys:a.includes(id)?a.filter(x=>x!==id):[...a,id]};persist();strPage();return}
