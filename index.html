@@ -582,7 +582,7 @@ function vYoga(){
 }
 
 /* ---------- views ---------- */
-let tab=(location.hash.match(/tab=(today|log|plan|yoga|body|move|timer|posture)/)||[])[1]||(()=>{const h=new Date().getHours();return h>=17||h<5?"posture":"today"})();if(tab==="move")tab="posture";let planDay=new Date().getDay(), logConfirm=null, bodyConfirm=null;
+let tab=(location.hash.match(/tab=(today|log|plan|yoga|body|move|timer|posture)/)||[])[1]||"posture";if(tab==="move")tab="posture";let planDay=new Date().getDay(), logConfirm=null, bodyConfirm=null;
 const ties='';
 const subSeg=()=>tab==="timer"?`<button class="link back" data-tab="today">← 今日</button>`:"";
 
